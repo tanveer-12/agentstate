@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Any, Literal
-import uuid
 import time
+import uuid
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field
 
 WorkflowStatus = Literal["running", "complete", "failed", "paused"]
 
@@ -9,7 +10,7 @@ class Task(BaseModel):
     id : str = Field(default_factory=lambda: str(uuid.uuid4()))
     description : str
     status : Literal["pending", "running", "done", "failed"] = 'pending'
-    result : Any | None = 'None'
+    result : Any | None = None
     created_at : float = Field(default_factory=time.time)
     updated_as: float = Field(default_factory=time.time)
 

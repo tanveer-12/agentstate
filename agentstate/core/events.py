@@ -1,7 +1,9 @@
-from pydantic import BaseModel, Field, TypeAdapter
-from typing import Literal, Annotated, Any, Union
-import uuid
 import time
+import uuid
+from typing import Annotated, Any, Literal
+
+from pydantic import BaseModel, Field, TypeAdapter
+
 
 # This is the parent all events share
 class BaseStateEvent(BaseModel):
@@ -11,8 +13,9 @@ class BaseStateEvent(BaseModel):
     timestamp : float = Field(default_factory=time.time)
 
 
-# six subclasses inherting from BaseStateEvent, with each one, having a 'type' field typed as a literal with a single
-# string value, and set its default to that string.
+# six subclasses inherting from BaseStateEvent, 
+# with each one, having a 'type' field typed as a literal with 
+# a single string value, and set its default to that string.
 
 class WorkflowStarted(BaseStateEvent):
     type : Literal["workflow_started"]
@@ -54,19 +57,18 @@ class AgentErrored(BaseStateEvent):
     error_message : str
     retry_count : int
 
-# Pydantic will use the type field to decide which model to instantiate when deserializing
+# Pydantic will use the type field to decide which model to instantiate 
+# when deserializing
 StateEvent = Annotated[
-    Union[
-        WorkflowStarted,
-        WorkflowCompleted,
-        PatchApplied,
-        ConflictDetected,
-        CheckpointSaved,
-        AgentErrored,
-    ],
+        WorkflowStarted
+    |    WorkflowCompleted
+    |    PatchApplied
+    |   ConflictDetected
+    |    CheckpointSaved
+    |   AgentErrored,
     Field(discriminator="type")
 ]
 
 # at module level, writing a typeadapter for statevent
 # this is how you deserialize a JSON string into the correct event subtype
-event_adapter = TypeAdapter(StateEvent)
+event_adapter: TypeAdapter[StateEvent] = TypeAdapter(StateEvent)

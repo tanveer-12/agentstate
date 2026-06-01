@@ -1,7 +1,9 @@
 from typing import Protocol, runtime_checkable
+
 import aiosqlite
-import json
-from agentstate.core.events import StateEvent, event_adapter, BaseStateEvent
+
+from agentstate.core.events import StateEvent, event_adapter
+
 
 # Protocol : a rule sheet for what a store must be able to do
 @runtime_checkable
@@ -43,7 +45,7 @@ class SQLiteStore:
     def __init__(self, path: str) -> None:
         self.path = path
     
-    async def _init_db(self, db) -> None:
+    async def _init_db(self, db:aiosqlite.Connection) -> None:
         await db.execute(
             """
             CREATE TABLE IF NOT EXISTS events(
@@ -94,7 +96,7 @@ class SQLiteStore:
                 WHERE workflow_id=?
                 ORDER BY id ASC
                 """,
-                (workflow_id),
+                (workflow_id,),
             )
             rows = await cursor.fetchall()
             return [event_adapter.validate_json(row[0]) for row in rows]
