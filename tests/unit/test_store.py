@@ -1,6 +1,6 @@
 import pytest
-from agentstate.core.events import PatchApplied, WorkflowStarted
-from agentstate.memory.store import InMemoryStore, SQLiteStore
+from agentstate_lib.core.events import PatchApplied, WorkflowStarted
+from agentstate_lib.memory.store import InMemoryStore, SQLiteStore
 
 @pytest.fixture
 def in_memory_store():

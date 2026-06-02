@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from agentstate.core.state import SharedState, Task
+from agentstate_lib.core.state import SharedState, Task
 
 def test_shared_state_defaults():
     state = SharedState(goal="test_goal")
