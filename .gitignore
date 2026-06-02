@@ -3,6 +3,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+docs/build_instructions.md
 
 # db
 *.db
