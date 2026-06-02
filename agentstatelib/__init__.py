@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+from agentstatelib.coordination import (
+    ConflictResolver,
+    InvariantChecker,
+    InvariantViolation,
+    LastWriteWins,
+    PriorityBased,
+    RejectIncoming,
+)
 from agentstatelib.core.events import (
     AgentErrored,
     BaseStateEvent,
@@ -59,5 +67,12 @@ __all__ = [
     "StateStore",
     "InMemoryStore",
     "SQLiteStore",
+    # coordination
+    "ConflictResolver",
+    "LastWriteWins",
+    "PriorityBased",
+    "RejectIncoming",
+    "InvariantChecker",
+    "InvariantViolation",
     "__version__",
 ]

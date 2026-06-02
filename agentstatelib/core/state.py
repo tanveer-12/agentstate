@@ -8,11 +8,12 @@ WorkflowStatus = Literal["running", "complete", "failed", "paused"]
 
 class Task(BaseModel):
     id : str = Field(default_factory=lambda: str(uuid.uuid4()))
+    goal_id: str | None = None
     description : str
     status : Literal["pending", "running", "done", "failed"] = 'pending'
     result : Any | None = None
     created_at : float = Field(default_factory=time.time)
-    updated_as: float = Field(default_factory=time.time)
+    updated_at: float = Field(default_factory=time.time)
 
 
 class Goal(BaseModel):

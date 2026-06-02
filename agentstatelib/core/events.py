@@ -4,6 +4,8 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, TypeAdapter
 
+from agentstatelib.core.patch import StatePatch
+
 
 # This is the parent all events share
 class BaseStateEvent(BaseModel):
@@ -44,6 +46,8 @@ class ConflictDetected(BaseStateEvent):
     winner_agent_id : str
     loser_agent_id : str
     resolution_strategy : str
+    existing_patch: StatePatch | None = None
+    incoming_patch: StatePatch | None = None
 
 
 class CheckpointSaved(BaseStateEvent):
