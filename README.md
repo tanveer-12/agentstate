@@ -1,6 +1,70 @@
-# agentstate
-Building a stateful coordination layer for multi-agent AI systems.
+# AgentStateLib
 
-Right now, most multi-agent AI systems just use a giant chat history or a messy dictionary to share information between agents. That makes them fragile: agents overwrite each other, there’s no clear picture of what the ‘world’ looks like, and you can’t see who changed what or rewind if something goes wrong.
+AgentStateLib is a Python library for building reliable multi-agent workflows. It gives multiple agents a shared, typed state and a simple graph router, so you can coordinate them without passing raw strings around. [file:1]
 
-I’m building a Python library that fixes this by giving agents a shared, structured world to operate in. Agents don’t directly change the state; they propose small, structured updates that my library validates, logs, and applies. Every change is saved as an event, so you can replay the whole run, debug it, and recover from failures. On top of that, there’s a graph that decides which agent runs next based on the current state, plus tooling to see what’s happening in real time. It doesn’t talk to models or handle prompts; it just manages state, coordination, and observability for multi-agent systems.
+## Installation
+
+```bash
+pip install agentstate-lib
+```
+
+## Quick start
+
+```python
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+
+graph = AgentGraph()
+
+@graph.node("planner", context=["goal"])
+async def planner(context: dict) -> StatePatch:
+    goal = context["goal"]
+    return StatePatch(
+        agent_id="planner",
+        target="facts.planned",
+        value=True,
+        reason=f"planned goal: {goal!r}",
+    )
+
+@graph.node("summarizer", context=["facts.planned", "goal"])
+async def summarizer(context: dict) -> StatePatch:
+    planned = context.get("facts", {}).get("planned")
+    goal = context.get("goal")
+    summary = f"Workflow for goal {goal!r} planned={planned}"
+    return StatePatch(
+        agent_id="summarizer",
+        target="facts.summary",
+        value=summary,
+        reason="add summary",
+    )
+
+graph.edge(
+    "planner",
+    "summarizer",
+    condition=lambda s: s.get("facts", {}).get("planned") is True,
+)
+
+async def main() -> None:
+    state = SharedState(goal="Write a multi-agent blog post")
+    final_state = await graph.run(state, start="planner")
+    print(final_state.facts)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Core ideas
+
+- **SharedState**: a Pydantic model that holds the workflow’s goal, tasks, artifacts, decisions, and facts.
+- **StatePatch**: what agents return. A structured change like “set `facts.planned = True`”.
+- **AgentGraph**: runs agents as a directed graph. Each agent is just an async function that receives a small context dict and returns a `StatePatch`.
+- **Context slicing**: each agent declares which paths it needs (e.g. `["goal", "facts.planned"]`), and only sees that subset of the state.
+- **Event store**: every applied patch is recorded as an event in a pluggable store (in-memory or SQLite), so you can replay or debug workflows. [file:1]
+
+## Status
+
+Version `0.1.2` is an early preview:
+- SharedState data model
+- StatePatch + apply_patch
+- AgentGraph with decorator API
+- InMemory and SQLite event stores
