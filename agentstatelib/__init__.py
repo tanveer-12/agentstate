@@ -30,7 +30,7 @@ from agentstatelib.router.context import slice_state
 from agentstatelib.router.graph import AgentGraph
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 __all__ = [
     "SharedState",
