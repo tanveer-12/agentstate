@@ -4,7 +4,7 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from agentstate_lib.core.patch import StatePatch
+    from agentstatelib.core.patch import StatePatch
 
 # Any async function that takes a context dict and returns a StatePatch
 # is a valid agent. No inheritance required.

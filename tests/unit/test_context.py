@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from agentstate_lib.core.patch import StatePatch, apply_patch
-from agentstate_lib.core.state import SharedState
-from agentstate_lib.router.context import slice_state
+from agentstatelib.core.patch import StatePatch, apply_patch
+from agentstatelib.core.state import SharedState
+from agentstatelib.router.context import slice_state
 
 def test_slice_state_returns_only_requested_paths() -> None:
     state = SharedState(goal="test")

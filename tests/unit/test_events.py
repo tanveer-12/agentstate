@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from agentstate_lib.core.events import (
+from agentstatelib.core.events import (
     AgentErrored,
     BaseStateEvent,
     CheckpointSaved,

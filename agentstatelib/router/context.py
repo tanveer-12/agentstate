@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from agentstate_lib.core.patch import get_nested, set_nested
-from agentstate_lib.core.state import SharedState
+from agentstatelib.core.patch import get_nested, set_nested
+from agentstatelib.core.state import SharedState
 
 
 def slice_state(state: SharedState, include_paths: list[str]) -> dict[str, Any]:

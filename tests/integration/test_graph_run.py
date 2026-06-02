@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from agentstate_lib.core.patch import StatePatch
-from agentstate_lib.core.state import SharedState
-from agentstate_lib.router.graph import AgentGraph
+from agentstatelib.core.patch import StatePatch
+from agentstatelib.core.state import SharedState
+from agentstatelib.router.graph import AgentGraph
 
 
 @pytest.mark.asyncio

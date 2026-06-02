@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from agentstate_lib.core.state import SharedState
+from agentstatelib.core.state import SharedState
 
 
 # represents "one change an agent wants to make" to the shared state

@@ -4,16 +4,16 @@ import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from agentstate_lib.core.events import (
+from agentstatelib.core.events import (
     PatchApplied,
     WorkflowCompleted,
     WorkflowStarted,
 )
-from agentstate_lib.core.patch import apply_patch
-from agentstate_lib.core.state import SharedState
-from agentstate_lib.memory.store import InMemoryStore, StateStore
-from agentstate_lib.router.context import slice_state
-from agentstate_lib.router.types import AgentFn, EdgeCondition
+from agentstatelib.core.patch import apply_patch
+from agentstatelib.core.state import SharedState
+from agentstatelib.memory.store import InMemoryStore, StateStore
+from agentstatelib.router.context import slice_state
+from agentstatelib.router.types import AgentFn, EdgeCondition
 
 
 @dataclass(frozen=True)

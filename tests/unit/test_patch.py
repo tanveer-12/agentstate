@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from agentstate_lib.core.patch import(
+from agentstatelib.core.patch import(
     StatePatch,
     apply_patch,
     get_nested,
     set_nested,
 )
 
-from agentstate_lib.core.state import SharedState, Task
+from agentstatelib.core.state import SharedState, Task
 
 def test_set_nested_simple() -> None:
     result = set_nested({}, "a", "value")

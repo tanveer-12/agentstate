@@ -49,4 +49,4 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["agentstate_lib"]
+packages = ["agentstatelib"]

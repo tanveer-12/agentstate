@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agentstate_lib.core.events import (
+from agentstatelib.core.events import (
     AgentErrored,
     BaseStateEvent,
     CheckpointSaved,
@@ -11,13 +11,13 @@ from agentstate_lib.core.events import (
     WorkflowStarted,
     event_adapter,
 )
-from agentstate_lib.core.patch import (
+from agentstatelib.core.patch import (
     StatePatch,
     apply_patch,
     get_nested,
     set_nested,
 )
-from agentstate_lib.core.state import (
+from agentstatelib.core.state import (
     Artifact,
     Decision,
     Goal,
@@ -25,12 +25,12 @@ from agentstate_lib.core.state import (
     Task,
     WorkflowStatus,
 )
-from agentstate_lib.memory.store import InMemoryStore, SQLiteStore, StateStore
-from agentstate_lib.router.context import slice_state
-from agentstate_lib.router.graph import AgentGraph
-from agentstate_lib.router.types import AgentFn, EdgeCondition
+from agentstatelib.memory.store import InMemoryStore, SQLiteStore, StateStore
+from agentstatelib.router.context import slice_state
+from agentstatelib.router.graph import AgentGraph
+from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "SharedState",

@@ -2,7 +2,7 @@ from typing import Protocol, runtime_checkable
 
 import aiosqlite
 
-from agentstate_lib.core.events import StateEvent, event_adapter
+from agentstatelib.core.events import StateEvent, event_adapter
 
 
 # Protocol : a rule sheet for what a store must be able to do
