@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 docs/build_instructions.md
+docs/v4_build.md
 
 # db
 *.db
@@ -170,12 +171,14 @@ venv.bak/
 .spyderproject
 .spyproject
 
+notebooks/colab_setup.ipynb
+
 # Rope project settings
 .ropeproject
 
 # mkdocs documentation
 /site
-
+site/
 # mypy
 .mypy_cache/
 .dmypy.json

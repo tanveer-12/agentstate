@@ -5,9 +5,9 @@ import asyncio
 import pytest
 
 from agentstatelib import AgentGraph, SharedState, StatePatch
+from agentstatelib.coordination import InvariantChecker, InvariantViolation
 from agentstatelib.core.events import ConflictDetected
 from agentstatelib.memory.store import InMemoryStore
-from agentstatelib.coordination import InvariantChecker, InvariantViolation
 
 
 @pytest.mark.asyncio

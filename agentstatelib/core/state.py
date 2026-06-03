@@ -6,45 +6,70 @@ from pydantic import BaseModel, Field
 
 WorkflowStatus = Literal["running", "complete", "failed", "paused"]
 
+
 class Task(BaseModel):
-    id : str = Field(default_factory=lambda: str(uuid.uuid4()))
+    """
+    A unit of work withing a workflow. May optionally belong to a Goal via goal_id.
+    """
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     goal_id: str | None = None
-    description : str
-    status : Literal["pending", "running", "done", "failed"] = 'pending'
-    result : Any | None = None
-    created_at : float = Field(default_factory=time.time)
+    description: str
+    status: Literal["pending", "running", "done", "failed"] = "pending"
+    result: Any | None = None
+    created_at: float = Field(default_factory=time.time)
     updated_at: float = Field(default_factory=time.time)
 
 
 class Goal(BaseModel):
+    """A high level objective that groups related Tasks."""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    description : str
-    status : Literal["pending", "active", "complete", "failed"] = 'pending'
-    created_at : float = Field(default_factory=time.time)
+    description: str
+    status: Literal["pending", "active", "complete", "failed"] = "pending"
+    created_at: float = Field(default_factory=time.time)
+
 
 class Artifact(BaseModel):
-    id : str = Field(default_factory=lambda : str(uuid.uuid4()))
-    produced_by : str
-    artifact_type : str
-    content : Any
-    created_at : float = Field(default_factory=time.time)
+    """
+    An output produced by an agent. artifact_type is free form:'draft',
+    'source', 'summary', 'decision', etc.
+    """
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    produced_by: str
+    artifact_type: str
+    content: Any
+    created_at: float = Field(default_factory=time.time)
+
 
 class Decision(BaseModel):
-    id : str = Field(default_factory=lambda : str(uuid.uuid4()))
-    made_by : str
-    description : str
-    rationale : str
-    timestamp : float = Field(default_factory=time.time)
+    """
+    A recorded decision made during a workflow, with rationale for audit purposes.
+    """
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    made_by: str
+    description: str
+    rationale: str
+    timestamp: float = Field(default_factory=time.time)
+
 
 class SharedState(BaseModel):
-    workflow_id : str = Field(default_factory=lambda: str(uuid.uuid4()))
-    workflow_type : str = "general"
-    goal : str
-    goals : dict[str, Goal] = Field(default_factory=dict)
-    tasks : dict[str, Task] = Field(default_factory=dict)
-    artifacts : dict[str, Artifact] = Field(default_factory=dict)
-    decisions : list[Decision] = Field(default_factory=list)
-    facts : dict[str, Any] = Field(default_factory=dict)
-    status : WorkflowStatus = 'running' 
-    created_at : float = Field(default_factory=time.time)
-    updated_at : float = Field(default_factory=time.time)
+    """
+    The single source of truth for a workflow. Never mutated directly -
+    all changes go through StatePatch and apply_patch. All agents in a
+    workflow round read the same SharedState snapshot.
+    """
+
+    workflow_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    workflow_type: str = "general"
+    goal: str
+    goals: dict[str, Goal] = Field(default_factory=dict)
+    tasks: dict[str, Task] = Field(default_factory=dict)
+    artifacts: dict[str, Artifact] = Field(default_factory=dict)
+    decisions: list[Decision] = Field(default_factory=list)
+    facts: dict[str, Any] = Field(default_factory=dict)
+    status: WorkflowStatus = "running"
+    created_at: float = Field(default_factory=time.time)
+    updated_at: float = Field(default_factory=time.time)
