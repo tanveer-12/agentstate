@@ -91,6 +91,7 @@ class CompletedGoalsHaveNoBlockingTasks:
             for task_id, task in state.tasks.items():
                 task_goal_id = _get_task_field(task, "goal_id")
                 task_status = _get_task_field(task, "status", "pending")
+
                 if task_goal_id == goal_id and task_status in {
                     "pending",
                     "running",
