@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from agentstatelib.coordination.conflicts import (
+    BatchResolutionResult,
     ConflictDetector,
     ConflictRecord,
     ConflictResolver,
@@ -24,6 +25,7 @@ __all__ = [
     "LastWriteWins",
     "PriorityBased",
     "RejectIncoming",
+    "BatchResolutionResult",
     # invariants
     "InvariantChecker",
     "InvariantViolation",

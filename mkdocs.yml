@@ -1,6 +1,6 @@
 site_name: agentstatelib
 site_description: Typed stateful coordination layer for parallel multi-agent AI systems
-repo_url: https://github.com/yourusername/agentstate
+repo_url: https://github.com/tanveer-12/agentstate
 repo_name: agentstate
 
 theme:
@@ -26,18 +26,13 @@ extra:
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
-  - build_instructions.md
-  - changelog.md
-  - v4_build.md
-  - api-reference\conflicts.md
-  - api-reference\graph.md
-  - api-reference\patch.md
-  - api-reference\state.md
-  - concepts\conflict.md
-  - concepts\local-models.md
-  - concepts\observability.md
-  - concepts\parallelism.md
-  - concepts\patches.md
-  - concepts\shared-state.md
-  - guides\colab-local-models.md
-  - guides\observability.md
+  - Concepts:
+    - Shared State: concepts/shared-state.md
+    - Patches: concepts/patches.md
+    - Conflict Detection: concepts/conflict.md
+    - Parallel Execution: concepts/parallelism.md
+  - API Reference:
+    - State: api-reference/state.md
+    - Patch: api-reference/patch.md
+    - Graph: api-reference/graph.md
+    - Conflicts: api-reference/conflicts.md

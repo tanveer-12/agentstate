@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from agentstatelib.coordination import (
+    BatchResolutionResult,
     ConflictResolver,
     InvariantChecker,
     InvariantViolation,
@@ -35,10 +36,10 @@ from agentstatelib.core.state import (
 )
 from agentstatelib.memory.store import InMemoryStore, SQLiteStore, StateStore
 from agentstatelib.router.context import slice_state
-from agentstatelib.router.graph import AgentGraph
+from agentstatelib.router.graph import AgentGraph, EventQueue, WorkflowEvent
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 __all__ = [
     "SharedState",
@@ -74,5 +75,6 @@ __all__ = [
     "RejectIncoming",
     "InvariantChecker",
     "InvariantViolation",
+    "BatchResolutionResult",
     "__version__",
 ]

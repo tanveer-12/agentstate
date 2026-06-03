@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from agentstatelib.coordination import (
+    BatchResolutionResult,
     ConflictDetector,
+    ConflictRecord,
     LastWriteWins,
     PriorityBased,
     RejectIncoming,
@@ -9,81 +11,107 @@ from agentstatelib.coordination import (
 from agentstatelib.core.patch import StatePatch
 
 
-def test_no_conflict_when_different_paths() -> None:
+def make_patch(agent_id, target, value, timestamp, priority=0):
+    return StatePatch(
+        agent_id=agent_id,
+        target=target,
+        value=value,
+        reason="test",
+        timestamp=timestamp,
+        priority=priority,
+    )
+
+
+def test_resolve_batch_no_conflict():
     detector = ConflictDetector(LastWriteWins())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t2.status", value="failed", reason="r2")
+    patches = [
+        make_patch("a1", "facts.a", 1, 1000.0),
+        make_patch("a2", "facts.b", 2, 1001.0),
+    ]
+    result = detector.resolve_batch(patches)
+    assert len(result.winners) == 2
+    assert result.conflicts == []
 
-    detector.submit(p1)
-    detector.submit(p2)
 
-    assert len(detector.conflicts) == 0
-
-
-def test_conflict_detected_on_same_path() -> None:
+def test_resolve_batch_detects_collision():
     detector = ConflictDetector(LastWriteWins())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t1.status", value="failed", reason="r2")
+    patches = [
+        make_patch("a1", "facts.a", 1, 1000.0),
+        make_patch("a2", "facts.a", 2, 1001.0),
+    ]
+    result = detector.resolve_batch(patches)
+    assert len(result.conflicts) == 1
+    assert len(result.winners) == 1
 
-    detector.submit(p1)
-    detector.submit(p2)
 
-    assert len(detector.conflicts) == 1
-
-
-def test_last_write_wins_returns_newer() -> None:
+def test_resolve_batch_last_write_wins():
     detector = ConflictDetector(LastWriteWins())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t1.status", value="failed", reason="r2")
-
-    # Force timestamps
-    p1.timestamp = 1000.0
-    p2.timestamp = 2000.0
-
-    detector.submit(p1)
-    detector.submit(p2)
-
-    patches = detector.drain()
-    assert len(patches) == 1
-    winner = patches[0]
-    assert winner.agent_id == "b"
+    older = make_patch("a1", "facts.a", 1, 1000.0)
+    newer = make_patch("a2", "facts.a", 2, 2000.0)
+    result = detector.resolve_batch([older, newer])
+    assert len(result.winners) == 1
+    assert result.winners[0].agent_id == "a2"
+    assert result.winners[0].timestamp == 2000.0
 
 
-def test_priority_based_returns_higher_priority() -> None:
+def test_resolve_batch_priority_based():
     detector = ConflictDetector(PriorityBased())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t1.status", value="failed", reason="r2")
-
-    p1.priority = 1
-    p2.priority = 10
-
-    detector.submit(p1)
-    winner = detector.submit(p2)
-
-    assert winner.agent_id == "b"
+    low = make_patch("a1", "facts.a", 1, 1000.0, priority=1)
+    high = make_patch("a2", "facts.a", 2, 1001.0, priority=10)
+    result = detector.resolve_batch([low, high])
+    assert len(result.winners) == 1
+    assert result.winners[0].agent_id == "a2"
+    assert result.winners[0].priority == 10
 
 
-def test_reject_incoming_keeps_first() -> None:
+def test_resolve_batch_reject_incoming():
     detector = ConflictDetector(RejectIncoming())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t1.status", value="failed", reason="r2")
-
-    detector.submit(p1)
-    winner = detector.submit(p2)
-
-    assert winner.agent_id == "a"
+    first = make_patch("a1", "facts.a", 1, 1000.0)
+    second = make_patch("a2", "facts.a", 2, 2000.0)
+    result = detector.resolve_batch([first, second])
+    assert len(result.winners) == 1
+    assert result.winners[0].agent_id == "a1"
 
 
-def test_drain_clears_pending() -> None:
+def test_resolve_batch_three_patches_same_path():
     detector = ConflictDetector(LastWriteWins())
-    p1 = StatePatch(agent_id="a", target="tasks.t1.status", value="done", reason="r1")
-    p2 = StatePatch(agent_id="b", target="tasks.t2.status", value="failed", reason="r2")
+    patches = [
+        make_patch("a1", "facts.a", 1, 1000.0),
+        make_patch("a2", "facts.a", 2, 2000.0),
+        make_patch("a3", "facts.a", 3, 3000.0),
+    ]
+    result = detector.resolve_batch(patches)
+    assert len(result.winners) == 1
+    assert len(result.conflicts) == 2
+    assert result.winners[0].agent_id == "a3"
+    assert result.winners[0].timestamp == 3000.0
 
-    detector.submit(p1)
-    detector.submit(p2)
 
-    patches = detector.drain()
-    assert len(patches) == 2
+def test_submit_returns_tuple():
+    detector = ConflictDetector(LastWriteWins())
+    patch = make_patch("a1", "facts.a", 1, 1000.0)
+    winner, conflict = detector.submit(patch)
+    assert isinstance(winner, StatePatch)
+    assert conflict is None
+    assert winner.agent_id == "a1"
 
-    patches_after = detector.drain()
-    assert patches_after == []
+
+def test_conflicts_accumulate_across_batches():
+    detector = ConflictDetector(LastWriteWins())
+
+    detector.resolve_batch(
+        [
+            make_patch("a1", "facts.a", 1, 1000.0),
+            make_patch("a2", "facts.a", 2, 2000.0),
+        ]
+    )
+    detector.resolve_batch(
+        [
+            make_patch("b1", "facts.b", 1, 1000.0),
+            make_patch("b2", "facts.b", 2, 2000.0),
+        ]
+    )
+
+    assert len(detector.conflicts) == 2
+    detector.reset()
+    assert len(detector.conflicts) == 0
