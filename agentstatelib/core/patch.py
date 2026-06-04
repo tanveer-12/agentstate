@@ -2,20 +2,25 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
 
-from agentstatelib.core.state import SharedState
+if TYPE_CHECKING:
+    from agentstatelib.core.state import SharedState
 
 
 # represents "one change an agent wants to make" to the shared state
 class StatePatch(BaseModel):
     """
-    A structured state update proposal from an agent.
-    Agents never write to SharedState directly - they
-    return a StatePatch. The library validated, resolves conflicts and
-    applies the winning patch. Every field is required except priority.
+    A structured state update proposal returned by an agent.
+
+    Agents never write to SharedState directly — they return a
+    StatePatch. The library validates the patch, resolves conflicts
+    with other patches from the same round, applies the winner to
+    state, and logs a PatchApplied event.
+
+    The reason field is required for a meaningful audit trail.
     """
 
     patch_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -29,15 +34,30 @@ class StatePatch(BaseModel):
 
 def set_nested(obj: dict[str, Any], path: str, value: Any) -> dict[str, Any]:
     """
-    Set value at a dotted path inside a nested dict, creating dicts as needed.
+    Set a value at a dotted path inside a nested dictionary.
+
+    Example:
+        set_nested({}, "tasks.t1.status", "done")
+
+    Produces:
+
+        {
+            "tasks": {
+                "t1": {
+                    "status": "done"
+                }
+            }
+        }
     """
     parts = path.split(".")  # turns "a.b.c" into ["a","b","c"]
-    current: dict[str, Any] = obj
+    current = obj
 
     for key in parts[:-1]:
-        if key not in current or not isinstance(current[key], dict):
-            current[key] = {}
-        current = current[key]
+        child = current.get(key)
+        if not isinstance(child, dict):
+            child = {}
+            current[key] = child
+        current = child
 
     current[parts[-1]] = value
     return obj
@@ -45,7 +65,20 @@ def set_nested(obj: dict[str, Any], path: str, value: Any) -> dict[str, Any]:
 
 def get_nested(obj: dict[str, Any], path: str) -> Any:
     """
-    Get value at a dotted path from a nested dict, or None if missing.
+    Retrieve a value from a nested dictionary using a dotted path.
+
+    Example:
+
+        get_nested(
+            {"tasks": {"t1": {"status": "done"}}},
+            "tasks.t1.status"
+        )
+
+    returns:
+
+        "done"
+
+    get_nested({}, "a.b.c") returns None.
     """
 
     parts = path.split(".")
@@ -63,7 +96,14 @@ def get_nested(obj: dict[str, Any], path: str) -> Any:
 
 # creates a dict view of SharedState with model_dump()
 def apply_patch(state: SharedState, patch: StatePatch) -> SharedState:
-    """Return a new SharedState with the patch applied at patch.target"""
+    """Apply a StatePatch to a SharedState, returning a new SharedState.
+
+    The original state object is never modified. This immutability is
+    what makes event replay and conflict detection possible — any
+    previous state can be reconstructed.
+    """
+    from agentstatelib.core.state import SharedState
+
     state_dict = state.model_dump()
     set_nested(state_dict, patch.target, patch.value)
     return SharedState.model_validate(state_dict)

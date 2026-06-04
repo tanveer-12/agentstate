@@ -83,7 +83,21 @@ class AgentGraph:
         agent_id: str,
         context: list[str] | None = None,
     ) -> Callable[[AgentFn], AgentFn]:
-        """Decorator to register an agent function under a given agent_id"""
+        """
+        Register an agent node.
+
+        Example:
+
+            @graph.node(
+                "planner",
+                context=["goal", "tasks"]
+            )
+            async def planner(ctx):
+                ...
+
+        The context list controls which portions of SharedState
+        are exposed to the agent.
+        """
 
         def decorator(fn: AgentFn) -> AgentFn:
             self._nodes[agent_id] = _Node(
@@ -101,7 +115,13 @@ class AgentGraph:
         to_agent: str,
         condition: EdgeCondition | None = None,
     ) -> None:
-        """Add a directed edge between two agents."""
+        """
+        Add a directed edge from from_agent to to_agent.
+
+        Multiple edges from the same source agent cause all
+        reachable agents to be collected and run together in
+        the next parallel round.
+        """
         self._edges.append(
             _Edge(
                 from_agent=from_agent,
@@ -110,18 +130,15 @@ class AgentGraph:
             )
         )
 
-    def _next_agent(self, current_id: str, state_dict: dict[str, object]) -> str | None:
-        """Return the next agent_id to run current_id, or None if done."""
-
-        for edge in self._edges:
-            if edge.from_agent != current_id:
-                continue
-            if edge.condition(state_dict):
-                return edge.to_agent
-
-        return None
-
     def add_invariant(self, checker: InvariantChecker) -> None:
+        """
+        Register an additional invariant checker.
+
+        Checkers run after every round completes.
+
+        Error-severity violations halt the workflow with
+        RuntimeError.
+        """
         self._invariant_checkers.append(checker)
 
     async def run(
@@ -130,6 +147,33 @@ class AgentGraph:
         start: str | list[str],
         event_queue: EventQueue | None = None,
     ) -> SharedState:
+        """
+        Execute the graph.
+
+        Parameters
+        ----------
+        state:
+            Initial SharedState snapshot.
+
+        start:
+            Agent id or list of agent ids to start from.
+
+        event_queue:
+            Optional queue receiving workflow events.
+
+        Returns
+        -------
+        SharedState
+            Final workflow state.
+
+        Raises
+        ------
+        ValueError
+            If a start node is not registered.
+
+        RuntimeError
+            If invariant checks fail.
+        """
         start_ids = [start] if isinstance(start, str) else list(start)
         for agent_id in start_ids:
             if agent_id not in self._nodes:
@@ -146,7 +190,6 @@ class AgentGraph:
             WorkflowStarted(
                 workflow_id=workflow_id,
                 agent_id="system",
-                type="workflow_started",
                 workflow_type=state.workflow_type,
                 goal=state.goal,
             ),
@@ -176,7 +219,6 @@ class AgentGraph:
             WorkflowCompleted(
                 workflow_id=workflow_id,
                 agent_id="system",
-                type="workflow_completed",
                 final_status=current_state.status,
             ),
             event_queue,
@@ -223,7 +265,6 @@ class AgentGraph:
                 PatchApplied(
                     workflow_id=workflow_id,
                     agent_id=winner_patch.agent_id,
-                    type="patch_applied",
                     patch_id=winner_patch.patch_id,
                     target=winner_patch.target,
                     old_value=old_value,
@@ -270,6 +311,7 @@ class AgentGraph:
                 )
             node = self._nodes[agent_id]
             context = slice_state(state, list(node.context_keys))
+
             async with self._sem:
                 return await node.fn(context)
 
@@ -300,11 +342,13 @@ class AgentGraph:
             for edge in self._edges:
                 if edge.from_agent != agent_id:
                     continue
+                if not edge.condition(state_dict):
+                    continue
                 if edge.to_agent in seen:
                     continue
-                if edge.condition(state_dict):
-                    next_ids.append(edge.to_agent)
-                    seen.add(edge.to_agent)
+
+                seen.add(edge.to_agent)
+                next_ids.append(edge.to_agent)
 
         return next_ids
 
@@ -329,7 +373,6 @@ class AgentGraph:
         return ConflictDetected(
             workflow_id=workflow_id,
             agent_id="system",
-            type="conflict_detected",
             conflict_id=record.conflict_id,
             path=record.path,
             winner_agent_id=record.winner_agent_id,

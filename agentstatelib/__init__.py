@@ -62,6 +62,8 @@ __all__ = [
     "AgentErrored",
     "event_adapter",
     "AgentGraph",
+    "EventQueue",
+    "WorkflowEvent",
     "AgentFn",
     "EdgeCondition",
     "slice_state",

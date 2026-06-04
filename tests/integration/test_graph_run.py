@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from agentstatelib.core.patch import StatePatch
@@ -12,60 +14,64 @@ async def test_single_agent_workflow() -> None:
     graph = AgentGraph()
 
     @graph.node("agent_a")
-    async def stub_agent(context: dict) -> StatePatch:
+    async def stub_agent(ctx: dict) -> StatePatch:
         return StatePatch(
-            agent_id="agent_a",
+            agent_id="a",
             target="facts.done",
             value=True,
             reason="test",
         )
 
-    state = SharedState(goal="test")
+    final = await graph.run(
+        SharedState(goal="test"),
+        start="agent_a",
+    )
 
-    final_state = await graph.run(state, start="agent_a")
-
-    assert final_state.facts.get("done") is True
+    assert final.facts.get("done") is True
 
 
 @pytest.mark.asyncio
-async def test_two_agent_pipeline_in_order() -> None:
+async def test_two_agent_sequential_pipeline() -> None:
     graph = AgentGraph()
 
-    @graph.node("first")
-    async def first_agent(context: dict) -> StatePatch:
+    @graph.node("agent_a")
+    async def agent_a(ctx: dict) -> StatePatch:
         return StatePatch(
-            agent_id="first",
+            agent_id="a",
             target="facts.step",
             value=1,
-            reason="set step to 1",
+            reason="step one",
         )
 
-    @graph.node("second")
-    async def second_agent(context: dict) -> StatePatch:
+    @graph.node("agent_b")
+    async def agent_b(ctx: dict) -> StatePatch:
         return StatePatch(
-            agent_id="second",
+            agent_id="b",
             target="facts.step",
             value=2,
-            reason="set step to 2",
+            reason="step two",
         )
 
     graph.edge(
-        "first",
-        "second",
+        "agent_a",
+        "agent_b",
         condition=lambda s: s.get("facts", {}).get("step") == 1,
     )
 
-    state = SharedState(goal="test")
+    final = await graph.run(
+        SharedState(goal="test"),
+        start="agent_a",
+    )
 
-    final_state = await graph.run(state, start="first")
-
-    assert final_state.facts["step"] == 2
+    assert final.facts.get("step") == 2
 
 
 @pytest.mark.asyncio
-async def test_graph_raises_on_unknown_start_agent() -> None:
+async def test_unknown_start_agent_raises() -> None:
     graph = AgentGraph()
-    state = SharedState(goal="x")
 
     with pytest.raises(ValueError):
-        await graph.run(state, start="nonexistent")
+        await graph.run(
+            SharedState(goal="x"),
+            start="nonexistent",
+        )

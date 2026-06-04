@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import pytest
+
 from agentstatelib.core.patch import StatePatch, apply_patch
 from agentstatelib.core.state import SharedState
 from agentstatelib.router.context import slice_state
+
 
 def test_slice_state_returns_only_requested_paths() -> None:
     state = SharedState(goal="test")
@@ -18,6 +21,7 @@ def test_slice_state_returns_only_requested_paths() -> None:
     assert "goal" in result
     assert "tasks" not in result
     assert "artifacts" not in result
+
 
 def test_slice_state_handles_nested_paths() -> None:
     state = SharedState(goal="test")
@@ -39,6 +43,7 @@ def test_slice_state_handles_nested_paths() -> None:
     result = slice_state(state, ["facts.key1"])
     assert result["facts"]["key1"] == "value1"
     assert "key2" not in result.get("facts", {})
+
 
 def test_slice_state_empty_include_returns_full_state() -> None:
     state = SharedState(goal="test")

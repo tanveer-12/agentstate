@@ -2,45 +2,330 @@
 
 ## What a patch is
 
-A patch is a proposal, not a write. An agent does not change `SharedState` directly; it returns a `StatePatch` that describes the change it wants to make.
+A `StatePatch` is a **proposal**, not a write.
 
-That separation matters because it keeps every mutation explicit and reviewable. Instead of silently changing state, the workflow can inspect, validate, and log every proposed update before it becomes part of the shared world.
+Agents never modify `SharedState` directly. Instead, they return a `StatePatch` describing the change they want to make. The library then decides whether that change should actually be applied.
 
-## Why agents propose instead of write
+```python
+from agentstatelib import StatePatch
 
-Agents propose patches so the system can preserve an audit trail, detect conflicts, and support replay. If state changes were applied directly by agents, you would lose the ability to reconstruct why a value changed or which agent caused it.
+patch = StatePatch(
+    agent_id="research_agent",
+    target="facts.domain",
+    value="machine learning",
+    reason="Detected primary topic from source documents",
+)
+```
 
-Proposal-based writes also make parallel execution safe. Multiple agents can work against the same snapshot, and the library can decide which patch wins instead of letting later writes overwrite earlier ones invisibly.
+This extra layer exists for several important reasons.
+
+### Conflict detection
+
+If two agents attempt to modify the same piece of state during the same parallel round, the library can detect the collision before anything is written.
+
+Without patches:
+
+```text
+Agent A writes facts.domain = "biology"
+Agent B writes facts.domain = "physics"
+```
+
+The last write silently wins.
+
+With patches:
+
+```text
+Agent A proposes facts.domain = "biology"
+Agent B proposes facts.domain = "physics"
+```
+
+The conflict is detected and resolved explicitly.
+
+### Attribution
+
+Every patch contains the `agent_id` of the agent that produced it.
+
+This means the event log can answer questions such as:
+
+- Which agent made this change?
+- When was it made?
+- What value was replaced?
+- Why was it changed?
+
+### Auditability
+
+Every patch requires a reason.
+
+This creates a human-readable history of workflow decisions and state transitions.
+
+Without patches, state changes happen silently.
+
+With patches, every change becomes an explicit event.
+
+---
 
 ## The patch pipeline
 
-The patch flow is simple:
+A patch travels through several stages before it becomes part of the workflow state.
 
-1. An agent returns a patch.
-2. The conflict detector checks whether any patch targets the same path as another patch in the same round.
-3. `apply_patch()` applies the winning patch to the current state.
-4. Invariants run against the updated state.
-5. The result becomes the next shared state snapshot.
+```text
+Agent
+  │
+  ▼
+StatePatch
+  │
+  ▼
+ConflictDetector.resolve_batch()
+  │
+  ▼
+apply_patch()
+  │
+  ▼
+InvariantChecker.check()
+  │
+  ▼
+New SharedState
+  │
+  ▼
+PatchApplied event logged
+```
 
-This pipeline keeps mutation controlled and observable. It also means a failed invariant or a conflict can be handled explicitly instead of causing hidden corruption.
+Each stage has a single responsibility.
 
-## Dotted target paths
+### Agent
 
-`target` uses dotted paths to point into nested dictionaries. Each segment walks one level deeper into the state.
+Produces a `StatePatch`.
+
+The agent does not modify state itself.
+
+### ConflictDetector.resolve_batch()
+
+Receives all patches produced during the current parallel round.
+
+If multiple patches target the same path, the configured conflict resolution strategy chooses a winner.
+
+### apply_patch()
+
+Applies the winning patch to a copy of the current state.
+
+The original state object remains unchanged.
+
+### InvariantChecker.check()
+
+Validates that the updated state still satisfies workflow invariants.
 
 Examples:
 
-- `facts.plan`
-- `goals.primary.status`
-- `tasks.task_1.description`
-- `artifacts.summary.content`
+- Tasks must reference valid goals.
+- Completed goals cannot have unfinished tasks.
 
-In practice, this lets agents update precise parts of the shared world. You can patch a single fact, a task status, or an artifact field without replacing the whole object.
+If an error-level invariant fails, workflow execution stops.
 
-## Priority in conflicts
+### New SharedState
 
-When two patches collide, `priority` helps the resolver choose between them. Higher priority patches can be favored over lower priority patches, depending on the configured conflict resolution strategy.
+A new immutable snapshot is created.
 
-That gives you a way to encode policy into the workflow. For example, a coordinator agent might have higher priority than a worker agent, or a human-approved patch might outrank an automatically generated one.
+All agents in the next round will read this updated snapshot.
 
-Without agentstatelib, agent B silently overwrites agent A's work. With agentstatelib, the conflict is detected, resolved by your configured strategy, and logged.
+### PatchApplied event
+
+A `PatchApplied` event is written to the event store.
+
+The event contains:
+
+- patch ID
+- target path
+- old value
+- new value
+- reason
+- workflow ID
+- agent ID
+
+This event becomes part of the permanent audit trail.
+
+---
+
+## The target field
+
+The `target` field specifies **where** the update should be applied.
+
+Targets use dotted-path notation.
+
+```python
+StatePatch(
+    agent_id="agent",
+    target="facts.domain",
+    value="robotics",
+    reason="Detected topic",
+)
+```
+
+This updates:
+
+```python
+state.facts["domain"]
+```
+
+### Examples
+
+Fact update:
+
+```python
+target="facts.domain"
+```
+
+Task update:
+
+```python
+target="tasks.research.status"
+```
+
+Artifact update:
+
+```python
+target="artifacts.draft.content"
+```
+
+Decision metadata:
+
+```python
+target="facts.selected_model"
+```
+
+### Automatic path creation
+
+Intermediate dictionaries are created automatically.
+
+```python
+set_nested({}, "tasks.t1.status", "done")
+```
+
+Produces:
+
+```python
+{
+    "tasks": {
+        "t1": {
+            "status": "done"
+        }
+    }
+}
+```
+
+You do not need to manually create every level beforehand.
+
+This allows agents to propose updates using simple dotted paths regardless of how deeply nested the target location is.
+
+---
+
+## The reason field
+
+The `reason` field is technically required and should be treated as required in spirit as well.
+
+A good reason explains **why** the change is being made.
+
+Poor example:
+
+```python
+reason="done"
+```
+
+This tells future readers almost nothing.
+
+Better example:
+
+```python
+reason="Completed literature review and identified 12 relevant papers"
+```
+
+Now the event log immediately communicates:
+
+- what happened
+- why it happened
+- what work was completed
+
+When debugging workflows weeks later, the reason field often becomes the most valuable piece of information in the entire event log.
+
+Compare:
+
+```text
+facts.paper_count = 12
+reason = "done"
+```
+
+versus
+
+```text
+facts.paper_count = 12
+reason = "Completed literature review and identified 12 relevant papers"
+```
+
+The second entry explains the workflow state without requiring any additional investigation.
+
+As a rule, write reasons for humans, not machines.
+
+---
+
+## Priority
+
+`StatePatch` includes an optional `priority` field.
+
+```python
+patch = StatePatch(
+    agent_id="planner",
+    target="facts.strategy",
+    value="approach_a",
+    reason="Planner selected strategy",
+    priority=10,
+)
+```
+
+Default value:
+
+```python
+priority = 0
+```
+
+Priority becomes important when using the `PriorityBased` conflict resolver.
+
+```text
+Patch A priority = 5
+Patch B priority = 10
+```
+
+Patch B wins.
+
+If priorities are equal:
+
+```text
+Patch A priority = 10
+Patch B priority = 10
+```
+
+The resolver falls back to timestamp ordering (last-write-wins behavior).
+
+### When to use priority
+
+Use higher priorities for agents whose decisions should dominate others.
+
+Examples:
+
+- Planner agent over worker agents
+- Human approval agent over autonomous agents
+- Validation agent over extraction agents
+
+Example:
+
+```python
+StatePatch(
+    agent_id="human_review",
+    target="facts.approved",
+    value=True,
+    reason="Human reviewer approved output",
+    priority=100,
+)
+```
+
+This ensures the human review decision wins conflicts against lower-priority automated agents.
+
+If you do not need hierarchical authority between agents, leave the priority field at its default value of `0`.
