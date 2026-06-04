@@ -4,14 +4,14 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, TypeAdapter
 
-from agentstatelib.core.patch import StatePatch
-
 
 # This is the parent all events share
 class BaseStateEvent(BaseModel):
     """
-    Base class for all events in the agentstate event log.
-    Every state change produces an event.
+    Base class for all events in the agentstatelib event log.
+
+    Every state change, conflict, checkpoint, and error produces a typed
+    event appended to the store. Events are immutable once written.
     """
 
     event_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -20,28 +20,40 @@ class BaseStateEvent(BaseModel):
     timestamp: float = Field(default_factory=time.time)
 
 
-# six subclasses inherting from BaseStateEvent,
-# with each one, having a 'type' field typed as a literal with
-# a single string value, and set its default to that string.
-
-
 class WorkflowStarted(BaseStateEvent):
-    type: Literal["workflow_started"]
+    """
+    Emitted at the start of AgentGraph.run().
+
+    Marks the beginning of the event sequence and carries the workflow
+    metadata needed to reconstruct SharedState from scratch during replay.
+    """
+
+    type: Literal["workflow_started"] = "workflow_started"
     workflow_type: str
     goal: str
 
 
 class WorkflowCompleted(BaseStateEvent):
-    type: Literal["workflow_completed"]
+    """
+    Emitted when AgentGraph.run() finishes normally.
+
+    final_status is the workflow status at the time of completion.
+    """
+
+    type: Literal["workflow_completed"] = "workflow_completed"
     final_status: Any
 
 
 class PatchApplied(BaseStateEvent):
     """
-    Records the before and after value of a specific state path.
+    Emitted after a winning patch is applied to state.
+
+    old_value and new_value store only the value at patch.target —
+    not full state dumps. This keeps individual events compact
+    regardless of overall state size.
     """
 
-    type: Literal["patch_applied"]
+    type: Literal["patch_applied"] = "patch_applied"
     patch_id: str
     target: str
     old_value: Any
@@ -51,11 +63,15 @@ class PatchApplied(BaseStateEvent):
 
 class ConflictDetected(BaseStateEvent):
     """
-    Emitted when resolve_batch() detects a path collision.
-    The winning patch is applied. Both patches are stored as dicts for serializability.
+    Emitted when resolve_batch() detects two patches targeting the same
+    state path in the same parallel round.
+
+    Both patches stored as plain dicts rather than StatePatch objects
+    to guarantee JSON serializability regardless of what value fields
+    contain.
     """
 
-    type: Literal["conflict_detected"]
+    type: Literal["conflict_detected"] = "conflict_detected"
     conflict_id: str
     path: str
     winner_agent_id: str
@@ -66,20 +82,26 @@ class ConflictDetected(BaseStateEvent):
 
 
 class CheckpointSaved(BaseStateEvent):
-    type: Literal["checkpoint_saved"]
+    """Emitted when save_checkpoint() completes successfully."""
+
+    type: Literal["checkpoint_saved"] = "checkpoint_saved"
     checkpoint_id: str
     event_count: int
 
 
 class AgentErrored(BaseStateEvent):
-    type: Literal["agent_errored"]
+    """
+    Emitted when an agent raises an unhandled exception.
+
+    retry_count records how many retries were attempted.
+    """
+
+    type: Literal["agent_errored"] = "agent_errored"
     error_type: str
     error_message: str
     retry_count: int
 
 
-# Pydantic will use the type field to decide which model to instantiate
-# when deserializing
 StateEvent = Annotated[
     WorkflowStarted
     | WorkflowCompleted

@@ -5,6 +5,8 @@ __pycache__/
 
 docs/build_instructions.md
 docs/v4_build.md
+docs/final-build.md
+
 
 # db
 *.db

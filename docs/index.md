@@ -17,6 +17,11 @@ agentstate gives multiple AI agents a shared, typed world to operate in, with st
 pip install agentstate-lib
 ```
 
+## Import
+```bash
+from agentstatelib import SharedState, AgentGraph, StatePatch
+```
+
 ## Positioning
 
 agentstate is the coordination layer that sits underneath multi-agent frameworks instead of replacing them. It focuses on shared typed state, auditable mutations, and recovery tooling so teams can build workflows that are easier to inspect, test, and trust.

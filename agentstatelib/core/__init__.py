@@ -1,4 +1,4 @@
-from .events import (
+from agentstatelib.core.events import (
     AgentErrored,
     BaseStateEvent,
     CheckpointSaved,
@@ -9,7 +9,14 @@ from .events import (
     WorkflowStarted,
     event_adapter,
 )
-from .state import Artifact, Decision, Goal, SharedState, Task, WorkflowStatus
+from agentstatelib.core.state import (
+    Artifact,
+    Decision,
+    Goal,
+    SharedState,
+    Task,
+    WorkflowStatus,
+)
 
 __all__ = [
     "SharedState",

@@ -7,20 +7,6 @@
       show_source: false
       members: true
 
-## StateEvent
-
-::: agentstatelib.core.events.StateEvent
-    options:
-      show_source: false
-      members: true
-
-## event_adapter
-
-::: agentstatelib.core.events.event_adapter
-    options:
-      show_source: false
-      members: true
-
 ## WorkflowStarted
 
 ::: agentstatelib.core.events.WorkflowStarted
@@ -59,6 +45,20 @@
 ## AgentErrored
 
 ::: agentstatelib.core.events.AgentErrored
+    options:
+      show_source: false
+      members: true
+
+## StateEvent
+
+::: agentstatelib.core.events.StateEvent
+    options:
+      show_source: false
+      members: true
+
+## event_adapter
+
+::: agentstatelib.core.events.event_adapter
     options:
       show_source: false
       members: true

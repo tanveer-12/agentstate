@@ -1,4 +1,4 @@
-from .store import (
+from agentstatelib.memory.store import (
     InMemoryStore,
     SQLiteStore,
     StateStore,
