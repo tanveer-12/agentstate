@@ -1,0 +1,3385 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>agentstatelib — Build Instructions - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agentstatelib-build-instructions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              agentstatelib — Build Instructions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../concepts/shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#package-naming-read-this-first-refer-back-always" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package naming — read this first, refer back always
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-read-this-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to read this document
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#competitive-positioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Competitive Positioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-models-your-dev-setup-vs-what-ships-to-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Models: Your Dev Setup vs What Ships to Users
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-0-pre-work-before-week-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 0 · Pre-work · Before Week 1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 0 · Pre-work · Before Week 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to create
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-0-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 0 commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-week-1-sharedstate-stateevent-sqlitestore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcorestatepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/state.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoreeventspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/events.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemorystorepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/store.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemory__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcore__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_statepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_state.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_eventspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_events.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_storepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_store.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsshared-statemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/shared-state.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referencestatemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/state.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referenceeventsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/events.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-week-2-statepatch-agentgraph-publish-v010" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcorepatchpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/patch.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutertypespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/types.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutercontextpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/context.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutergraphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibrouter__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelib__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_patchpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_patch.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_contextpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_context.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_graph_runpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_graph_run.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptspatchesmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/patches.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsquickstartmd-fill-in-completely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/quickstart.md — fill in completely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-v013" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish v0.1.3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-week-3-coordination-layer-conflicts-invariants-parallel-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 · Week 3 · Coordination Layer — Conflicts · Invariants · Parallel Graph
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2 · Week 3 · Coordination Layer — Conflicts · Invariants · Parallel Graph">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoordination__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/coordination/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelib__init__py-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/__init__.py (update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_conflictspy-rewrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_conflicts.py (rewrite)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_invariantspy-additions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_invariants.py (additions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_conflict_flowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_conflict_flow.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_parallel_executionpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_parallel_execution.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsconflictmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/conflict.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsparallelismmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/parallelism.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referenceconflictsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/conflicts.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mkdocsyml-expand-nav-for-week-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mkdocs.yml — expand nav for Week 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-v013_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish v0.1.3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-4-fastapi-http-layer-v02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapiapppy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/app.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapiauthpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/auth.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapiroutespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/routes.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapistreamingpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/streaming.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapi__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_apipy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_api.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguideshttp-apimd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/http-api.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-and-run-commands-for-week-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test and run commands for Week 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-5-persistence-checkpoint-replay-v03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 5 · Persistence · Checkpoint · Replay · v0.3
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 5 · Persistence · Checkpoint · Replay · v0.3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemorystorepy-add-postgresql-stub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/store.py (add PostgreSQL stub)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemorycheckpointpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/checkpoint.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemoryreplaypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/replay.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemory__init__py-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/__init__.py (update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelib__init__py-update_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/__init__.py (update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_replaypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_replay.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_checkpoint_recoverypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_checkpoint_recovery.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsevent-logmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/event-log.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidescheckpoint-recoverymd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/checkpoint-recovery.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidesreplay-debuggermd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/replay-debugger.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-mkdocsyml-nav-for-week-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update mkdocs.yml nav for Week 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-and-publish-commands-for-week-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test and publish commands for Week 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-6-llm-integration-local-models-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 6 · LLM Integration · Local Models · Benchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 6 · LLM Integration · Local Models · Benchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-a-start-your-colab-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part A — Start your Colab session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-to-write" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to write
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcontribbase_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/contrib/base_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelsopenai_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/openai_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelsanthropic_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/anthropic_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelsollama_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/ollama_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelsgroq_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/groq_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelsrule_based_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/rule_based_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesbenchmarkrun_benchmarkpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/benchmark/run_benchmark.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidesllm-integrationmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/llm-integration.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguideslocal-modelsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/local-models.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsbenchmarkmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/benchmark.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-mkdocsyml-nav-for-week-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update mkdocs.yml nav for Week 6
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-and-run-commands-for-week-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test and run commands for Week 6
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#done-when_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Done when
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weeks-714-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weeks 7–14 Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-docs-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version → Docs Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="agentstatelib-build-instructions">agentstatelib — Build Instructions</h1>
+<h2 id="package-naming-read-this-first-refer-back-always">Package naming — read this first, refer back always</h2>
+<p>Two names. Never mix them up.</p>
+<p><strong>Install from PyPI:</strong></p>
+<pre><code>pip install agentstate-lib
+</code></pre>
+<p><strong>Import in Python:</strong></p>
+<pre><code class="language-python">from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.core.state import SharedState
+from agentstatelib.coordination.conflicts import LastWriteWins
+</code></pre>
+<p><strong>Source folder on disk:</strong> <code>agentstatelib/</code></p>
+<p>In <code>pyproject.toml</code> the project name is <code>agentstate-lib</code> (hyphens). The importable package is <code>agentstatelib</code> (underscores). Every import in every file in this document uses <code>agentstatelib</code>. Every <code>pip install</code> uses <code>agentstate-lib</code>.</p>
+<hr />
+<h2 id="how-to-read-this-document">How to read this document</h2>
+<p>Every week follows the same structure:</p>
+<ul>
+<li><strong>Context</strong> — why this week matters and what it enables</li>
+<li><strong>Files to work in</strong> — exact paths in the order you write them</li>
+<li><strong>Detailed instructions per file</strong> — imports, classes, methods, fields, docstrings — everything except the actual code characters</li>
+<li><strong>Docs to write</strong> — what user-facing documentation ships with this version</li>
+<li><strong>Test commands</strong> — exact PowerShell commands to run</li>
+<li><strong>Publish commands</strong> — how to ship and deploy docs</li>
+<li><strong>Done when</strong> — explicit pass criteria before moving to the next week</li>
+</ul>
+<p>Rules:
+1. Run <code>ruff check</code>, <code>mypy --strict</code>, and <code>pytest</code> after every coding session — not once per week, every session
+2. Every public class and function gets a docstring — mkdocstrings renders these into your API reference pages
+3. Docs ship with every published version — users who install the day you publish must be able to use it immediately
+4. Colab is your personal GPU dev tool — it ships nothing to users</p>
+<hr />
+<h2 id="competitive-positioning">Competitive Positioning</h2>
+<p>You build against LangGraph, CrewAI, and AutoGen. Every design decision reinforces one of three things:</p>
+<p><strong>Coordination</strong> — typed SharedState, StatePatch pipeline, batch conflict resolution, invariant checking. LangGraph silently merges state with dict reducers. You detect and log every conflict explicitly.</p>
+<p><strong>Observability</strong> — append-only event log, OpenTelemetry traces, replay debugger, live dashboard. No existing multi-agent framework ships this as a first-class built-in feature.</p>
+<p><strong>Framework agnosticism</strong> — any async callable returning StatePatch is a valid agent. OpenAI, Anthropic, Ollama, Groq, rule-based functions — all identical from your library's perspective. LangGraph is coupled to LangChain.</p>
+<pre><code>Feature                   | agentstatelib | LangGraph | CrewAI | AutoGen
+--------------------------|---------------|-----------|--------|--------
+Typed shared state        | yes           | dict only | no     | no
+Append-only event log     | yes           | no        | no     | no
+Conflict detection        | yes           | no        | no     | no
+Parallel round execution  | yes           | partial   | no     | no
+Replay debugger           | yes           | no        | no     | no
+Framework agnostic        | yes           | no        | part   | part
+Local model support       | yes           | partial   | part   | part
+Built-in observability    | yes           | no        | no     | no
+</code></pre>
+<hr />
+<h2 id="documentation-strategy">Documentation Strategy</h2>
+<p>MkDocs + Material theme + mkdocstrings + mike. This is the same stack FastAPI and Pydantic use.</p>
+<ul>
+<li><strong>MkDocs</strong> generates a static site from Markdown files hosted free on GitHub Pages</li>
+<li><strong>mkdocstrings</strong> reads Python docstrings and generates API reference pages automatically — every docstring you write in source becomes a searchable reference page, which is why docstrings matter from day one</li>
+<li><strong>mike</strong> manages versioned docs so users can read docs for the exact version installed</li>
+</ul>
+<p>Doc site grows each week:</p>
+<pre><code>docs/
+├── index.md                      ← comparison table + install
+├── quickstart.md                 ← 15-line working example
+├── concepts/
+│   ├── shared-state.md           ← week 1
+│   ├── patches.md                ← week 2
+│   ├── conflict.md               ← week 3
+│   ├── parallelism.md            ← week 3
+│   ├── event-log.md              ← week 5
+│   └── observability.md          ← week 7
+├── api-reference/
+│   ├── state.md                  ← week 1
+│   ├── patch.md                  ← week 2
+│   ├── graph.md                  ← week 2
+│   ├── conflicts.md              ← week 3
+│   ├── store.md                  ← week 5
+│   └── observability.md          ← week 7
+├── guides/
+│   ├── llm-integration.md        ← week 6
+│   ├── local-models.md           ← week 6
+│   ├── checkpoint-recovery.md    ← week 5
+│   ├── opentelemetry.md          ← week 7
+│   ├── dashboard.md              ← week 8
+│   ├── testing.md                ← week 9
+│   ├── production.md             ← week 10
+│   ├── integrations.md           ← week 12
+│   └── migration/v0.x-to-v1.md  ← week 12
+├── decisions/                    ← ADRs week 11
+├── benchmark.md                  ← week 6
+└── design.md                     ← week 13
+</code></pre>
+<hr />
+<h2 id="local-models-your-dev-setup-vs-what-ships-to-users">Local Models: Your Dev Setup vs What Ships to Users</h2>
+<p>Your Colab session is your personal GPU access for testing. It ships nothing to users.</p>
+<p><strong>What you use (dev only):</strong>
+- <code>notebooks/colab_setup.ipynb</code> — starts Ollama on Colab Pro, creates ngrok tunnel to your Windows machine
+- <code>.env</code> with <code>COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app</code>
+- The ngrok URL changes every Colab session — update <code>.env</code> each time</p>
+<p><strong>What ships to users:</strong>
+- <code>agentstatelib/contrib/base_agent.py</code> — retry-with-correction base class, provider-agnostic
+- <code>examples/models/</code> — reference implementations users copy and adapt
+- <code>docs/guides/llm-integration.md</code> — integration guide written for users
+- <code>docs/guides/local-models.md</code> — Ollama grammar-constrained output guide</p>
+<p>Users bring their own Ollama on their own server, their own API keys, their own inference setup. Your library only sees StatePatch objects — it never cares where they came from.</p>
+<p><strong>Colab session workflow:</strong>
+1. Open <code>notebooks/colab_setup.ipynb</code> in Colab Pro
+2. Runtime → Run all (or run cells 1–6 in order)
+3. Copy the ngrok URL printed by Cell 4
+4. Update <code>.env</code>: <code>COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app</code>
+5. Keep Cell 6 running to prevent timeout</p>
+<hr />
+<h2 id="phase-0-pre-work-before-week-1">Phase 0 · Pre-work · Before Week 1</h2>
+<h3 id="context">Context</h3>
+<p>Set up so every tool runs clean on an empty codebase. If anything fails here, fix it before writing library code — undetected config problems become confusing failures weeks later.</p>
+<h3 id="files-to-create">Files to create</h3>
+<p><strong><code>pyproject.toml</code></strong> — replace the generated file entirely.</p>
+<p><code>[build-system]</code> section: <code>requires = ["hatchling"]</code>, <code>build-backend = "hatchling.build"</code>.</p>
+<p><code>[project]</code> section: <code>name = "agentstate-lib"</code>, <code>version = "0.1.0"</code>, <code>description = "Typed stateful coordination layer for parallel multi-agent AI systems"</code>, <code>readme = "README.md"</code>, <code>requires-python = "&gt;=3.11"</code>, <code>dependencies = ["pydantic&gt;=2.0", "aiosqlite&gt;=0.19"]</code>. Add <code>authors</code> with your name and email. Add <code>license = {text = "MIT"}</code>.</p>
+<p><code>[project.optional-dependencies]</code> section with these groups:
+- <code>api</code> contains fastapi&gt;=0.100 and uvicorn with standard extras
+- <code>otel</code> contains opentelemetry-api, opentelemetry-sdk, opentelemetry-exporter-otlp-proto-grpc
+- <code>dashboard</code> contains rich&gt;=13.0
+- <code>contrib</code> is an empty list — the contrib module has no extra deps
+- <code>docs</code> contains mkdocs-material&gt;=9.0, mkdocstrings with python extra, mike&gt;=2.0
+- <code>dev</code> contains pytest&gt;=7.0, pytest-asyncio&gt;=0.21, mypy&gt;=1.0, ruff&gt;=0.1, hypothesis&gt;=6.0, httpx&gt;=0.24, python-dotenv&gt;=1.0</p>
+<p><code>[tool.ruff]</code> section: <code>line-length = 88</code>, <code>target-version = "py312"</code>. Under <code>[tool.ruff.lint]</code>: <code>select = ["E", "F", "I", "UP", "B"]</code>.</p>
+<p><code>[tool.mypy]</code> section: <code>python_version = "3.12"</code>, <code>strict = true</code>, <code>ignore_missing_imports = true</code>.</p>
+<p><code>[tool.pytest.ini_options]</code> section: <code>asyncio_mode = "auto"</code>, <code>testpaths = ["tests"]</code>.</p>
+<p><strong>All package <code>__init__.py</code> files</strong> — create empty files at each of these paths:
+<code>agentstatelib/__init__.py</code>, <code>agentstatelib/core/__init__.py</code>, <code>agentstatelib/router/__init__.py</code>, <code>agentstatelib/coordination/__init__.py</code>, <code>agentstatelib/memory/__init__.py</code>, <code>agentstatelib/observability/__init__.py</code>, <code>agentstatelib/api/__init__.py</code>, <code>agentstatelib/contrib/__init__.py</code>, <code>tests/__init__.py</code>, <code>tests/unit/__init__.py</code>, <code>tests/integration/__init__.py</code>, <code>tests/property/__init__.py</code>.</p>
+<p>Write a single comment in <code>agentstatelib/__init__.py</code>: <code># Public API — exports added as modules are built</code>. Write a single comment in <code>tests/conftest.py</code>: <code># Shared fixtures — populated starting week 1</code>.</p>
+<p><strong><code>.gitignore</code></strong> — add these entries: <code>.venv/</code>, <code>__pycache__/</code>, <code>*.pyc</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code>, <code>.pytest_cache/</code>, <code>dist/</code>, <code>*.egg-info/</code>, <code>.env</code>, <code>*.db</code>, <code>.checkpoints/</code>, <code>site/</code>.</p>
+<p><strong><code>.vscode/settings.json</code></strong> — set <code>python.defaultInterpreterPath</code> to <code>.venv/Scripts/python.exe</code>, <code>editor.formatOnSave</code> to true, <code>editor.defaultFormatter</code> to <code>charliermarsh.ruff</code>, <code>python.testing.pytestEnabled</code> to true, <code>python.testing.pytestArgs</code> to <code>["tests"]</code>.</p>
+<p><strong><code>.env</code></strong> — create on Windows, add to <code>.gitignore</code>, never commit. Four lines:</p>
+<pre><code>OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+GROQ_API_KEY=
+COLAB_OLLAMA_URL=http://localhost:11434
+</code></pre>
+<p><strong><code>mkdocs.yml</code></strong> — create in project root. Set <code>site_name</code> to <code>agentstatelib</code>. Set <code>site_description</code>. Set <code>repo_url</code> to your GitHub URL. Under <code>theme</code>: name is <code>material</code>, features list includes <code>navigation.tabs</code>, <code>navigation.sections</code>, <code>content.code.copy</code>, <code>search.suggest</code>. Under <code>plugins</code>: list <code>search</code> and <code>mkdocstrings</code> with handlers → python → options → show_source: true. Under <code>extra</code>: version → provider: mike. Nav for now: Home pointing to index.md and Quickstart pointing to quickstart.md.</p>
+<p><strong><code>docs/index.md</code></strong> — write the landing page. Two sentences describing the library. The full comparison table above formatted as a Markdown table. Install command <code>pip install agentstate-lib</code>. Import line <code>from agentstatelib import SharedState, AgentGraph, StatePatch</code>. Link to quickstart.</p>
+<p><strong><code>docs/quickstart.md</code></strong> — one line: <code>Coming with v0.1.0</code>.</p>
+<p>Create placeholder files in <code>docs/concepts/</code> for all concept pages listed in the doc structure. Each contains one line: <code>Coming in version X.Y</code>.</p>
+<p><strong><code>notebooks/colab_setup.ipynb</code></strong> — create this notebook with six cells.</p>
+<p>Cell 1 installs Ollama and the library. Contains two shell commands: the curl command for the Ollama install script, and pip install of pyngrok and agentstate-lib.</p>
+<p>Cell 2 starts the Ollama server. Creates a subprocess.Popen call with <code>["ollama", "serve"]</code>, stdout and stderr both redirected to DEVNULL. Sleeps 3 seconds. Makes a GET request to <code>http://localhost:11434/api/tags</code> with timeout=5. Prints the list of model names from the response. Prints an error message if the request fails.</p>
+<p>Cell 3 detects GPU type using nvidia-smi with the query flags for name and memory.total and format csv,noheader. Builds a models list starting with llama3:8b and mistral:7b, adding llama3:70b only if "A100" appears in the GPU output. For each model in the list: runs <code>ollama pull {model}</code>, prints "ready" if returncode is 0, prints "FAILED" with the stderr if not.</p>
+<p>Cell 4 kills any existing ngrok tunnels with <code>ngrok.kill()</code>. Creates a new HTTP tunnel to port 11434. Prints the public URL in a clearly delimited block. Prints the exact line to add to the Windows .env file. Prints a note that the URL changes every session.</p>
+<p>Cell 5 is a smoke test. POSTs to <code>http://localhost:11434/api/generate</code> with model llama3:8b, a prompt asking for a specific JSON object, and stream=False. Prints the response field from the JSON. Prints "Ollama working."</p>
+<p>Cell 6 is a keep-alive. Prints "Keep-alive running. Do not stop this cell." then loops forever: sleep 60 seconds, increment counter, every 5 iterations print the elapsed minutes.</p>
+<h3 id="phase-0-commands">Phase 0 commands</h3>
+<pre><code class="language-powershell">uv add pydantic aiosqlite python-dotenv
+uv add --optional docs mkdocs-material &quot;mkdocstrings[python]&quot; mike
+uv add --dev pytest pytest-asyncio mypy ruff hypothesis httpx
+
+ruff check agentstatelib/
+mypy agentstatelib/
+pytest tests/ -v
+python -c &quot;import agentstatelib; print('import ok')&quot;
+
+mkdocs build --strict
+
+git add .
+git commit -m &quot;chore: initial scaffold&quot;
+git push -u origin main
+</code></pre>
+<h3 id="done-when">Done when</h3>
+<p><code>python -c "import agentstatelib"</code> prints <code>import ok</code>. <code>mkdocs build --strict</code> succeeds and produces <code>site/</code>. All four tool commands exit with code 0. The Colab notebook cells 1–5 run without errors when opened in Colab Pro.</p>
+<hr />
+<h2 id="phase-1-week-1-sharedstate-stateevent-sqlitestore">Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore</h2>
+<h3 id="context_1">Context</h3>
+<p>This week you build the data foundation. SharedState is the shared world model. StateEvent is the typed record of everything that happens to it. SQLiteStore is how events persist across process restarts. Get the shapes right here — changing serialized event schemas later is painful.</p>
+<p>Docstring discipline starts now. mkdocstrings pulls docstrings into API reference pages. Every class and every public function needs a docstring. A class without one produces a blank API page.</p>
+<h3 id="files-to-work-in">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/core/state.py</code></li>
+<li><code>agentstatelib/core/events.py</code></li>
+<li><code>agentstatelib/memory/store.py</code></li>
+<li><code>agentstatelib/memory/__init__.py</code></li>
+<li><code>agentstatelib/core/__init__.py</code></li>
+<li><code>tests/unit/test_state.py</code></li>
+<li><code>tests/unit/test_events.py</code></li>
+<li><code>tests/unit/test_store.py</code></li>
+<li><code>docs/concepts/shared-state.md</code></li>
+<li><code>docs/api-reference/state.md</code></li>
+<li><code>docs/api-reference/events.md</code></li>
+</ol>
+<hr />
+<h3 id="agentstatelibcorestatepy"><code>agentstatelib/core/state.py</code></h3>
+<p>Import <code>BaseModel</code> and <code>Field</code> from <code>pydantic</code>. Import <code>Literal</code> and <code>Any</code> from <code>typing</code>. Import <code>uuid</code> and <code>time</code>.</p>
+<p>Write <code>WorkflowStatus</code> as a type alias using <code>Literal</code> with exactly four string values: <code>"running"</code>, <code>"complete"</code>, <code>"failed"</code>, <code>"paused"</code>. This is the complete set of valid workflow statuses — no other values are accepted.</p>
+<p>Write the <code>Task</code> model inheriting from <code>BaseModel</code>. Fields in order:
+- <code>id</code> typed as <code>str</code> with <code>default_factory=lambda: str(uuid.uuid4())</code>
+- <code>goal_id</code> typed as <code>str | None</code> defaulting to <code>None</code> — tasks with no goal_id are ungrouped and not subject to goal-based invariant checks
+- <code>description</code> typed as <code>str</code>
+- <code>status</code> typed as <code>Literal["pending", "running", "done", "failed"]</code> defaulting to <code>"pending"</code>
+- <code>result</code> typed as <code>Any | None</code> defaulting to <code>None</code>
+- <code>created_at</code> typed as <code>float</code> with <code>default_factory=time.time</code>
+- <code>updated_at</code> typed as <code>float</code> with <code>default_factory=time.time</code></p>
+<p>Docstring for <code>Task</code>: "A unit of work within a workflow. May optionally belong to a Goal via goal_id. When goal_id is None the task is ungrouped and not checked by goal-based invariants. The result field stores agent output after the task completes."</p>
+<p>Write the <code>Goal</code> model. Fields:
+- <code>id</code> typed as <code>str</code>, uuid factory
+- <code>description</code> typed as <code>str</code>
+- <code>status</code> typed as <code>Literal["pending", "active", "complete", "failed"]</code> defaulting to <code>"pending"</code>
+- <code>created_at</code> typed as <code>float</code>, time factory</p>
+<p>Docstring for <code>Goal</code>: "A high-level objective that groups related Tasks. Goals are optional — workflows that use only facts and artifacts do not need them."</p>
+<p>Write the <code>Artifact</code> model. Fields:
+- <code>id</code> typed as <code>str</code>, uuid factory
+- <code>produced_by</code> typed as <code>str</code> — the agent_id that created this artifact
+- <code>artifact_type</code> typed as <code>str</code> — free-form, examples: draft, source, summary, decision, report
+- <code>content</code> typed as <code>Any</code>
+- <code>created_at</code> typed as <code>float</code>, time factory</p>
+<p>Docstring for <code>Artifact</code>: "An output produced by an agent and stored in shared state. artifact_type is a free-form string — use whatever names make sense for your workflow domain, such as 'draft', 'source', or 'summary'."</p>
+<p>Write the <code>Decision</code> model. Fields:
+- <code>id</code> typed as <code>str</code>, uuid factory
+- <code>made_by</code> typed as <code>str</code>
+- <code>description</code> typed as <code>str</code>
+- <code>rationale</code> typed as <code>str</code> — the reasoning behind the decision, required for audit
+- <code>timestamp</code> typed as <code>float</code>, time factory</p>
+<p>Docstring for <code>Decision</code>: "A recorded workflow decision with rationale. Append to SharedState.decisions when an agent makes a significant choice that downstream agents or human reviewers should be able to audit."</p>
+<p>Write the <code>SharedState</code> model. Fields in order:
+- <code>workflow_id</code> typed as <code>str</code>, uuid factory
+- <code>workflow_type</code> typed as <code>str</code> defaulting to <code>"general"</code>
+- <code>goal</code> typed as <code>str</code>
+- <code>goals</code> typed as <code>dict[str, Goal]</code> with <code>default_factory=dict</code>
+- <code>tasks</code> typed as <code>dict[str, Task]</code> with <code>default_factory=dict</code>
+- <code>artifacts</code> typed as <code>dict[str, Artifact]</code> with <code>default_factory=dict</code>
+- <code>decisions</code> typed as <code>list[Decision]</code> with <code>default_factory=list</code>
+- <code>facts</code> typed as <code>dict[str, Any]</code> with <code>default_factory=dict</code>
+- <code>status</code> typed as <code>WorkflowStatus</code> defaulting to <code>"running"</code>
+- <code>created_at</code> typed as <code>float</code>, time factory
+- <code>updated_at</code> typed as <code>float</code>, time factory</p>
+<p>Docstring for <code>SharedState</code>: "The single source of truth for a workflow. Never mutated directly — all changes go through StatePatch and apply_patch which return a new SharedState object. All agents in a parallel round read the same SharedState snapshot, guaranteeing consistent reads within a round with no intra-round races. The event log stores the sequence of patches applied to state, so any past state can be reconstructed by replaying the log."</p>
+<hr />
+<h3 id="agentstatelibcoreeventspy"><code>agentstatelib/core/events.py</code></h3>
+<p>Import <code>BaseModel</code>, <code>Field</code>, <code>TypeAdapter</code> from <code>pydantic</code>. Import <code>Literal</code>, <code>Annotated</code>, <code>Union</code>, <code>Any</code> from <code>typing</code>. Import <code>uuid</code> and <code>time</code>.</p>
+<p>Write <code>BaseStateEvent</code> inheriting from <code>BaseModel</code>. Fields:
+- <code>event_id</code> typed as <code>str</code>, uuid factory
+- <code>workflow_id</code> typed as <code>str</code>
+- <code>agent_id</code> typed as <code>str</code>
+- <code>timestamp</code> typed as <code>float</code>, time factory</p>
+<p>Docstring for <code>BaseStateEvent</code>: "Base class for all events in the agentstatelib event log. Every state change, conflict, checkpoint, and error produces a typed event appended to the store. Events are immutable once written."</p>
+<p>Write six event subclasses, each inheriting from <code>BaseStateEvent</code>. For each one, add a <code>type</code> field typed as a <code>Literal</code> with a single string value and that same string as the default. This discriminator field is what allows Pydantic to deserialize any serialized event back to the correct subclass.</p>
+<p><code>WorkflowStarted</code> — <code>type: Literal["workflow_started"] = "workflow_started"</code>. Extra fields: <code>workflow_type</code> typed as <code>str</code>, <code>goal</code> typed as <code>str</code>. Docstring: "Emitted at the start of AgentGraph.run(). Marks the beginning of the event sequence and carries the workflow metadata needed to reconstruct SharedState from scratch during replay."</p>
+<p><code>WorkflowCompleted</code> — <code>type: Literal["workflow_completed"] = "workflow_completed"</code>. Extra field: <code>final_status</code> typed as <code>str</code>. Docstring: "Emitted when AgentGraph.run() finishes normally. final_status is the workflow status at the time of completion."</p>
+<p><code>PatchApplied</code> — <code>type: Literal["patch_applied"] = "patch_applied"</code>. Extra fields: <code>patch_id</code> typed as <code>str</code>, <code>target</code> typed as <code>str</code>, <code>old_value</code> typed as <code>Any</code>, <code>new_value</code> typed as <code>Any</code>, <code>reason</code> typed as <code>str</code>. Note that <code>timestamp</code> is inherited from BaseStateEvent but here it carries the patch's own timestamp — the PatchApplied event's timestamp is the event creation time, not the patch creation time, so you may need to store the patch timestamp separately if needed. Docstring: "Emitted after a winning patch is applied to state. old_value and new_value store only the value at patch.target — not full state dumps. This keeps individual events compact regardless of overall state size."</p>
+<p><code>ConflictDetected</code> — <code>type: Literal["conflict_detected"] = "conflict_detected"</code>. Extra fields: <code>conflict_id</code> typed as <code>str</code>, <code>path</code> typed as <code>str</code>, <code>winner_agent_id</code> typed as <code>str</code>, <code>loser_agent_id</code> typed as <code>str</code>, <code>resolution_strategy</code> typed as <code>str</code>, <code>existing_patch</code> typed as <code>dict[str, object] | None</code> defaulting to <code>None</code>, <code>incoming_patch</code> typed as <code>dict[str, object] | None</code> defaulting to <code>None</code>. Docstring: "Emitted when resolve_batch() detects two patches targeting the same state path in the same parallel round. Both patches stored as plain dicts rather than StatePatch objects to guarantee JSON serializability regardless of what value fields contain."</p>
+<p><code>CheckpointSaved</code> — <code>type: Literal["checkpoint_saved"] = "checkpoint_saved"</code>. Extra fields: <code>checkpoint_id</code> typed as <code>str</code>, <code>event_count</code> typed as <code>int</code>. Docstring: "Emitted when save_checkpoint() completes successfully."</p>
+<p><code>AgentErrored</code> — <code>type: Literal["agent_errored"] = "agent_errored"</code>. Extra fields: <code>error_type</code> typed as <code>str</code>, <code>error_message</code> typed as <code>str</code>, <code>retry_count</code> typed as <code>int</code>. Docstring: "Emitted when an agent raises an unhandled exception. retry_count records how many retries were attempted."</p>
+<p>After the six subclasses, write <code>StateEvent</code> as a type alias. Use <code>Annotated</code> wrapping a <code>Union</code> of all six subclass types, with <code>Field(discriminator="type")</code> as the second argument to Annotated. This is the discriminated union — Pydantic uses the <code>type</code> field value to pick the correct subclass during deserialization.</p>
+<p>Write at module level: <code>event_adapter = TypeAdapter(StateEvent)</code>. This is the object used for deserialization — callers call <code>event_adapter.validate_json(raw_json_string)</code> to get back the correct typed event subclass.</p>
+<hr />
+<h3 id="agentstatelibmemorystorepy"><code>agentstatelib/memory/store.py</code></h3>
+<p>Import <code>Protocol</code> and <code>runtime_checkable</code> from <code>typing</code>. Import <code>aiosqlite</code>. Import <code>json</code>. Import <code>StateEvent</code> and <code>event_adapter</code> from <code>agentstatelib.core.events</code>. Import <code>BaseStateEvent</code> too.</p>
+<p>Write the <code>StateStore</code> protocol. Decorate it with <code>@runtime_checkable</code>. It should have four async methods: <code>append(self, event: StateEvent) -&gt; None</code>, <code>get_workflow(self, workflow_id: str) -&gt; list[StateEvent]</code>, <code>since(self, workflow_id: str, index: int) -&gt; list[StateEvent]</code>, <code>count(self, workflow_id: str) -&gt; int</code>. Each method body is just <code>...</code>. Docstring for <code>StateStore</code>: "Protocol for agentstatelib persistence backends. Any class implementing these four async methods satisfies this protocol and works as a drop-in backend for AgentGraph. No base class import required — structural typing means any conforming class qualifies automatically. Built-in implementations: InMemoryStore (for testing), SQLiteStore (for single-process use), PostgreSQLStore (for production)."</p>
+<p>Write <code>InMemoryStore</code>. It has one instance variable <code>_events: dict[str, list[StateEvent]]</code> initialized to an empty dict in <code>__init__</code>. Implement all four methods:
+- <code>append</code> adds the event to the list for that workflow_id, creating the list if the key does not yet exist
+- <code>get_workflow</code> returns a copy of the list (copy is critical — callers must not mutate the store's internal state), or an empty list if the workflow_id is not found
+- <code>since</code> returns the list sliced from the given index onward, or an empty list if the workflow_id is not found
+- <code>count</code> returns the length of the list, or 0 if the workflow_id is not found</p>
+<p>Docstring for <code>InMemoryStore</code>: "In-memory StateStore. Data is lost when the process exits. Use for tests and rapid development. Satisfies the StateStore protocol and passes the same test suite as SQLiteStore."</p>
+<p>Write <code>SQLiteStore</code>. It takes a <code>path: str</code> parameter in <code>__init__</code>, stored as <code>self.path</code>. Write a private async method <code>_init_db(self, db)</code> that executes <code>CREATE TABLE IF NOT EXISTS events</code> with columns: <code>id INTEGER PRIMARY KEY AUTOINCREMENT</code>, <code>event_id TEXT NOT NULL</code>, <code>workflow_id TEXT NOT NULL</code>, <code>type TEXT NOT NULL</code>, <code>data TEXT NOT NULL</code>, <code>timestamp REAL NOT NULL</code>. Then executes <code>CREATE INDEX IF NOT EXISTS idx_wf_id ON events(workflow_id)</code>. Then calls <code>await db.commit()</code>.</p>
+<p>Implement <code>append</code>: open a connection with <code>async with aiosqlite.connect(self.path) as db</code>, call <code>await self._init_db(db)</code>, execute an INSERT with the five non-id fields, then <code>await db.commit()</code>. Serialize the event to JSON using <code>event.model_dump_json()</code>. The INSERT statement inserts event_id, workflow_id, event.type, the serialized JSON string, and event.timestamp.</p>
+<p>Implement <code>get_workflow</code>: open connection with <code>async with aiosqlite.connect(self.path) as db</code>, call <code>await self._init_db(db)</code>, execute <code>SELECT data FROM events WHERE workflow_id=? ORDER BY id ASC</code> with the workflow_id as the parameter, call <code>await cursor.fetchall()</code>, return a list where each row's data column (row[0]) is deserialized with <code>event_adapter.validate_json(row[0])</code>.</p>
+<p>Implement <code>since</code>: same structure as <code>get_workflow</code> but the query adds <code>LIMIT -1 OFFSET ?</code> with the index as the second parameter. <code>LIMIT -1</code> in SQLite means no limit on results, and <code>OFFSET ?</code> skips the first <code>index</code> rows. Return the deserialized list.</p>
+<p>Implement <code>count</code>: open connection, init db, execute <code>SELECT COUNT(*) FROM events WHERE workflow_id=?</code>, call <code>await cursor.fetchone()</code>, return <code>row[0]</code> as an integer.</p>
+<p>Docstring for <code>SQLiteStore</code>: "SQLite-backed StateStore. Events persist across process restarts. Each write is wrapped in a transaction. Suitable for single-process workflows and development. For production multi-process deployments, use PostgreSQLStore (requires asyncpg)."</p>
+<hr />
+<h3 id="agentstatelibmemory__init__py"><code>agentstatelib/memory/__init__.py</code></h3>
+<p>Import <code>StateStore</code>, <code>InMemoryStore</code>, <code>SQLiteStore</code> from <code>agentstatelib.memory.store</code>. Set <code>__all__</code> to a list containing all three names.</p>
+<hr />
+<h3 id="agentstatelibcore__init__py"><code>agentstatelib/core/__init__.py</code></h3>
+<p>Import and re-export from <code>agentstatelib.core.state</code>: <code>SharedState</code>, <code>Task</code>, <code>Goal</code>, <code>Artifact</code>, <code>Decision</code>, <code>WorkflowStatus</code>.</p>
+<p>Import and re-export from <code>agentstatelib.core.events</code>: <code>StateEvent</code>, <code>BaseStateEvent</code>, <code>WorkflowStarted</code>, <code>WorkflowCompleted</code>, <code>PatchApplied</code>, <code>ConflictDetected</code>, <code>CheckpointSaved</code>, <code>AgentErrored</code>, <code>event_adapter</code>.</p>
+<p>Set <code>__all__</code> listing every name.</p>
+<hr />
+<h3 id="testsunittest_statepy"><code>tests/unit/test_state.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>ValidationError</code> from <code>pydantic</code>. Import <code>SharedState</code>, <code>Task</code>, <code>Goal</code>, <code>WorkflowStatus</code> from <code>agentstatelib.core.state</code>.</p>
+<p>Write four test functions:</p>
+<p><code>test_shared_state_defaults</code> — create <code>SharedState(goal="test goal")</code>. Assert <code>s.workflow_id</code> is a non-empty string. Assert <code>s.tasks</code> is an empty dict. Assert <code>s.artifacts</code> is an empty dict. Assert <code>s.status == "running"</code>.</p>
+<p><code>test_shared_state_rejects_invalid_status</code> — use <code>pytest.raises(ValidationError)</code> as a context manager and inside create <code>SharedState(goal="x", status="invalid_status")</code>. The ValidationError must be raised — if it is not, the test fails.</p>
+<p><code>test_task_defaults</code> — create <code>Task(description="do something")</code>. Assert <code>t.status == "pending"</code>. Assert <code>t.result is None</code>. Assert <code>t.goal_id is None</code>. Assert <code>t.id</code> is a non-empty string.</p>
+<p><code>test_two_states_have_different_ids</code> — create two SharedState objects both with <code>goal="same goal"</code>. Assert <code>s1.workflow_id != s2.workflow_id</code>.</p>
+<hr />
+<h3 id="testsunittest_eventspy"><code>tests/unit/test_events.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>ValidationError</code> from <code>pydantic</code>. Import all event types and <code>event_adapter</code> from <code>agentstatelib.core.events</code>.</p>
+<p>Write five test functions:</p>
+<p><code>test_patch_applied_round_trip</code> — create a <code>PatchApplied</code> event with all required fields filled in. Call <code>.model_dump_json()</code> to get a JSON string. Call <code>event_adapter.validate_json(json_string)</code>. Assert the recovered object is an instance of <code>PatchApplied</code>. Assert <code>recovered.event_id == original.event_id</code>.</p>
+<p><code>test_discriminated_union_selects_correct_type</code> — create a <code>WorkflowStarted</code> event. Serialize it with <code>.model_dump_json()</code>. Deserialize with <code>event_adapter.validate_json()</code>. Assert the result is an instance of <code>WorkflowStarted</code> and is not an instance of <code>PatchApplied</code> or any other subclass.</p>
+<p><code>test_all_event_types_serialize</code> — create one instance of each of the six event types with all required fields. For each: call <code>.model_dump_json()</code> then <code>event_adapter.validate_json()</code> on the result. Assert no exceptions are raised. Assert <code>recovered.event_id == original.event_id</code> for each.</p>
+<p><code>test_base_fields_on_all_events</code> — create one instance of each event type. For each: assert <code>hasattr(event, "event_id")</code>, <code>hasattr(event, "workflow_id")</code>, <code>hasattr(event, "agent_id")</code>, <code>hasattr(event, "timestamp")</code>.</p>
+<p><code>test_invalid_type_raises</code> — use <code>pytest.raises(ValidationError)</code> and inside call <code>event_adapter.validate_json('{"type": "not_a_real_type", "workflow_id": "x", "agent_id": "y", "event_id": "z", "timestamp": 1.0}')</code>.</p>
+<hr />
+<h3 id="testsunittest_storepy"><code>tests/unit/test_store.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>pytest_asyncio</code> mark. Import <code>WorkflowStarted</code>, <code>PatchApplied</code>, <code>event_adapter</code> from <code>agentstatelib.core.events</code>. Import <code>InMemoryStore</code>, <code>SQLiteStore</code>, <code>StateStore</code> from <code>agentstatelib.memory.store</code>.</p>
+<p>Write a pytest fixture <code>in_memory_store</code> that returns <code>InMemoryStore()</code>.</p>
+<p>Write a pytest fixture <code>sqlite_store</code> that takes the built-in <code>tmp_path</code> fixture and returns <code>SQLiteStore(str(tmp_path / "test.db"))</code>.</p>
+<p>Write five tests, each parametrized with <code>@pytest.mark.parametrize("store_fixture", ["in_memory_store", "sqlite_store"])</code>. Inside each test, get the actual store with <code>store = request.getfixturevalue(store_fixture)</code>. Mark all tests with <code>@pytest.mark.asyncio</code>.</p>
+<p><code>test_append_and_retrieve</code> — create a <code>WorkflowStarted</code> event. <code>await store.append(event)</code>. <code>events = await store.get_workflow(event.workflow_id)</code>. Assert <code>len(events) == 1</code>. Assert <code>events[0].event_id == event.event_id</code>.</p>
+<p><code>test_unknown_workflow_returns_empty</code> — <code>events = await store.get_workflow("workflow-that-does-not-exist")</code>. Assert <code>events == []</code>.</p>
+<p><code>test_count_increments</code> — append three events all with the same <code>workflow_id</code>. <code>count = await store.count(workflow_id)</code>. Assert <code>count == 3</code>.</p>
+<p><code>test_since_returns_from_index</code> — append four events to the same workflow_id. <code>result = await store.since(workflow_id, 2)</code>. Assert <code>len(result) == 2</code>. The result should contain the 3rd and 4th events (0-indexed offset 2).</p>
+<p><code>test_event_type_preserved_after_retrieve</code> — append a <code>PatchApplied</code> event. Retrieve it. Assert the retrieved event is an instance of <code>PatchApplied</code> — not just a <code>BaseStateEvent</code>.</p>
+<p>Write one additional non-parametrized test:</p>
+<p><code>test_both_stores_satisfy_protocol</code> — assert <code>isinstance(InMemoryStore(), StateStore) is True</code>. Assert <code>isinstance(SQLiteStore(":memory:"), StateStore) is True</code>. This verifies <code>@runtime_checkable</code> is working.</p>
+<hr />
+<h3 id="docsconceptsshared-statemd"><code>docs/concepts/shared-state.md</code></h3>
+<p>Write the SharedState concept guide for users.</p>
+<p><strong>Section 1 — What SharedState is.</strong> Introduce it as the shared world model all agents in a workflow read from. Use the blackboard analogy: every agent reads from the same blackboard and proposes updates to it, but nothing is written directly — proposals go through a validation and conflict-resolution process first.</p>
+<p><strong>Section 2 — Why it is never mutated directly.</strong> Explain that every change goes through <code>StatePatch</code> and <code>apply_patch</code>, which return a new <code>SharedState</code> object. The original never changes. Explain what this enables: every change is attributed and logged, replaying events reconstructs any past state, parallel agents see the same consistent snapshot within a round, conflicts between agents can be detected before any state is modified.</p>
+<p><strong>Section 3 — The fields.</strong> Walk through <code>goals</code>, <code>tasks</code>, <code>artifacts</code>, <code>facts</code>, and <code>decisions</code> with one realistic example of when to use each. Keep examples grounded — a research workflow using goals to track objectives, tasks for concrete steps, artifacts for produced documents, facts for shared configuration, decisions for choices that need audit trails.</p>
+<p><strong>Section 4 — Code example.</strong> A literal fenced code block showing: create a <code>SharedState</code>, apply a patch, assert the original is unchanged. Use real import paths. Users should be able to copy and run this.</p>
+<p><strong>Section 5 — Next steps.</strong> Link to the Patches concept page.</p>
+<hr />
+<h3 id="docsapi-referencestatemd"><code>docs/api-reference/state.md</code></h3>
+<p>Write the reference page using mkdocstrings autodoc directives. Add a level-2 heading for each class, then the directive. For SharedState:</p>
+<pre><code>## SharedState
+
+::: agentstatelib.core.state.SharedState
+    options:
+      show_source: false
+      members: true
+</code></pre>
+<p>Repeat this pattern for <code>Task</code>, <code>Goal</code>, <code>Artifact</code>, <code>Decision</code>, and <code>WorkflowStatus</code>.</p>
+<hr />
+<h3 id="docsapi-referenceeventsmd"><code>docs/api-reference/events.md</code></h3>
+<p>Same autodoc pattern. Cover <code>BaseStateEvent</code>, all six event subclasses in order, <code>StateEvent</code>, and <code>event_adapter</code>. Add a brief intro paragraph: "These classes are created internally by AgentGraph and written to the store. You read them back from the store for replay, debugging, and analysis. You do not construct them in user code."</p>
+<hr />
+<h3 id="test-commands-for-week-1">Test commands for Week 1</h3>
+<pre><code class="language-powershell">pytest tests/unit/test_state.py tests/unit/test_events.py tests/unit/test_store.py -v
+
+mypy agentstatelib/core/ agentstatelib/memory/ --strict
+
+mkdocs build --strict
+
+python -c &quot;
+from agentstatelib.core.state import SharedState
+from agentstatelib.core.events import WorkflowStarted, event_adapter
+s = SharedState(goal='test')
+print('SharedState:', s.workflow_id)
+e = WorkflowStarted(workflow_id=s.workflow_id, agent_id='system',
+                    workflow_type='test', goal='test')
+recovered = event_adapter.validate_json(e.model_dump_json())
+print('Event round-trip:', recovered.type)
+print('week 1 ok')
+&quot;
+</code></pre>
+<h3 id="done-when_1">Done when</h3>
+<p>All three test files pass. <code>mypy</code> exits with code 0. <code>mkdocs build --strict</code> succeeds. The smoke test prints <code>week 1 ok</code>.</p>
+<hr />
+<h2 id="phase-1-week-2-statepatch-agentgraph-publish-v010">Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0</h2>
+<h3 id="context_2">Context</h3>
+<p>This week you build the two most important user-facing components. <code>StatePatch</code> is the mutation proposal — the contract between agents and the coordination layer. <code>AgentGraph</code> is the execution engine implementing the parallel round model that is your core architectural differentiator. The quickstart docs ship this week. Users who install v0.1.3 must have working code within five minutes of reading the docs.</p>
+<h3 id="files-to-work-in_1">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/core/patch.py</code></li>
+<li><code>agentstatelib/router/types.py</code></li>
+<li><code>agentstatelib/router/context.py</code></li>
+<li><code>agentstatelib/router/graph.py</code></li>
+<li><code>agentstatelib/router/__init__.py</code></li>
+<li><code>agentstatelib/__init__.py</code></li>
+<li><code>tests/unit/test_patch.py</code></li>
+<li><code>tests/unit/test_context.py</code></li>
+<li><code>tests/integration/test_graph_run.py</code></li>
+<li><code>docs/concepts/patches.md</code></li>
+<li><code>docs/api-reference/patch.md</code></li>
+<li><code>docs/api-reference/graph.md</code></li>
+<li><code>docs/quickstart.md</code> — fill in completely</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcorepatchpy"><code>agentstatelib/core/patch.py</code></h3>
+<p>Import <code>BaseModel</code> and <code>Field</code> from <code>pydantic</code>. Import <code>Any</code> from <code>typing</code>. Import <code>uuid</code> and <code>time</code>. Import <code>TYPE_CHECKING</code> from <code>typing</code> — use this to import <code>SharedState</code> only for type checking to avoid circular imports: <code>if TYPE_CHECKING: from agentstatelib.core.state import SharedState</code>.</p>
+<p>Write the <code>StatePatch</code> model inheriting from <code>BaseModel</code>. Fields in order:
+- <code>patch_id</code> typed as <code>str</code> with <code>default_factory=lambda: str(uuid.uuid4())</code>
+- <code>agent_id</code> typed as <code>str</code> — the agent that produced this patch
+- <code>target</code> typed as <code>str</code> — a dotted path like <code>"tasks.plan.status"</code> or <code>"artifacts.draft.content"</code>
+- <code>value</code> typed as <code>Any</code> — the new value to set at the target path
+- <code>reason</code> typed as <code>str</code> — one sentence explaining why this update is being made
+- <code>timestamp</code> typed as <code>float</code> with <code>default_factory=time.time</code>
+- <code>priority</code> typed as <code>int</code> defaulting to <code>0</code> — used by PriorityBased conflict resolver, higher value wins</p>
+<p>Docstring for <code>StatePatch</code>: "A structured state update proposal returned by an agent. Agents never write to SharedState directly — they return a StatePatch. The library validates the patch, resolves conflicts with other patches from the same round, applies the winner to state, and logs a PatchApplied event. The reason field is required for a meaningful audit trail."</p>
+<p>Write <code>set_nested(obj: dict, path: str, value: Any) -&gt; dict</code>. This function splits path on <code>"."</code>. It walks the dict one part at a time. For each part except the last: if that key does not exist in the current level, set it to an empty dict, then step into it. For the last part, set the value. Return the original obj — the mutation is in-place. Never use <code>eval()</code> or <code>exec()</code>. Docstring with example: <code>set_nested({}, "tasks.t1.status", "done")</code> returns <code>{"tasks": {"t1": {"status": "done"}}}</code>.</p>
+<p>Write <code>get_nested(obj: dict, path: str) -&gt; Any</code>. This function splits path on <code>"."</code>. It walks the dict one part at a time. If at any point the current value is not a dict or the key is missing, return <code>None</code> without raising. Return the value at the final key. Docstring with example: <code>get_nested({"tasks": {"t1": {"status": "done"}}}, "tasks.t1.status")</code> returns <code>"done"</code>. <code>get_nested({}, "a.b.c")</code> returns <code>None</code>.</p>
+<p>Write <code>apply_patch(state: "SharedState", patch: StatePatch) -&gt; "SharedState"</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code> inside the function body to avoid circular import at module load time. Call <code>state.model_dump()</code> to get a plain dict. Call <code>set_nested</code> on that dict with <code>patch.target</code> and <code>patch.value</code>. Call <code>SharedState.model_validate(modified_dict)</code> and return the result. The original <code>state</code> object must never be modified — verify this by checking that <code>state.model_dump()</code> produces the same output before and after the call. Docstring: "Apply a StatePatch to a SharedState, returning a new SharedState. The original state object is never modified. This immutability is what makes event replay and conflict detection possible — any previous state can be reconstructed."</p>
+<hr />
+<h3 id="agentstatelibroutertypespy"><code>agentstatelib/router/types.py</code></h3>
+<p>Import <code>Callable</code> and <code>Awaitable</code> from <code>typing</code>. Import <code>TYPE_CHECKING</code> from <code>typing</code>. Under <code>if TYPE_CHECKING:</code> import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>.</p>
+<p>Write a module-level docstring: "Type aliases defining the contracts for agent functions and edge conditions in agentstatelib."</p>
+<p>Write <code>AgentFn</code> as a type alias: <code>AgentFn = Callable[[dict], Awaitable["StatePatch"]]</code>. Docstring: "The complete interface for an agentstatelib agent. Any async function accepting a context dict and returning a StatePatch satisfies this type. No class inheritance required. No library imports required inside the agent function. This design allows agents backed by OpenAI, Anthropic, Ollama, rule-based Python, or any other callable to work identically."</p>
+<p>Write <code>EdgeCondition</code> as a type alias: <code>EdgeCondition = Callable[[dict], bool]</code>. Docstring: "A function that receives the current state as a plain dict and returns True if the edge should fire. Edge conditions are evaluated after each round completes to determine which agents run next."</p>
+<hr />
+<h3 id="agentstatelibroutercontextpy"><code>agentstatelib/router/context.py</code></h3>
+<p>Import <code>Any</code> from <code>typing</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>get_nested</code> and <code>set_nested</code> from <code>agentstatelib.core.patch</code>.</p>
+<p>Write <code>slice_state(state: SharedState, include_paths: list[str]) -&gt; dict</code>. Convert state to a plain dict with <code>state.model_dump()</code>. Create an empty result dict. For each path in <code>include_paths</code>: call <code>get_nested(full_dict, path)</code> — if the result is not <code>None</code>, call <code>set_nested(result, path, result_value)</code> to place it at the same dotted path in the result dict. Return the result dict. If <code>include_paths</code> is empty, return the full state dict. Docstring: "Extract a subset of SharedState by dotted path. Each agent node declares which paths it needs via the context= parameter of @graph.node(). The agent receives exactly those paths — nothing more. Serves two purposes: limits context window usage for LLM-backed agents, and prevents agents from accidentally reading state they should not see."</p>
+<hr />
+<h3 id="agentstatelibroutergraphpy"><code>agentstatelib/router/graph.py</code></h3>
+<p>This is the most important file. Use the parallel round-based implementation from the review session — the version with <code>_execute_round</code>, <code>_run_agents_parallel</code>, <code>_next_round</code>, <code>_emit</code>, and <code>resolve_batch</code>. Every public method needs a complete docstring.</p>
+<p>Imports at the top: <code>asyncio</code>, <code>Callable</code> from <code>collections.abc</code>, <code>dataclass</code> from <code>dataclasses</code>. Then all imports from your own modules.</p>
+<p>Write <code>WorkflowEvent</code> as a type alias: the union of <code>PatchApplied | WorkflowStarted | WorkflowCompleted | ConflictDetected</code>. This is what gets put into event queues.</p>
+<p>Write <code>EventQueue</code> as a type alias: <code>asyncio.Queue[WorkflowEvent]</code>. Users import this to annotate their own queues.</p>
+<p>Write <code>_Node</code> as a frozen dataclass with fields: <code>agent_id: str</code>, <code>fn: AgentFn</code>, <code>context_keys: tuple[str, ...]</code>. Use <code>tuple</code> not <code>list</code> so the frozen dataclass is truly immutable — <code>list</code> elements can still be mutated even with <code>frozen=True</code>.</p>
+<p>Write <code>_Edge</code> as a frozen dataclass with fields: <code>from_agent: str</code>, <code>to_agent: str</code>, <code>condition: EdgeCondition</code>.</p>
+<p>Write the <code>AgentGraph</code> class:</p>
+<p><code>__init__</code> takes: <code>store: StateStore | None = None</code>, <code>max_concurrent: int = 10</code>, <code>conflict_resolver: ConflictResolver | None = None</code>, <code>invariant_checkers: list[InvariantChecker] | None = None</code>. Creates <code>self._store = store or InMemoryStore()</code>. Creates <code>self._nodes: dict[str, _Node] = {}</code>. Creates <code>self._edges: list[_Edge] = []</code>. Creates <code>self._sem = asyncio.Semaphore(max_concurrent)</code>. Creates <code>self._conflict_detector = ConflictDetector(conflict_resolver or LastWriteWins())</code>. Creates <code>self._invariant_checkers: list[InvariantChecker] = invariant_checkers or []</code>. Class docstring must explain the round model: each call to <code>run()</code> executes in rounds; in each round all agents whose incoming edges fire run concurrently against the same state snapshot; their patches are batch-resolved for conflicts; winning patches are applied; invariants are checked; the next round is computed.</p>
+<p><code>node(self, agent_id: str, context: list[str] | None = None) -&gt; Callable[[AgentFn], AgentFn]</code>: returns a decorator. The decorator takes a function <code>fn: AgentFn</code>, creates <code>_Node(agent_id=agent_id, fn=fn, context_keys=tuple(context or []))</code>, stores it in <code>self._nodes[agent_id]</code>, and returns <code>fn</code> unchanged. Docstring must include a working example showing the decorator usage with context keys.</p>
+<p><code>edge(self, from_agent: str, to_agent: str, condition: EdgeCondition | None = None) -&gt; None</code>: creates <code>_Edge(from_agent=from_agent, to_agent=to_agent, condition=condition or (lambda _s: True))</code> and appends to <code>self._edges</code>. Docstring: "Add a directed edge from from_agent to to_agent. Multiple edges from the same source agent cause all reachable agents to be collected and run together in the next parallel round."</p>
+<p><code>add_invariant(self, checker: InvariantChecker) -&gt; None</code>: appends to <code>self._invariant_checkers</code>. Docstring: "Register an additional invariant checker. Checkers run after every round completes. Error-severity violations halt the workflow with RuntimeError."</p>
+<p><code>async def run(self, state: SharedState, start: str | list[str], event_queue: EventQueue | None = None) -&gt; SharedState</code>: the main execution method. Normalizes <code>start</code> to a list with <code>start_ids = [start] if isinstance(start, str) else list(start)</code>. Validates all start agents are registered — raise <code>ValueError</code> with a helpful message listing registered agents if any are missing. Extracts <code>workflow_id = state.workflow_id</code>. Creates and emits <code>WorkflowStarted</code>. Resets <code>self._conflict_detector</code>. Sets <code>current_state = state</code> and <code>current_round_ids = start_ids</code>. Enters while loop: calls <code>await self._execute_round(...)</code> to get new state, computes <code>current_state.model_dump()</code> once and passes it to <code>self._next_round(current_round_ids, state_dict)</code> to get next round, updates <code>current_round_ids</code>. After loop: emits <code>WorkflowCompleted</code>. Returns <code>current_state</code>. Docstring explains Parameters, Returns, and Raises.</p>
+<p><code>async def _execute_round(self, agent_ids: list[str], state: SharedState, workflow_id: str, event_queue: EventQueue | None) -&gt; SharedState</code>: runs one round. Step 1: calls <code>await self._run_agents_parallel(agent_ids, state)</code> to get patches. Step 2: calls <code>self._conflict_detector.resolve_batch(patches)</code> to get <code>result</code>. Step 3: for each conflict in <code>result.conflicts</code>, calls <code>await self._emit(self._build_conflict_event(workflow_id, record), event_queue)</code>. Step 4: computes <code>pre_round_dict = state.model_dump()</code> once. Step 5: for each winner in <code>result.winners</code> — computes <code>old_value = get_nested(pre_round_dict, winner.target)</code>, applies the patch with <code>current_state = apply_patch(current_state, winner)</code>, computes <code>new_value = get_nested(current_state.model_dump(), winner.target)</code>, emits a <code>PatchApplied</code> event. Step 6: runs invariant checks on the final state after all patches — calls <code>check_all(current_state, self._invariant_checkers)</code>, if any error-severity violations exist raises <code>RuntimeError</code> with the descriptions joined by semicolons. Returns <code>current_state</code>.</p>
+<p><code>async def _run_agents_parallel(self, agent_ids: list[str], state: SharedState) -&gt; list[StatePatch]</code>: defines an inner <code>async def _call_one(agent_id: str) -&gt; StatePatch</code> coroutine. Inside <code>_call_one</code>: validate the agent is registered. Get the node. Compute <code>context = slice_state(state, list(node.context_keys))</code>. Acquire the semaphore with <code>async with self._sem:</code>. Call <code>return await node.fn(context)</code>. Then at the outer level: <code>patches = list(await asyncio.gather(*(_call_one(aid) for aid in agent_ids)))</code>. Return patches.</p>
+<p><code>def _next_round(self, just_ran: list[str], state_dict: dict) -&gt; list[str]</code>: iterates <code>self._edges</code>. For each agent in <code>just_ran</code>, finds all edges where <code>edge.from_agent == agent_id</code> and <code>edge.condition(state_dict)</code> is True. Collects destination agent ids into a list, using a <code>seen: set[str]</code> to deduplicate. Returns the deduplicated list. If empty, the run is done.</p>
+<p><code>async def _emit(self, event: WorkflowEvent, event_queue: EventQueue | None) -&gt; None</code>: calls <code>await self._store.append(event)</code> and if <code>event_queue is not None</code> calls <code>event_queue.put_nowait(event)</code>.</p>
+<p><code>@staticmethod def _build_conflict_event(workflow_id: str, record: ConflictRecord) -&gt; ConflictDetected</code>: constructs a <code>ConflictDetected</code> event from the record. Sets <code>existing_patch = record.existing_patch</code> and <code>incoming_patch = record.incoming_patch</code> — these are already dicts after the ConflictRecord fix.</p>
+<hr />
+<h3 id="agentstatelibrouter__init__py"><code>agentstatelib/router/__init__.py</code></h3>
+<p>Import and re-export <code>AgentGraph</code>, <code>WorkflowEvent</code>, <code>EventQueue</code> from <code>agentstatelib.router.graph</code>. Import and re-export <code>AgentFn</code>, <code>EdgeCondition</code> from <code>agentstatelib.router.types</code>. Import and re-export <code>slice_state</code> from <code>agentstatelib.router.context</code>. Set <code>__all__</code>.</p>
+<hr />
+<h3 id="agentstatelib__init__py"><code>agentstatelib/__init__.py</code></h3>
+<p>This is your public API surface. Import and re-export:</p>
+<p>From <code>agentstatelib.core.state</code>: <code>SharedState</code>, <code>Task</code>, <code>Goal</code>, <code>Artifact</code>, <code>Decision</code>, <code>WorkflowStatus</code>.</p>
+<p>From <code>agentstatelib.core.patch</code>: <code>StatePatch</code>, <code>apply_patch</code>, <code>set_nested</code>, <code>get_nested</code>.</p>
+<p>From <code>agentstatelib.core.events</code>: <code>StateEvent</code>, <code>BaseStateEvent</code>, <code>WorkflowStarted</code>, <code>WorkflowCompleted</code>, <code>PatchApplied</code>, <code>ConflictDetected</code>, <code>AgentErrored</code>, <code>CheckpointSaved</code>, <code>event_adapter</code>.</p>
+<p>From <code>agentstatelib.router.graph</code>: <code>AgentGraph</code>, <code>WorkflowEvent</code>, <code>EventQueue</code>.</p>
+<p>From <code>agentstatelib.router.types</code>: <code>AgentFn</code>, <code>EdgeCondition</code>.</p>
+<p>From <code>agentstatelib.router.context</code>: <code>slice_state</code>.</p>
+<p>From <code>agentstatelib.memory.store</code>: <code>StateStore</code>, <code>InMemoryStore</code>, <code>SQLiteStore</code>.</p>
+<p>Set <code>__version__ = "0.1.3"</code>. Set <code>__all__</code> listing every name above as a list of strings.</p>
+<hr />
+<h3 id="testsunittest_patchpy"><code>tests/unit/test_patch.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>StatePatch</code>, <code>set_nested</code>, <code>get_nested</code>, <code>apply_patch</code> from <code>agentstatelib.core.patch</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>.</p>
+<p>Write six tests:</p>
+<p><code>test_set_nested_simple</code> — call <code>set_nested({}, "a", "value")</code>. Assert result equals <code>{"a": "value"}</code>.</p>
+<p><code>test_set_nested_deep_path</code> — call <code>set_nested({}, "a.b.c", 42)</code>. Assert <code>result["a"]["b"]["c"] == 42</code>.</p>
+<p><code>test_set_nested_creates_missing_keys</code> — call <code>set_nested({}, "tasks.t1.status", "done")</code>. Assert no exception is raised and <code>result["tasks"]["t1"]["status"] == "done"</code>.</p>
+<p><code>test_get_nested_returns_none_for_missing</code> — call <code>get_nested({}, "a.b.c")</code>. Assert result is <code>None</code>. No exception should be raised.</p>
+<p><code>test_apply_patch_returns_new_object</code> — create <code>s = SharedState(goal="test")</code>. Create <code>p = StatePatch(agent_id="a", target="facts.key", value="val", reason="test")</code>. Call <code>new_s = apply_patch(s, p)</code>. Assert <code>new_s is not s</code> (different Python objects). Assert <code>s.facts == {}</code> (original unchanged). Assert <code>new_s.facts.get("key") == "val"</code>.</p>
+<p><code>test_apply_patch_deep_target</code> — create state. Apply patch with <code>target="tasks.t1.status"</code> and <code>value="done"</code>. Assert the new state has the value at that path — either as a dict key or as an attribute on a Task model depending on how Pydantic coerces nested dicts.</p>
+<hr />
+<h3 id="testsunittest_contextpy"><code>tests/unit/test_context.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StatePatch</code>, <code>apply_patch</code> from <code>agentstatelib.core.patch</code>. Import <code>slice_state</code> from <code>agentstatelib.router.context</code>.</p>
+<p>Write three tests:</p>
+<p><code>test_slice_returns_only_requested_paths</code> — create <code>s = SharedState(goal="my goal")</code>. Call <code>result = slice_state(s, ["goal"])</code>. Assert <code>"goal" in result</code>. Assert <code>"tasks" not in result</code>. Assert <code>"artifacts" not in result</code>.</p>
+<p><code>test_slice_handles_nested_paths</code> — create a state. Apply a patch setting <code>"facts.key1"</code> to <code>"value1"</code>. Apply another setting <code>"facts.key2"</code> to <code>"value2"</code>. Call <code>result = slice_state(final_state, ["facts.key1"])</code>. Assert <code>result["facts"]["key1"] == "value1"</code>. Assert <code>"key2" not in result.get("facts", {})</code>.</p>
+<p><code>test_empty_include_returns_full_state</code> — create state. Call <code>result = slice_state(state, [])</code>. Assert <code>"goal" in result</code>. Assert <code>"tasks" in result</code>. Assert <code>"artifacts" in result</code>.</p>
+<hr />
+<h3 id="testsintegrationtest_graph_runpy"><code>tests/integration/test_graph_run.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>asyncio</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. Import <code>AgentGraph</code> from <code>agentstatelib.router.graph</code>. All tests marked with <code>@pytest.mark.asyncio</code>.</p>
+<p>Write three tests. Use stub agent functions — plain async functions returning hardcoded StatePatch objects. No real model calls.</p>
+<p><code>test_single_agent_workflow</code> — define <code>async def stub_agent(ctx): return StatePatch(agent_id="a", target="facts.done", value=True, reason="test")</code>. Create <code>graph = AgentGraph()</code>. Register with <code>@graph.node("agent_a")(stub_agent)</code> or as a decorator. No edges. Call <code>final = await graph.run(SharedState(goal="test"), start="agent_a")</code>. Assert <code>final.facts.get("done") is True</code>.</p>
+<p><code>test_two_agent_sequential_pipeline</code> — define two agents: <code>agent_a</code> sets <code>"facts.step"</code> to <code>1</code>, <code>agent_b</code> sets <code>"facts.step"</code> to <code>2</code>. Register both. Add edge from <code>"agent_a"</code> to <code>"agent_b"</code> with condition <code>lambda s: s.get("facts", {}).get("step") == 1</code>. Run from <code>"agent_a"</code>. Assert <code>final.facts.get("step") == 2</code>.</p>
+<p><code>test_unknown_start_agent_raises</code> — create empty <code>AgentGraph()</code>. Use <code>pytest.raises(ValueError)</code> and inside call <code>await graph.run(SharedState(goal="x"), start="nonexistent")</code>.</p>
+<hr />
+<h3 id="docsconceptspatchesmd"><code>docs/concepts/patches.md</code></h3>
+<p>Write the Patches concept guide.</p>
+<p><strong>Section 1 — What a patch is.</strong> A proposal, not a write. Agents return a StatePatch describing what they want to change. The library decides whether to apply it. Explain why this layer exists: without it there is no way to detect when two agents want to change the same thing, no attribution for who changed what, no reason field for the audit log.</p>
+<p><strong>Section 2 — The patch pipeline.</strong> Draw the flow in text: agent returns StatePatch → ConflictDetector.resolve_batch() → apply_patch() → InvariantChecker.check() → new SharedState → PatchApplied event logged. Each step has a single responsibility.</p>
+<p><strong>Section 3 — The target field.</strong> Explain dotted paths with examples: <code>"facts.domain"</code>, <code>"tasks.research.status"</code>, <code>"artifacts.draft.content"</code>. Show how missing intermediate keys are created automatically by set_nested.</p>
+<p><strong>Section 4 — The reason field.</strong> Explain this is not optional in spirit. The reason field is what makes the event log readable during debugging. <code>"done"</code> tells you nothing. <code>"Completed literature review — found 12 relevant papers"</code> tells you exactly what happened.</p>
+<p><strong>Section 5 — Priority.</strong> Explain the priority field and when to use it with PriorityBased resolution. Default is 0. Set higher values on patches from agents that should win conflicts.</p>
+<hr />
+<h3 id="docsquickstartmd-fill-in-completely"><code>docs/quickstart.md</code> — fill in completely</h3>
+<p>The most important doc page. Users land here first.</p>
+<p><strong>Install section:</strong> <code>pip install agentstate-lib</code></p>
+<p><strong>Working example</strong> — a complete 25-line sequential script using the decorator pattern. Three agents: planner, researcher, writer. Each returns a StatePatch. Edges connect them with conditions. Use stub logic that does not require any API key so users can run it immediately. Test this script yourself before writing it into the docs.</p>
+<p><strong>Parallel agents section</strong> — show how to run two agents in parallel by passing a list to start: <code>await graph.run(state, start=["analyst_a", "analyst_b"])</code>.</p>
+<p><strong>What is happening</strong> — bullet list explaining SharedState (shared world), the decorator (registers the function), StatePatch (the proposal), edge condition (when to advance), parallel start (both in round 1).</p>
+<p><strong>Next steps</strong> — links to SharedState and Patches concept pages.</p>
+<hr />
+<h3 id="test-commands-for-week-2">Test commands for Week 2</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch, Artifact
+
+graph = AgentGraph()
+
+@graph.node('planner', context=['goal'])
+async def planner(ctx):
+    return StatePatch(agent_id='planner', target='facts.plan',
+                      value='done', reason='planned')
+
+@graph.node('researcher', context=['facts'])
+async def researcher(ctx):
+    return StatePatch(agent_id='researcher', target='artifacts.result',
+                      value=Artifact(produced_by='researcher', artifact_type='result', content='found'),
+                      reason='researched')
+
+graph.edge('planner', 'researcher',
+           lambda s: s.get('facts', {}).get('plan') == 'done')
+
+async def main():
+    state = SharedState(goal='test workflow')
+    final = await graph.run(state, start='planner')
+    assert final.facts.get('plan') == 'done'
+    assert final.artifacts.get('result').content == 'found'
+    print('quickstart: ok')
+
+asyncio.run(main())
+&quot;
+
+mkdocs build --strict
+python -m build
+</code></pre>
+<h3 id="publish-v013">Publish v0.1.3</h3>
+<pre><code class="language-powershell">twine upload --repository testpypi dist/*
+
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ agentstate-lib==0.1.0
+python -c &quot;import agentstatelib; print(agentstatelib.__version__)&quot;
+
+twine upload dist/*
+git tag v0.1.3
+git push origin v0.1.3
+mike deploy --push --update-aliases 0.1 latest
+mike set-default --push latest
+</code></pre>
+<h3 id="done-when_2">Done when</h3>
+<p>All tests pass. <code>mypy --strict</code> exits clean. Quickstart script runs without errors. <code>pip install agentstate-lib</code> works. Doc site live at your GitHub Pages URL.</p>
+<hr />
+<h2 id="phase-2-week-3-coordination-layer-conflicts-invariants-parallel-graph">Phase 2 · Week 3 · Coordination Layer — Conflicts · Invariants · Parallel Graph</h2>
+<h3 id="context_3">Context</h3>
+<p>You already have working <code>conflicts.py</code>, <code>invariants.py</code>, and <code>graph.py</code> from the review and correction sessions. This week: fix the failing integration test, update all conflict unit tests for the batch API, write new parallel execution tests proving the round model, update exports, and ship the coordination docs.</p>
+<p>The failing test used a sequential edge so both agents ran in separate rounds — conflicts only occur when two agents run in the same round. Fix it by using parallel start.</p>
+<h3 id="files-to-work-in_2">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/coordination/__init__.py</code></li>
+<li><code>agentstatelib/__init__.py</code> (update exports and version)</li>
+<li><code>tests/unit/test_conflicts.py</code> (rewrite for batch API)</li>
+<li><code>tests/unit/test_invariants.py</code> (add dict-task edge cases)</li>
+<li><code>tests/integration/test_conflict_flow.py</code> (fix failing test, add new tests)</li>
+<li><code>tests/integration/test_parallel_execution.py</code> (new file)</li>
+<li><code>docs/concepts/conflict.md</code></li>
+<li><code>docs/concepts/parallelism.md</code></li>
+<li><code>docs/api-reference/conflicts.md</code></li>
+<li><code>mkdocs.yml</code> (expand nav)</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcoordination__init__py"><code>agentstatelib/coordination/__init__.py</code></h3>
+<p>Import and re-export from <code>agentstatelib.coordination.conflicts</code>: <code>ConflictResolver</code>, <code>ConflictDetector</code>, <code>ConflictRecord</code>, <code>BatchResolutionResult</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>.</p>
+<p>Import and re-export from <code>agentstatelib.coordination.invariants</code>: <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>check_all</code>, <code>TasksReferenceExistingGoals</code>, <code>CompletedGoalsHaveNoBlockingTasks</code>.</p>
+<p>Set <code>__all__</code> explicitly listing every name above.</p>
+<hr />
+<h3 id="agentstatelib__init__py-update"><code>agentstatelib/__init__.py</code> (update)</h3>
+<p>Add these imports at the top level: <code>ConflictResolver</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code> from <code>agentstatelib.coordination.conflicts</code>. <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>BatchResolutionResult</code> from <code>agentstatelib.coordination</code>.</p>
+<p>Also export <code>WorkflowEvent</code> and <code>EventQueue</code> from <code>agentstatelib.router.graph</code> — users need these to annotate their own queues when using the dashboard feature.</p>
+<p>Update <code>__version__ = "0.1.3"</code>.</p>
+<p>Update <code>__all__</code> to include all new names.</p>
+<hr />
+<h3 id="testsunittest_conflictspy-rewrite"><code>tests/unit/test_conflicts.py</code> (rewrite)</h3>
+<p>The primary API is now <code>resolve_batch(patches) -&gt; BatchResolutionResult</code>. The <code>submit()</code> method returns a tuple <code>(winner, conflict_or_none)</code>. Rewrite all tests to use the correct API.</p>
+<p>Import <code>pytest</code>. Import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. Import <code>ConflictDetector</code>, <code>BatchResolutionResult</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>, <code>ConflictRecord</code> from <code>agentstatelib.coordination.conflicts</code>.</p>
+<p>Write eight test functions:</p>
+<p><code>test_resolve_batch_no_conflict</code> — create <code>detector = ConflictDetector(LastWriteWins())</code>. Create two patches with different targets (<code>"facts.x"</code> and <code>"facts.y"</code>). Call <code>result = detector.resolve_batch([patch_a, patch_b])</code>. Assert <code>len(result.winners) == 2</code>. Assert <code>result.conflicts == []</code>.</p>
+<p><code>test_resolve_batch_detects_collision</code> — create two patches both targeting <code>"facts.x"</code> with different values. Call <code>result = detector.resolve_batch([patch_a, patch_b])</code>. Assert <code>len(result.conflicts) == 1</code>. Assert <code>len(result.winners) == 1</code> — one winner per unique path.</p>
+<p><code>test_resolve_batch_last_write_wins</code> — create two patches targeting the same path. Set <code>patch_a.timestamp = 1000.0</code> and <code>patch_b.timestamp = 2000.0</code>. Note: since timestamp is set by default_factory you may need to use <code>model_copy(update={"timestamp": 1000.0})</code> or construct with explicit timestamp. Use <code>LastWriteWins()</code> resolver. Assert the winner is the patch with timestamp 2000.0 by checking <code>result.winners[0].agent_id</code>.</p>
+<p><code>test_resolve_batch_priority_based</code> — two patches same path, priorities 1 and 10. Create <code>detector = ConflictDetector(PriorityBased())</code>. Assert winner has priority 10.</p>
+<p><code>test_resolve_batch_reject_incoming</code> — two patches same path. <code>detector = ConflictDetector(RejectIncoming())</code>. Assert winner is the first patch by checking its agent_id.</p>
+<p><code>test_resolve_batch_three_patches_same_path</code> — three patches targeting the same path with ascending timestamps. Assert <code>len(result.winners) == 1</code>. Assert <code>len(result.conflicts) == 2</code>. Assert the winner is the patch with the latest timestamp.</p>
+<p><code>test_submit_returns_tuple</code> — call <code>winner, conflict = detector.submit(patch)</code> with no prior patch to that path. Assert <code>winner</code> is a <code>StatePatch</code>. Assert <code>conflict is None</code> — no conflict when there is nothing to conflict with.</p>
+<p><code>test_conflicts_accumulate_across_batches</code> — call <code>resolve_batch</code> twice in sequence, each time with two patches targeting the same path (different paths between the two calls). Assert <code>len(detector.conflicts) == 2</code> after both calls. Then call <code>detector.reset()</code>. Assert <code>len(detector.conflicts) == 0</code>.</p>
+<hr />
+<h3 id="testsunittest_invariantspy-additions"><code>tests/unit/test_invariants.py</code> (additions)</h3>
+<p>Keep all existing passing tests. Add these two tests:</p>
+<p><code>test_task_with_none_goal_id_is_not_a_violation</code> — create <code>state = SharedState(goal="test")</code>. Apply a patch setting <code>"tasks.t1"</code> to a dict with <code>{"description": "do something", "goal_id": None, "status": "pending"}</code>. Call <code>check_all(state, [TasksReferenceExistingGoals()])</code>. Assert result is an empty list — ungrouped tasks are not violations.</p>
+<p><code>test_invariant_handles_dict_tasks</code> — create a state. Apply a patch that sets <code>"tasks.t1"</code> to a plain dict (not a Task model instance). Call <code>check_all(state, [TasksReferenceExistingGoals(), CompletedGoalsHaveNoBlockingTasks()])</code>. Assert no <code>AttributeError</code> is raised — both checkers must handle dict tasks via the <code>_get_task_field</code> helper.</p>
+<hr />
+<h3 id="testsintegrationtest_conflict_flowpy"><code>tests/integration/test_conflict_flow.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. Import <code>AgentGraph</code> from <code>agentstatelib.router.graph</code>. Import <code>ConflictDetected</code> from <code>agentstatelib.core.events</code>. Import <code>InMemoryStore</code> from <code>agentstatelib.memory.store</code>. Import <code>InvariantChecker</code>, <code>InvariantViolation</code> from <code>agentstatelib.coordination</code>.</p>
+<p>Write four tests, all marked <code>@pytest.mark.asyncio</code>:</p>
+<p><code>test_conflict_detected_and_logged_in_store</code> — register <code>agent_a</code> returning a patch to <code>"facts.status"</code> with value <code>"done"</code>. Register <code>agent_b</code> returning a patch to <code>"facts.status"</code> with value <code>"failed"</code>. Do NOT add any edge between them. Call <code>final = await graph.run(state, start=["agent_a", "agent_b"])</code> — both agents run in round 1 simultaneously. Retrieve <code>events = await store.get_workflow(state.workflow_id)</code>. Filter for <code>ConflictDetected</code> instances. Assert <code>len(conflict_events) &gt;= 1</code>.</p>
+<p><code>test_conflict_event_has_correct_fields</code> — same setup. Get the first <code>ConflictDetected</code> event. Assert <code>event.path == "facts.status"</code>. Assert <code>event.winner_agent_id in ("agent_a", "agent_b")</code>. Assert <code>event.loser_agent_id in ("agent_a", "agent_b")</code>. Assert <code>event.winner_agent_id != event.loser_agent_id</code>. Assert <code>event.resolution_strategy == "LastWriteWins"</code>.</p>
+<p><code>test_conflict_final_state_is_consistent</code> — same setup. Assert <code>final.facts["status"] in ("done", "failed")</code> — exactly one value, not None, not both.</p>
+<p><code>test_invariant_violation_halts_workflow</code> — define an inner class <code>AlwaysError</code> implementing <code>InvariantChecker</code> with a <code>check</code> method that always returns <code>[InvariantViolation(rule_name="AlwaysError", description="Always fails.", severity="error")]</code>. Create graph with <code>invariant_checkers=[AlwaysError()]</code>. Register one agent. Use <code>pytest.raises(RuntimeError)</code> and inside call <code>await graph.run(state, start="agent_a")</code>.</p>
+<hr />
+<h3 id="testsintegrationtest_parallel_executionpy"><code>tests/integration/test_parallel_execution.py</code></h3>
+<p>New file. These tests prove the parallel round model. Import everything needed.</p>
+<p>Write seven tests, all <code>@pytest.mark.asyncio</code>:</p>
+<p><code>test_two_agents_in_same_round</code> — register <code>agent_a</code> setting <code>"facts.result_a"</code> to 1 and <code>agent_b</code> setting <code>"facts.result_b"</code> to 2. No edges. <code>final = await graph.run(state, start=["agent_a", "agent_b"])</code>. Retrieve events. Filter <code>PatchApplied</code>. Assert <code>len(patch_events) == 2</code>. Assert both <code>"result_a"</code> and <code>"result_b"</code> are in <code>final.facts</code>.</p>
+<p><code>test_parallel_agents_read_same_snapshot</code> — this verifies the critical consistency guarantee. Before the main run, apply an initial patch setting <code>"facts.counter"</code> to 42 using <code>apply_patch(initial_state, setup_patch)</code>. Register two agents both declared with <code>context=["facts.counter"]</code>. Each agent reads <code>ctx["facts"]["counter"]</code> from context and returns a patch setting their own result key. Run both in parallel. Retrieve <code>PatchApplied</code> events. The <code>old_value</code> field on each patch event for the counter path (if you store it that way) or the context the agent received should both be 42. Design the agents to store what they read in their patch value so you can assert it: agent_a sets <code>"facts.a_saw"</code> to <code>ctx.get("facts", {}).get("counter")</code> and agent_b sets <code>"facts.b_saw"</code> similarly. Assert <code>final.facts["a_saw"] == 42</code> and <code>final.facts["b_saw"] == 42</code>.</p>
+<p><code>test_sequential_rounds_chain</code> — register planner (sets <code>"facts.plan"</code> to <code>"done"</code>), researcher (sets <code>"artifacts.sources"</code> to <code>["s1"]</code>), writer (sets <code>"artifacts.draft"</code> to <code>"draft"</code>). Edge planner→researcher fires when <code>"plan" in s.get("facts", {})</code>. Edge researcher→writer fires when <code>"sources" in s.get("artifacts", {})</code>. Run from planner. Retrieve <code>PatchApplied</code> events. Assert they arrive in order: planner's <code>target="facts.plan"</code> first, then researcher's <code>target="artifacts.sources"</code>, then writer's <code>target="artifacts.draft"</code>.</p>
+<p><code>test_fan_out</code> — register coordinator (sets <code>"facts.started"</code> to True), analyst_a (sets <code>"facts.result_a"</code> to 1), analyst_b (sets <code>"facts.result_b"</code> to 2). Add edges coordinator→analyst_a and coordinator→analyst_b both unconditional. Run from coordinator. Retrieve <code>PatchApplied</code> events. Assert coordinator's patch appears first. Assert both analyst patches appear in the events. Assert final state has all three facts.</p>
+<p><code>test_fan_out_then_fan_in</code> — register coordinator, analyst_a, analyst_b, aggregator. Edges: coordinator→analyst_a, coordinator→analyst_b (unconditional), analyst_a→aggregator (unconditional), analyst_b→aggregator (unconditional). Run from coordinator. Retrieve <code>PatchApplied</code> events in order. The coordinator's patch should appear first, then the two analyst patches (in either order), then the aggregator's patch last. Assert aggregator only ran once despite two edges pointing to it.</p>
+<p><code>test_parallel_start_with_list</code> — register agent_a and agent_b. Call <code>await graph.run(state, start=["agent_a", "agent_b"])</code>. Assert no <code>ValueError</code>. Retrieve events. Assert both agents' patches appear.</p>
+<p><code>test_unknown_start_agent_raises</code> — <code>pytest.raises(ValueError)</code> wrapping <code>await graph.run(state, start="not_registered")</code>.</p>
+<hr />
+<h3 id="docsconceptsconflictmd"><code>docs/concepts/conflict.md</code></h3>
+<p>Write the conflict detection concept guide.</p>
+<p><strong>Section 1 — What a conflict is.</strong> Two agents in the same parallel round both returning patches targeting the same dotted state path. Contrast with LangGraph: in LangGraph parallel node updates are merged with <code>dict.update()</code> which silently overwrites — the second writer wins and there is no record of the collision. In agentstatelib the same situation produces a <code>ConflictDetected</code> event, the configured resolver picks the winner, and both patches are preserved in the event log.</p>
+<p><strong>Section 2 — When conflicts happen.</strong> Only within a round. If agent_a updates <code>"facts.status"</code> in round 1 and agent_b updates <code>"facts.status"</code> in round 2, that is not a conflict — agent_b is making a deliberate update to already-applied state. Conflicts are detected in <code>resolve_batch()</code> which processes all patches from a single round together.</p>
+<p><strong>Section 3 — The resolution pipeline.</strong> Step by step: patches arrive in <code>resolve_batch()</code> → path collision detected → <code>resolver.resolve(existing, incoming)</code> called → winner determined → <code>ConflictDetected</code> event emitted → winning patch goes to <code>apply_patch()</code> → <code>PatchApplied</code> event emitted.</p>
+<p><strong>Section 4 — Resolution strategies.</strong> Explain <code>LastWriteWins</code> (default, newer timestamp wins, ties go to incoming), <code>PriorityBased</code> (set the priority field on StatePatch, higher value wins, ties fall back to last-write-wins), <code>RejectIncoming</code> (first patch to a path wins, incoming is logged but not applied — useful when you want the first agent to lock a path for a round). When to use each.</p>
+<p><strong>Section 5 — Custom resolver.</strong> Explain the <code>ConflictResolver</code> protocol: one method <code>resolve(existing, incoming) -&gt; StatePatch</code>. Show a five-line pattern for writing a custom resolver. Note that any class with this method satisfies the protocol without importing anything from agentstatelib.</p>
+<p><strong>Section 6 — Reading the conflict log.</strong> Show how to retrieve events from the store, filter for <code>ConflictDetected</code> instances, and read <code>path</code>, <code>winner_agent_id</code>, <code>loser_agent_id</code>, <code>resolution_strategy</code>.</p>
+<hr />
+<h3 id="docsconceptsparallelismmd"><code>docs/concepts/parallelism.md</code></h3>
+<p>Write the parallel execution concept guide.</p>
+<p><strong>Section 1 — The round model.</strong> Every call to <code>graph.run()</code> executes in rounds. In each round: all agents whose incoming edges fire are collected, all run concurrently against the same state snapshot, patches are resolved, winning patches are applied, invariants are checked, the next round is computed. No agent in a round sees any other agent's updates until the next round.</p>
+<p><strong>Section 2 — Why this matters.</strong> Eliminates read-write races within a round. All agents see identical state regardless of execution order. Conflicts are explicit and logged, not silent.</p>
+<p><strong>Section 3 — Fan-out topology.</strong> coordinator→[analyst_a, analyst_b]. Both analysts run in round 2 simultaneously. Show the two edge declarations that produce this. Explain that the coordinator's state update is visible to both analysts since it was applied at the end of round 1 before round 2 begins.</p>
+<p><strong>Section 4 — Fan-in.</strong> [analyst_a, analyst_b]→aggregator. Aggregator runs in round 3 after both analysts complete. Explain how <code>_next_round</code> deduplicates — the aggregator appears in the next round's list only once even though two edges point to it.</p>
+<p><strong>Section 5 — Parallel start.</strong> <code>run(state, start=["agent_a", "agent_b"])</code> runs multiple agents in round 1 simultaneously.</p>
+<p><strong>Section 6 — The semaphore.</strong> <code>max_concurrent</code> in <code>AgentGraph.__init__</code> controls an <code>asyncio.Semaphore</code> that limits total simultaneous agent coroutines across all rounds. Default is 10. Set it lower if your agents make API calls and you need to stay within rate limits.</p>
+<hr />
+<h3 id="docsapi-referenceconflictsmd"><code>docs/api-reference/conflicts.md</code></h3>
+<p>Write the reference page using mkdocstrings autodoc directives. One heading and directive per class/function. Cover in this order: <code>ConflictDetector</code>, <code>BatchResolutionResult</code>, <code>ConflictRecord</code>, <code>ConflictResolver</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>, <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>check_all</code>, <code>TasksReferenceExistingGoals</code>, <code>CompletedGoalsHaveNoBlockingTasks</code>.</p>
+<p>Add a brief intro paragraph: "The coordination module contains two subsystems: conflict resolution (what happens when parallel agents target the same state path) and invariant checking (what happens after every round to verify state is still internally consistent)."</p>
+<hr />
+<h3 id="mkdocsyml-expand-nav-for-week-3"><code>mkdocs.yml</code> — expand nav for Week 3</h3>
+<pre><code class="language-yaml">nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+    - Shared State: concepts/shared-state.md
+    - Patches: concepts/patches.md
+    - Conflict Detection: concepts/conflict.md
+    - Parallel Execution: concepts/parallelism.md
+  - API Reference:
+    - State: api-reference/state.md
+    - Patch: api-reference/patch.md
+    - Graph: api-reference/graph.md
+    - Conflicts: api-reference/conflicts.md
+</code></pre>
+<hr />
+<h3 id="test-commands-for-week-3">Test commands for Week 3</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+ruff check agentstatelib/
+
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.core.events import ConflictDetected
+from agentstatelib.memory.store import InMemoryStore
+
+async def main():
+    store = InMemoryStore()
+    graph = AgentGraph(store=store)
+
+    @graph.node('analyst_a')
+    async def analyst_a(ctx):
+        return StatePatch(agent_id='analyst_a', target='facts.verdict',
+                         value='positive', reason='a says positive')
+
+    @graph.node('analyst_b')
+    async def analyst_b(ctx):
+        return StatePatch(agent_id='analyst_b', target='facts.verdict',
+                         value='negative', reason='b says negative')
+
+    state = SharedState(goal='conflict test')
+    final = await graph.run(state, start=['analyst_a', 'analyst_b'])
+    events = await store.get_workflow(state.workflow_id)
+    conflicts = [e for e in events if isinstance(e, ConflictDetected)]
+    print(f'Conflicts: {len(conflicts)}')
+    print(f'Winner: {conflicts[0].winner_agent_id}')
+    print(f'Final verdict: {final.facts[\&quot;verdict\&quot;]}')
+    assert len(conflicts) == 1
+    print('parallel conflict test: ok')
+
+asyncio.run(main())
+&quot;
+
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.core.events import PatchApplied
+from agentstatelib.memory.store import InMemoryStore
+
+async def main():
+    store = InMemoryStore()
+    graph = AgentGraph(store=store)
+
+    @graph.node('coordinator')
+    async def coordinator(ctx):
+        return StatePatch(agent_id='coordinator', target='facts.started',
+                         value=True, reason='kicked off')
+
+    @graph.node('analyst_a')
+    async def analyst_a(ctx):
+        return StatePatch(agent_id='analyst_a', target='facts.result_a',
+                         value=1, reason='a done')
+
+    @graph.node('analyst_b')
+    async def analyst_b(ctx):
+        return StatePatch(agent_id='analyst_b', target='facts.result_b',
+                         value=2, reason='b done')
+
+    graph.edge('coordinator', 'analyst_a')
+    graph.edge('coordinator', 'analyst_b')
+
+    state = SharedState(goal='fan-out test')
+    final = await graph.run(state, start='coordinator')
+    events = await store.get_workflow(state.workflow_id)
+    patches = [e for e in events if isinstance(e, PatchApplied)]
+    agents_ran = [p.agent_id for p in patches]
+    print('Agents that ran:', agents_ran)
+    assert 'coordinator' in agents_ran
+    assert 'analyst_a' in agents_ran
+    assert 'analyst_b' in agents_ran
+    print('fan-out test: ok')
+
+asyncio.run(main())
+&quot;
+
+mkdocs build --strict
+</code></pre>
+<h3 id="publish-v013_1">Publish v0.1.3</h3>
+<pre><code class="language-powershell">python -m build
+twine upload dist/*
+git tag v0.1.3
+git push origin v0.1.3
+mike deploy --push --update-aliases 0.1 latest
+</code></pre>
+<h3 id="done-when_3">Done when</h3>
+<p>All tests pass with zero failures. Both manual tests print "ok". <code>mypy --strict</code> exits with code 0. <code>mkdocs build --strict</code> succeeds. v0.1.3 is live on PyPI. Docs show v0.1 with the Conflict Detection and Parallel Execution concept pages.</p>
+<hr />
+<h2 id="phase-3-week-4-fastapi-http-layer-v02">Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2</h2>
+<h3 id="context_4">Context</h3>
+<p>A thin HTTP transport layer over your library. No business logic here — all logic lives in AgentGraph, SharedState, and the store. The streaming events endpoint is your first public observability surface.</p>
+<h3 id="files-to-work-in_3">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/api/app.py</code></li>
+<li><code>agentstatelib/api/auth.py</code></li>
+<li><code>agentstatelib/api/routes.py</code></li>
+<li><code>agentstatelib/api/streaming.py</code></li>
+<li><code>agentstatelib/api/__init__.py</code></li>
+<li><code>tests/integration/test_api.py</code></li>
+<li><code>docs/guides/http-api.md</code></li>
+</ol>
+<pre><code class="language-powershell">uv add --optional api fastapi &quot;uvicorn[standard]&quot;
+</code></pre>
+<hr />
+<h3 id="agentstatelibapiapppy"><code>agentstatelib/api/app.py</code></h3>
+<p>Import <code>FastAPI</code> from <code>fastapi</code>. Import <code>SQLiteStore</code> from <code>agentstatelib.memory.store</code>.</p>
+<p>Write <code>create_app(db_path: str = "agentstatelib.db") -&gt; FastAPI</code>. Inside: create a <code>FastAPI</code> instance with <code>title="agentstatelib API"</code> and <code>version="0.2.0"</code>. Create <code>SQLiteStore(db_path)</code>. Store it on <code>app.state.store</code>. Import the routes <code>APIRouter</code> from <code>agentstatelib.api.routes</code> and include it with prefix <code>"/v1"</code>. Return the app.</p>
+<p>Write module-level <code>app = create_app()</code> for direct uvicorn invocation as <code>uvicorn agentstatelib.api.app:app</code>.</p>
+<p>Docstring on <code>create_app</code>: "Create and configure the agentstatelib FastAPI application. In tests, pass a custom db_path (e.g. using tmp_path) to isolate the database."</p>
+<hr />
+<h3 id="agentstatelibapiauthpy"><code>agentstatelib/api/auth.py</code></h3>
+<p>Import <code>Header</code>, <code>HTTPException</code> from <code>fastapi</code>. Import <code>os</code>.</p>
+<p>Write <code>verify_api_key(x_api_key: str = Header(...)) -&gt; str</code>. Read valid keys from <code>os.environ.get("AGENTSTATE_API_KEYS", "dev-key-123")</code>. Split on comma. Strip whitespace from each. If the provided key is not in the set: raise <code>HTTPException(status_code=401, detail={"error_code": "invalid_api_key", "message": "Invalid or missing API key"})</code>. Return the key if valid.</p>
+<p>Docstring: "FastAPI dependency for API key authentication. Inject with Depends(verify_api_key). Configure valid keys via the AGENTSTATE_API_KEYS environment variable as a comma-separated list."</p>
+<hr />
+<h3 id="agentstatelibapiroutespy"><code>agentstatelib/api/routes.py</code></h3>
+<p>Import <code>APIRouter</code>, <code>HTTPException</code>, <code>Depends</code>, <code>Request</code> from <code>fastapi</code>. Import <code>StreamingResponse</code> from <code>fastapi.responses</code>. Import <code>json</code>, <code>asyncio</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. Import <code>WorkflowStarted</code> from <code>agentstatelib.core.events</code>. Import <code>verify_api_key</code> from <code>agentstatelib.api.auth</code>. Import <code>stream_workflow_events</code> from <code>agentstatelib.api.streaming</code>.</p>
+<p>Write <code>get_store(request: Request)</code> — a FastAPI dependency that returns <code>request.app.state.store</code>.</p>
+<p>Write <code>router = APIRouter()</code> at module level. Define five endpoints on this router:</p>
+<p><code>@router.get("/health")</code> — no auth, no store. Returns <code>{"status": "ok", "version": "0.2.0"}</code>. Docstring: "Health check endpoint. Returns immediately. No authentication required. Use for load balancer and monitoring system probes."</p>
+<p><code>@router.post("/workflows", status_code=201)</code> — requires <code>Depends(verify_api_key)</code> and <code>Depends(get_store)</code>. Request body has fields <code>goal: str</code> and <code>workflow_type: str = "general"</code>. Creates a <code>SharedState</code>. Creates and appends a <code>WorkflowStarted</code> event. Returns the state.</p>
+<p><code>@router.get("/workflows/{workflow_id}")</code> — auth and store deps. Gets all events. If empty list, raises <code>HTTPException(404, detail={"error_code": "workflow_not_found", "message": f"Workflow {workflow_id} not found"})</code>. Import and call <code>replay</code> from <code>agentstatelib.memory.replay</code> (this module ships in week 5, but add the import now so the route exists — it will error only at runtime if called before week 5). Return the replayed state.</p>
+<p><code>@router.post("/workflows/{workflow_id}/patches")</code> — auth and store deps. Request body is <code>StatePatch</code>. Verify workflow exists (404 if not). Append a <code>PatchApplied</code> event constructed from the patch. Return replayed state. This allows external code to submit patches without going through a graph — useful for human-in-the-loop workflows.</p>
+<p><code>@router.get("/workflows/{workflow_id}/events")</code> — auth and store deps. Returns <code>StreamingResponse(stream_workflow_events(store, workflow_id), media_type="text/event-stream")</code>.</p>
+<p>Every error detail uses a dict with <code>error_code</code> and <code>message</code> keys. Never plain string errors.</p>
+<hr />
+<h3 id="agentstatelibapistreamingpy"><code>agentstatelib/api/streaming.py</code></h3>
+<p>Import <code>asyncio</code>. Import <code>StateStore</code> from <code>agentstatelib.memory.store</code>.</p>
+<p>Write <code>async def stream_workflow_events(store: StateStore, workflow_id: str, poll_interval: float = 0.5)</code> as an <code>async def</code> generator (using <code>yield</code>). Initialize <code>last_count = 0</code>. Loop up to 600 iterations (5 minutes at 0.5s intervals). In each iteration: call <code>await store.since(workflow_id, last_count)</code> to get new events. For each new event: <code>yield f"data: {event.model_dump_json()}\n\n"</code>. Update <code>last_count += len(new_events)</code>. Then <code>await asyncio.sleep(poll_interval)</code>. Yield <code>"retry: 3000\n\n"</code> once at the very start (before the loop) to tell SSE clients to reconnect after 3 seconds if disconnected.</p>
+<p>Docstring: "Async generator that yields Server-Sent Events for a workflow. Yields all existing events first, then polls for new events every poll_interval seconds. Maximum stream duration is 5 minutes (600 iterations). Consumed by the GET /workflows/{id}/events endpoint."</p>
+<hr />
+<h3 id="agentstatelibapi__init__py"><code>agentstatelib/api/__init__.py</code></h3>
+<p>Import and export <code>create_app</code> from <code>agentstatelib.api.app</code>. Set <code>__all__ = ["create_app"]</code>.</p>
+<hr />
+<h3 id="testsintegrationtest_apipy"><code>tests/integration/test_api.py</code></h3>
+<pre><code class="language-powershell">uv add --dev httpx
+</code></pre>
+<p>Import <code>TestClient</code> from <code>fastapi.testclient</code>. Import <code>pytest</code>. Import <code>create_app</code> from <code>agentstatelib.api</code>.</p>
+<p>Write a pytest fixture <code>client</code> that creates and yields <code>TestClient(create_app(db_path=str(tmp_path / "test.db")))</code> — use <code>tmp_path</code> fixture for a real file path since aiosqlite may not support <code>:memory:</code> correctly in async context managers.</p>
+<p>Write four tests (synchronous — TestClient handles async internally):</p>
+<p><code>test_health_no_auth_required</code> — <code>response = client.get("/health")</code>. Assert <code>response.status_code == 200</code>. Assert <code>response.json()["status"] == "ok"</code>.</p>
+<p><code>test_create_requires_auth</code> — <code>response = client.post("/v1/workflows", json={"goal": "test"})</code>. Assert <code>response.status_code == 401</code>.</p>
+<p><code>test_create_and_retrieve_workflow</code> — post with header <code>{"x-api-key": "dev-key-123"}</code> and body <code>{"goal": "test goal"}</code>. Assert 201. Extract <code>workflow_id = response.json()["workflow_id"]</code>. Get with same auth header at <code>f"/v1/workflows/{workflow_id}"</code>. Assert 200. Assert <code>response.json()["workflow_id"] == workflow_id</code>.</p>
+<p><code>test_patch_updates_state</code> — create a workflow. Post to <code>f"/v1/workflows/{workflow_id}/patches"</code> with body containing a <code>StatePatch</code>-shaped dict targeting <code>"facts.test_key"</code> with value <code>"hello"</code>. Get the workflow. Assert <code>response.json()["facts"]["test_key"] == "hello"</code>.</p>
+<hr />
+<h3 id="docsguideshttp-apimd"><code>docs/guides/http-api.md</code></h3>
+<p><strong>Section 1 — When to use the HTTP API.</strong> Use it when agents run in separate processes, when external systems need to query or update workflow state, when you want to stream live events to a frontend or monitoring system, or when you want human-in-the-loop workflows where patches are submitted manually. Use the Python library directly when everything runs in one process.</p>
+<p><strong>Section 2 — Running the server.</strong> Show the uvicorn command. Show the environment variable for API keys. Show the health check curl command to verify it is running.</p>
+<p><strong>Section 3 — Endpoint reference.</strong> Show curl examples for all five endpoints. Show a Python httpx async client example that creates a workflow and streams its events.</p>
+<p><strong>Section 4 — Authentication.</strong> Explain the <code>x-api-key</code> header. Explain <code>AGENTSTATE_API_KEYS</code> env var with comma-separated keys. Keys should be stored as environment variables, never committed to source control.</p>
+<hr />
+<h3 id="test-and-run-commands-for-week-4">Test and run commands for Week 4</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+$env:AGENTSTATE_API_KEYS = &quot;dev-key-123&quot;
+uvicorn agentstatelib.api.app:app --reload
+
+# In another terminal
+curl http://localhost:8000/health
+
+curl -X POST http://localhost:8000/v1/workflows `
+  -H &quot;Content-Type: application/json&quot; `
+  -H &quot;x-api-key: dev-key-123&quot; `
+  -d '{&quot;goal&quot;: &quot;test workflow&quot;, &quot;workflow_type&quot;: &quot;research&quot;}'
+
+start http://localhost:8000/docs
+
+mkdocs build --strict
+</code></pre>
+<h3 id="done-when_4">Done when</h3>
+<p>All tests pass. Server starts and health endpoint returns 200. Workflow create and retrieve work through the API. Docs build cleanly.</p>
+<hr />
+<h2 id="phase-3-week-5-persistence-checkpoint-replay-v03">Phase 3 · Week 5 · Persistence · Checkpoint · Replay · v0.3</h2>
+<h3 id="context_5">Context</h3>
+<p>The replay debugger is your most visible competitive advantage. When someone asks "why did my workflow produce a wrong result?", you step through the event log event by event and inspect state at each point. LangGraph has no equivalent — once a run completes, intermediate states are gone.</p>
+<h3 id="files-to-work-in_4">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/memory/store.py</code> (add PostgreSQL stub, update docstrings)</li>
+<li><code>agentstatelib/memory/checkpoint.py</code></li>
+<li><code>agentstatelib/memory/replay.py</code></li>
+<li><code>agentstatelib/memory/__init__.py</code> (update)</li>
+<li><code>agentstatelib/__init__.py</code> (update version and exports)</li>
+<li><code>tests/unit/test_store.py</code> (add protocol test)</li>
+<li><code>tests/unit/test_replay.py</code></li>
+<li><code>tests/integration/test_checkpoint_recovery.py</code></li>
+<li><code>docs/concepts/event-log.md</code></li>
+<li><code>docs/guides/checkpoint-recovery.md</code></li>
+<li><code>docs/guides/replay-debugger.md</code></li>
+<li><code>mkdocs.yml</code> (expand nav)</li>
+</ol>
+<hr />
+<h3 id="agentstatelibmemorystorepy-add-postgresql-stub"><code>agentstatelib/memory/store.py</code> (add PostgreSQL stub)</h3>
+<p>Add at the top of the file, after the existing imports, a try/except block: <code>try: import asyncpg; HAS_ASYNCPG = True</code> and <code>except ImportError: asyncpg = None; HAS_ASYNCPG = False</code>.</p>
+<p>Write <code>PostgreSQLStore</code> class. <code>__init__</code> takes <code>dsn: str</code>. If <code>HAS_ASYNCPG</code> is <code>False</code>, raise <code>ImportError("asyncpg is required for PostgreSQLStore. Install it with: pip install asyncpg")</code>. Store <code>self.dsn = dsn</code>. Set <code>self._pool = None</code> — the pool is created lazily on first use.</p>
+<p>Write a private async method <code>_get_pool(self)</code>. If <code>self._pool is None</code>, call <code>asyncpg.create_pool(self.dsn)</code> and store the result. Return <code>self._pool</code>.</p>
+<p>Write a private async method <code>_init_db(self)</code>. Gets the pool. Executes <code>CREATE TABLE IF NOT EXISTS events</code> with columns using PostgreSQL syntax: <code>id SERIAL PRIMARY KEY</code>, <code>event_id TEXT NOT NULL</code>, <code>workflow_id TEXT NOT NULL</code>, <code>type TEXT NOT NULL</code>, <code>data TEXT NOT NULL</code>, <code>timestamp DOUBLE PRECISION NOT NULL</code>. Creates index on <code>workflow_id</code>. PostgreSQL uses <code>$1</code>, <code>$2</code> parameter placeholders instead of <code>?</code>.</p>
+<p>Implement <code>append</code>: get pool, execute INSERT using <code>$1</code> through <code>$5</code> placeholders for event_id, workflow_id, event.type, serialized JSON, event.timestamp.</p>
+<p>Implement <code>get_workflow</code>: get pool, execute <code>SELECT data FROM events WHERE workflow_id=$1 ORDER BY id ASC</code>, fetch all rows, return deserialized list.</p>
+<p>Implement <code>since</code>: same query but add <code>OFFSET $2</code> with the index.</p>
+<p>Implement <code>count</code>: execute <code>SELECT COUNT(*) FROM events WHERE workflow_id=$1</code>, return the integer.</p>
+<p>Add <code>async def close(self) -&gt; None</code> that closes the pool if it exists.</p>
+<p>Docstring for <code>PostgreSQLStore</code>: "PostgreSQL-backed StateStore for production multi-process deployments. Requires asyncpg: pip install asyncpg. DSN format: postgresql://user:password@host/database. Connection pool is created lazily on first use."</p>
+<p>Add to <code>tests/unit/test_store.py</code> one test:</p>
+<p><code>test_both_stores_satisfy_protocol</code> — assert <code>isinstance(InMemoryStore(), StateStore) is True</code>. Assert <code>isinstance(SQLiteStore(":memory:"), StateStore) is True</code>. If these fail, <code>@runtime_checkable</code> is not working correctly.</p>
+<hr />
+<h3 id="agentstatelibmemorycheckpointpy"><code>agentstatelib/memory/checkpoint.py</code></h3>
+<p>Import <code>BaseModel</code>, <code>Field</code> from <code>pydantic</code>. Import <code>Path</code> from <code>pathlib</code>. Import <code>uuid</code>, <code>time</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StateStore</code> from <code>agentstatelib.memory.store</code>.</p>
+<p>Write <code>Checkpoint</code> model. Fields: <code>checkpoint_id</code> (str, <code>default_factory=lambda: str(uuid.uuid4())</code>), <code>workflow_id</code> (str), <code>state</code> (<code>SharedState</code> — the complete state at checkpoint time), <code>event_count</code> (int — how many events existed in the store when the checkpoint was saved; used during recovery to resume reading from the store without replaying the entire history), <code>created_at</code> (float, time factory). Docstring: "A snapshot of SharedState at a point in time saved to disk. The event_count field marks where in the event log the workflow had progressed, so recovery can resume without replaying every event from the beginning."</p>
+<p>Write <code>async def save_checkpoint(state: SharedState, store: StateStore, directory: str = ".checkpoints") -&gt; Checkpoint</code>. Call <code>Path(directory).mkdir(parents=True, exist_ok=True)</code>. Call <code>count = await store.count(state.workflow_id)</code>. Create a <code>Checkpoint</code> instance with <code>workflow_id=state.workflow_id</code>, <code>state=state</code>, <code>event_count=count</code>. Construct the file path as <code>Path(directory) / f"{state.workflow_id}_{checkpoint.checkpoint_id}.json"</code>. Write it with <code>path.write_text(checkpoint.model_dump_json())</code>. Return the checkpoint. Docstring: "Save a checkpoint of current state to disk. Call periodically during long workflows so failures do not require restarting from scratch."</p>
+<p>Write <code>def load_latest_checkpoint(workflow_id: str, directory: str = ".checkpoints") -&gt; Checkpoint | None</code>. Call <code>Path(directory).glob(f"{workflow_id}_*.json")</code> to get matching files. Convert to a list. If empty, return <code>None</code>. Sort by <code>f.stat().st_mtime</code> descending. Read and return <code>Checkpoint.model_validate_json(files[0].read_text())</code>. Docstring: "Load the most recent checkpoint for a workflow. Returns None if no checkpoint exists."</p>
+<p>Write <code>def load_checkpoint(checkpoint_id: str, directory: str = ".checkpoints") -&gt; Checkpoint</code>. Use <code>Path(directory).glob(f"*_{checkpoint_id}.json")</code>. Convert to list. If empty, raise <code>FileNotFoundError(f"Checkpoint {checkpoint_id} not found in {directory}")</code>. Return <code>Checkpoint.model_validate_json(matches[0].read_text())</code>. Docstring: "Load a specific checkpoint by checkpoint_id."</p>
+<hr />
+<h3 id="agentstatelibmemoryreplaypy"><code>agentstatelib/memory/replay.py</code></h3>
+<p>Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StateEvent</code>, <code>WorkflowStarted</code>, <code>PatchApplied</code> from <code>agentstatelib.core.events</code>. Import <code>apply_patch</code> from <code>agentstatelib.core.patch</code>.</p>
+<p>Write <code>replay(events: list[StateEvent]) -&gt; SharedState</code>. Find the <code>WorkflowStarted</code> event by iterating and checking <code>isinstance(e, WorkflowStarted)</code>. If none found, raise <code>ValueError("Cannot replay: no WorkflowStarted event found in log")</code>. Extract <code>workflow_id</code>, <code>workflow_type</code>, and <code>goal</code> from it. Create a base <code>SharedState</code> with those three fields. Sort all events by <code>timestamp</code> ascending. Iterate sorted events: for each <code>PatchApplied</code> event (check with <code>isinstance(e, PatchApplied)</code>), call <code>current_state = apply_patch(current_state, StatePatch(agent_id=e.agent_id, target=e.target, value=e.new_value, reason=e.reason, patch_id=e.patch_id))</code>. You need to import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. All other event types are skipped. Return the final <code>current_state</code>. Docstring: "Reconstruct SharedState from an event log. Finds the WorkflowStarted event for metadata, then applies all PatchApplied events in timestamp order. Any past state in a workflow's history can be recovered by passing a truncated event list."</p>
+<p>Write <code>ReplayDebugger</code> class. <code>__init__</code> takes <code>events: list[StateEvent]</code>. Sort events by <code>timestamp</code> ascending and store as <code>self._events</code>. Set <code>self._cursor = 0</code>. Docstring: "Step through a workflow's event log to inspect state at any point in time. Primary debugging tool when a workflow produces unexpected results. No equivalent exists in LangGraph, CrewAI, or AutoGen."</p>
+<p>Write <code>step(self) -&gt; tuple[StateEvent, SharedState]</code>. If <code>self._cursor &gt;= len(self._events)</code>, raise <code>StopIteration("No more events to replay")</code>. Advance cursor: <code>self._cursor += 1</code>. Return <code>(self._events[self._cursor - 1], replay(self._events[:self._cursor]))</code>.</p>
+<p>Write <code>jump_to(self, index: int) -&gt; SharedState</code>. Validate: if <code>index &lt; 0</code> or <code>index &gt; len(self._events)</code>, raise <code>IndexError(f"Index {index} out of range [0, {len(self._events)}]")</code>. Set <code>self._cursor = index</code>. Return <code>replay(self._events[:index])</code>.</p>
+<p>Write <code>state_at(self, timestamp: float) -&gt; SharedState</code>. Filter: <code>filtered = [e for e in self._events if e.timestamp &lt;= timestamp]</code>. Return <code>replay(filtered)</code>. Docstring: "Reconstruct state as it was at the given timestamp. Useful for finding the state at the moment a specific conflict or error occurred."</p>
+<p>Write <code>reset(self) -&gt; None</code>. Sets <code>self._cursor = 0</code>.</p>
+<p>Write <code>current_index</code> as a property: <code>return self._cursor</code>.</p>
+<p>Write <code>total_events</code> as a property: <code>return len(self._events)</code>.</p>
+<hr />
+<h3 id="agentstatelibmemory__init__py-update"><code>agentstatelib/memory/__init__.py</code> (update)</h3>
+<p>Add exports: <code>Checkpoint</code>, <code>save_checkpoint</code>, <code>load_latest_checkpoint</code>, <code>load_checkpoint</code> from <code>agentstatelib.memory.checkpoint</code>. Add <code>replay</code>, <code>ReplayDebugger</code> from <code>agentstatelib.memory.replay</code>. Add <code>PostgreSQLStore</code> from <code>agentstatelib.memory.store</code>. Update <code>__all__</code>.</p>
+<hr />
+<h3 id="agentstatelib__init__py-update_1"><code>agentstatelib/__init__.py</code> (update)</h3>
+<p>Add exports: <code>Checkpoint</code>, <code>save_checkpoint</code>, <code>load_latest_checkpoint</code>, <code>replay</code>, <code>ReplayDebugger</code>. Update <code>__version__ = "0.3.0"</code>. Update <code>__all__</code>.</p>
+<hr />
+<h3 id="testsunittest_replaypy"><code>tests/unit/test_replay.py</code></h3>
+<p>Import <code>pytest</code>. Import <code>SharedState</code> from <code>agentstatelib.core.state</code>. Import <code>StatePatch</code>, <code>apply_patch</code> from <code>agentstatelib.core.patch</code>. Import <code>WorkflowStarted</code>, <code>PatchApplied</code> from <code>agentstatelib.core.events</code>. Import <code>replay</code>, <code>ReplayDebugger</code> from <code>agentstatelib.memory.replay</code>.</p>
+<p>Write a helper fixture or function that creates a list of events for a simple workflow: one <code>WorkflowStarted</code>, then N <code>PatchApplied</code> events each setting a different facts key.</p>
+<p>Write five tests:</p>
+<p><code>test_replay_reconstructs_state</code> — create a <code>WorkflowStarted</code> event and two <code>PatchApplied</code> events (set <code>facts.a = 1</code> and <code>facts.b = 2</code>). Call <code>state = replay(events)</code>. Assert <code>state.facts.get("a") == 1</code> and <code>state.facts.get("b") == 2</code>.</p>
+<p><code>test_replay_missing_workflow_started_raises</code> — call <code>replay([patch_applied_event])</code> with no WorkflowStarted. Assert <code>ValueError</code> is raised with <code>pytest.raises(ValueError)</code>.</p>
+<p><code>test_debugger_step_advances_cursor</code> — create debugger with 3 events. Call <code>step()</code> twice. Assert <code>debugger.current_index == 2</code>.</p>
+<p><code>test_debugger_jump_to_index</code> — create debugger with 5 events. Call <code>jump_to(3)</code>. Assert the returned state reflects only the first 3 events (e.g. facts from events 4 and 5 are absent).</p>
+<p><code>test_debugger_stop_iteration_at_end</code> — create debugger with 1 event. Call <code>step()</code> once. Use <code>pytest.raises(StopIteration)</code> around the second call to <code>step()</code>.</p>
+<hr />
+<h3 id="testsintegrationtest_checkpoint_recoverypy"><code>tests/integration/test_checkpoint_recovery.py</code></h3>
+<p>Import <code>pytest</code>. Import everything needed. All tests <code>@pytest.mark.asyncio</code>.</p>
+<p>Write three tests:</p>
+<p><code>test_save_and_load_checkpoint</code> — create <code>SQLiteStore(str(tmp_path / "test.db"))</code>. Run a one-agent workflow. Call <code>cp = await save_checkpoint(final_state, store)</code>. Call <code>loaded = load_latest_checkpoint(final_state.workflow_id)</code>. Assert <code>loaded is not None</code>. Assert <code>loaded.state.workflow_id == final_state.workflow_id</code>. Assert <code>loaded.event_count &gt; 0</code>. Clean up <code>.checkpoints</code> directory.</p>
+<p><code>test_checkpoint_preserves_state</code> — run a workflow that sets several facts and one artifact. Save checkpoint. Load it. Assert every fact in the original final state matches the loaded state. Assert artifact keys match.</p>
+<p><code>test_replay_debugger_full_walkthrough</code> — run a two-agent sequential workflow with a SQLite or InMemory store. Get all events. Create <code>ReplayDebugger(events)</code>. Step through in a while loop catching <code>StopIteration</code>. Count the steps. Assert step count equals <code>len(events)</code>. Assert the final state from the last step is equivalent to <code>replay(events)</code> — compare their <code>model_dump()</code> outputs.</p>
+<hr />
+<h3 id="docsconceptsevent-logmd"><code>docs/concepts/event-log.md</code></h3>
+<p><strong>Section 1 — What the event log is.</strong> Append-only sequence of typed events. Every state change, conflict, checkpoint, and error produces one event. Events are never deleted or modified.</p>
+<p><strong>Section 2 — State as a projection.</strong> SharedState is derived from events, not stored directly. <code>current_state = replay(all_events)</code>. This is event sourcing — a pattern from distributed systems.</p>
+<p><strong>Section 3 — What you get for free.</strong> Audit trail (every change is attributed and has a reason), replay (reconstruct any past state), conflict history (ConflictDetected events record both patches and the winner), recovery (combine with checkpoints for fault tolerance).</p>
+<p><strong>Section 4 — How to read the event log.</strong> Show <code>store.get_workflow(workflow_id)</code> and filtering by isinstance. Show reading the reason field from PatchApplied events.</p>
+<p><strong>Section 5 — The replay debugger.</strong> Brief introduction, link to full guide.</p>
+<hr />
+<h3 id="docsguidescheckpoint-recoverymd"><code>docs/guides/checkpoint-recovery.md</code></h3>
+<p><strong>Section 1 — When to use checkpoints.</strong> Long-running workflows where failure near the end is costly, workflows calling external APIs with real costs, workflows on unreliable hardware (cloud spot instances, Colab sessions).</p>
+<p><strong>Section 2 — Saving a checkpoint.</strong> Show the <code>save_checkpoint</code> call. Explain what is stored: the full SharedState and the current event count. Explain the <code>.checkpoints</code> directory and how to change it.</p>
+<p><strong>Section 3 — Recovering from a checkpoint.</strong> Show <code>load_latest_checkpoint</code>. Explain <code>event_count</code> — you know how far the workflow progressed so you can resume agents without replaying everything.</p>
+<hr />
+<h3 id="docsguidesreplay-debuggermd"><code>docs/guides/replay-debugger.md</code></h3>
+<p>Frame around a debugging story.</p>
+<p><strong>Problem statement:</strong> "Your workflow ran but produced a wrong answer. You want to find which agent wrote the wrong value and what state it saw."</p>
+<p><strong>Step by step:</strong> get events from store, create <code>ReplayDebugger(events)</code>, write the step loop, at each step print the event type and the relevant state portion, find the step where the wrong value first appeared, examine that event.</p>
+<p><strong>Show <code>state_at(timestamp)</code>.</strong> Useful for jumping to the exact moment a conflict occurred.</p>
+<p><strong>Closing comparison:</strong> "In LangGraph, once a run completes or fails, intermediate states are gone. In agentstatelib, every intermediate state is recoverable from the event log. You can replay any workflow as many times as needed and inspect state at any point."</p>
+<hr />
+<h3 id="update-mkdocsyml-nav-for-week-5">Update <code>mkdocs.yml</code> nav for Week 5</h3>
+<pre><code class="language-yaml">nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+    - Shared State: concepts/shared-state.md
+    - Patches: concepts/patches.md
+    - Conflict Detection: concepts/conflict.md
+    - Parallel Execution: concepts/parallelism.md
+    - Event Log: concepts/event-log.md
+  - API Reference:
+    - State: api-reference/state.md
+    - Patch: api-reference/patch.md
+    - Graph: api-reference/graph.md
+    - Conflicts: api-reference/conflicts.md
+    - Store: api-reference/store.md
+  - Guides:
+    - HTTP API: guides/http-api.md
+    - Checkpoint &amp; Recovery: guides/checkpoint-recovery.md
+    - Replay Debugger: guides/replay-debugger.md
+</code></pre>
+<p>Also create <code>docs/api-reference/store.md</code> with autodoc directives for <code>StateStore</code>, <code>InMemoryStore</code>, <code>SQLiteStore</code>, <code>PostgreSQLStore</code>, <code>Checkpoint</code>, <code>save_checkpoint</code>, <code>load_latest_checkpoint</code>, <code>replay</code>, <code>ReplayDebugger</code>.</p>
+<hr />
+<h3 id="test-and-publish-commands-for-week-5">Test and publish commands for Week 5</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.memory.store import SQLiteStore
+from agentstatelib.memory.checkpoint import save_checkpoint, load_latest_checkpoint
+from agentstatelib.memory.replay import ReplayDebugger
+
+async def main():
+    store = SQLiteStore('ckpt_test.db')
+    graph = AgentGraph(store=store)
+    state = SharedState(goal='checkpoint test')
+
+    @graph.node('agent_a')
+    async def agent_a(ctx):
+        return StatePatch(agent_id='agent_a', target='facts.step',
+                         value=1, reason='step 1')
+
+    final = await graph.run(state, start='agent_a')
+    cp = await save_checkpoint(final, store)
+    print('Saved checkpoint:', cp.checkpoint_id)
+    loaded = load_latest_checkpoint(final.workflow_id)
+    print('Loaded facts:', loaded.state.facts)
+    events = await store.get_workflow(final.workflow_id)
+    debugger = ReplayDebugger(events)
+    step_num = 0
+    while True:
+        try:
+            event, state_at = debugger.step()
+            print(f'Step {step_num}: {event.type}')
+            step_num += 1
+        except StopIteration:
+            break
+    print(f'Replayed {step_num} events')
+
+asyncio.run(main())
+&quot;
+
+Remove-Item ckpt_test.db -ErrorAction SilentlyContinue
+Remove-Item -Recurse .checkpoints -ErrorAction SilentlyContinue
+
+mkdocs build --strict
+python -m build
+twine upload dist/*
+git tag v0.3.0
+git push origin v0.3.0
+mike deploy --push --update-aliases 0.3 latest
+</code></pre>
+<h3 id="done-when_5">Done when</h3>
+<p>All tests pass. Manual test prints checkpoint id, loaded facts, and replay count. Docs build cleanly. v0.3.0 on PyPI.</p>
+<hr />
+<h2 id="phase-3-week-6-llm-integration-local-models-benchmark">Phase 3 · Week 6 · LLM Integration · Local Models · Benchmark</h2>
+<h3 id="context_6">Context</h3>
+<p>This week you build your strongest competitive advantage: the LLM integration layer and local model reliability system. The benchmark you produce this week is the core evidence in your blog post.</p>
+<p>Important separation: Colab is your personal GPU access. What ships to users is <code>contrib/base_agent.py</code>, the examples, and the docs.</p>
+<h3 id="part-a-start-your-colab-session">Part A — Start your Colab session</h3>
+<pre><code class="language-powershell"># 1. Open notebooks/colab_setup.ipynb in Google Colab Pro
+# 2. Runtime -&gt; Run all
+# 3. Copy ngrok URL from Cell 4 output
+# 4. Update .env: COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app
+# 5. Verify connection:
+python -c &quot;
+import os, requests
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('COLAB_OLLAMA_URL', 'http://localhost:11434')
+print('Testing:', url)
+try:
+    r = requests.get(f'{url}/api/tags', timeout=10)
+    models = [m['name'] for m in r.json().get('models', [])]
+    print('Connected. Models:', models)
+except Exception as e:
+    print('Failed:', e)
+    print('Check that all 6 Colab cells are running.')
+    print('The URL changes every Colab session - re-copy from Cell 4.')
+&quot;
+</code></pre>
+<h3 id="files-to-write">Files to write</h3>
+<ol>
+<li><code>agentstatelib/contrib/base_agent.py</code></li>
+<li><code>examples/models/openai_agent.py</code></li>
+<li><code>examples/models/anthropic_agent.py</code></li>
+<li><code>examples/models/ollama_agent.py</code></li>
+<li><code>examples/models/groq_agent.py</code></li>
+<li><code>examples/models/rule_based_agent.py</code></li>
+<li><code>examples/benchmark/run_benchmark.py</code></li>
+<li><code>docs/guides/llm-integration.md</code></li>
+<li><code>docs/guides/local-models.md</code></li>
+<li><code>docs/benchmark.md</code></li>
+<li><code>mkdocs.yml</code> (expand guides section)</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcontribbase_agentpy"><code>agentstatelib/contrib/base_agent.py</code></h3>
+<p>Module docstring: "Optional base class for LLM-backed agent functions. Provides the retry-with-correction loop common across all providers. Not required — any async callable accepting a dict and returning a StatePatch is a valid AgentFn. Use this base class to avoid reimplementing retry logic for each provider."</p>
+<p>Import <code>json</code>. Import <code>Any</code> from <code>typing</code>. Import <code>StatePatch</code> from <code>agentstatelib.core.patch</code>. Import <code>AgentFn</code> from <code>agentstatelib.router.types</code>.</p>
+<p>Write <code>MaxRetriesExceeded</code> exception class. In <code>__init__</code>, accept and store four arguments: <code>agent_id: str</code>, <code>attempts: int</code>, <code>last_error: str</code>, <code>last_output: str</code>. Call <code>super().__init__(...)</code>. Implement <code>__str__</code> to return a multi-line string that shows all four fields so the developer immediately sees what the model returned and what error it caused.</p>
+<p>Write <code>LLMAgent</code> class (not abstract, uses NotImplementedError). Class docstring must include a complete working example showing how to subclass, implement <code>_call_model</code>, and register with the graph:</p>
+<pre><code>Example
+-------
+from agentstatelib.contrib.base_agent import LLMAgent
+from agentstatelib import StatePatch
+
+class MyOpenAIAgent(LLMAgent):
+    async def _call_model(self, prompt: str) -&gt; str:
+        response = await client.chat.completions.create(
+            model=self.model,
+            messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}],
+            response_format={&quot;type&quot;: &quot;json_object&quot;},
+        )
+        return response.choices[0].message.content
+
+planner = MyOpenAIAgent(
+    agent_id=&quot;planner&quot;,
+    system_prompt=&quot;You are a planning agent...&quot;,
+    model=&quot;gpt-4o&quot;,
+)
+graph.node(&quot;planner&quot;, context=[&quot;goal&quot;])(planner)
+</code></pre>
+<p><code>__init__</code> parameters: <code>agent_id: str</code>, <code>system_prompt: str</code>, <code>model: str</code>, <code>max_retries: int = 3</code>. Store all four as instance variables.</p>
+<p><code>async def __call__(self, context: dict) -&gt; StatePatch</code> — this is the AgentFn interface:
+- Initialize <code>last_error: str | None = None</code> and <code>last_output: str | None = None</code>
+- Loop <code>range(self.max_retries)</code> times. On each iteration:
+  - Call <code>raw = await self._call_model(self._build_prompt(context, error=last_error))</code>
+  - Strip markdown fences: call <code>.strip()</code>, then <code>.removeprefix("```json")</code>, then <code>.removeprefix("```")</code>, then <code>.removesuffix("```")</code>, then <code>.strip()</code> again
+  - Try <code>parsed = json.loads(cleaned)</code> — on <code>json.JSONDecodeError as e</code>: set <code>last_error = str(e)</code>, set <code>last_output = raw</code>, <code>continue</code> to next iteration
+  - Try <code>return StatePatch(agent_id=self.agent_id, **parsed)</code> — on <code>Exception as e</code> (catches pydantic ValidationError and any other): set <code>last_error = str(e)</code>, set <code>last_output = raw</code>, <code>continue</code>
+- After the loop exhausts: raise <code>MaxRetriesExceeded(agent_id=self.agent_id, attempts=self.max_retries, last_error=last_error or "unknown", last_output=last_output or "")</code></p>
+<p><code>def _build_prompt(self, context: dict, error: str | None = None) -&gt; str</code> — builds the full prompt. Combine four parts with newlines between them: (1) <code>self.system_prompt</code>, (2) <code>"Current state context:\n" + json.dumps(context, indent=2, default=str)</code> — the <code>default=str</code> handles non-serializable values, (3) a fixed instruction block specifying that the model must return a JSON object with exactly three fields: <code>target</code> (string, the dotted state path to update), <code>value</code> (any valid JSON), <code>reason</code> (string, one sentence). Instruct: return only the JSON object, no markdown, no explanation, no code fences. (4) If <code>error</code> is not None: append <code>"Your previous response failed with this error:\n{error}\nReturn corrected JSON only."</code>.</p>
+<p><code>async def _call_model(self, prompt: str) -&gt; str</code> — body is <code>raise NotImplementedError("Subclass must implement _call_model")</code>. Docstring: "Make a single call to your model with the given prompt. Return the raw string response. The base class handles JSON parsing, StatePatch validation, and the retry-with-correction loop. Only implement this method."</p>
+<hr />
+<h3 id="examplesmodelsopenai_agentpy"><code>examples/models/openai_agent.py</code></h3>
+<p>Comment block at the very top:</p>
+<pre><code class="language-python"># Reference implementation — copy and adapt for your project.
+# Not part of the agentstatelib package — lives in examples/ only.
+# Works with: OpenAI API, Azure OpenAI, vLLM (OpenAI-compatible),
+#             Together AI, Fireworks AI, Groq (OpenAI-compatible endpoint).
+# The base_url parameter is the only thing that changes between providers.
+</code></pre>
+<p>Import <code>httpx</code>, <code>json</code>, <code>os</code>, <code>asyncio</code>. Import <code>load_dotenv</code> from <code>dotenv</code>. Import <code>StatePatch</code> from <code>agentstatelib</code>. Import <code>LLMAgent</code> from <code>agentstatelib.contrib.base_agent</code>.</p>
+<p>Write <code>OpenAIAgent(LLMAgent)</code>. Additional <code>__init__</code> parameters (in addition to base class params): <code>api_key: str | None = None</code> defaulting to <code>os.environ.get("OPENAI_API_KEY")</code>, <code>base_url: str = "https://api.openai.com/v1"</code>. Store both. Docstring explains the base_url parameter makes this work with any OpenAI-compatible endpoint.</p>
+<p><code>_call_model</code> implementation: create <code>async with httpx.AsyncClient(timeout=60.0) as client:</code>. POST to <code>f"{self.base_url}/chat/completions"</code>. Headers: <code>{"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}</code>. Body dict: <code>model</code> is <code>self.model</code>, <code>messages</code> is a list with two items — first <code>{"role": "system", "content": self.system_prompt}</code> and second <code>{"role": "user", "content": prompt}</code>, <code>response_format</code> is <code>{"type": "json_object"}</code>. Call <code>response.raise_for_status()</code>. Return <code>response.json()["choices"][0]["message"]["content"]</code>.</p>
+<p>Write <code>async def main()</code> that: calls <code>load_dotenv()</code>, creates a planner agent, calls it with a sample context, prints the StatePatch, prints elapsed time.</p>
+<hr />
+<h3 id="examplesmodelsanthropic_agentpy"><code>examples/models/anthropic_agent.py</code></h3>
+<p>Same structure with comment block at top noting differences from OpenAI.</p>
+<p>Write <code>AnthropicAgent(LLMAgent)</code>. Additional params: <code>api_key</code> from <code>ANTHROPIC_API_KEY</code> env var.</p>
+<p><code>_call_model</code>: endpoint <code>https://api.anthropic.com/v1/messages</code>. Headers include <code>x-api-key: {self.api_key}</code> and <code>anthropic-version: 2023-06-01</code>. The system prompt goes in a top-level <code>"system"</code> field in the request body, not in the messages list. The messages list contains only the user message. Body requires <code>max_tokens: 1000</code>. Response content is at <code>response.json()["content"][0]["text"]</code>.</p>
+<p>Add a comment inside the method explaining: "Anthropic has no native JSON mode. The prompt instruction in _build_prompt handles this. The retry-with-correction loop handles cases where the model adds explanation before or after the JSON."</p>
+<hr />
+<h3 id="examplesmodelsollama_agentpy"><code>examples/models/ollama_agent.py</code></h3>
+<p>Comment block:</p>
+<pre><code class="language-python"># Reference implementation for Ollama.
+# Works with any Ollama instance:
+# - Local:  http://localhost:11434  (default)
+# - Docker: http://your-container:11434
+# - Remote: http://your-server:11434
+# Set the base_url parameter or the OLLAMA_BASE_URL environment variable.
+# The library does not know or care where your Ollama is running.
+</code></pre>
+<p>Write <code>OllamaAgent(LLMAgent)</code>. Additional params: <code>base_url: str</code> defaulting to <code>os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")</code>, <code>use_grammar: bool = True</code>.</p>
+<p><code>_call_model</code>: create <code>async with httpx.AsyncClient(timeout=120.0) as client:</code>. POST to <code>f"{self.base_url}/api/generate"</code>. Body: <code>model</code> is <code>self.model</code>, <code>prompt</code> is the prompt parameter, <code>stream</code> is <code>False</code>. If <code>self.use_grammar</code> is True: add <code>"format": StatePatch.model_json_schema()</code> to the body — this is grammar-constrained output. Ollama constrains its token sampling to only produce output matching the StatePatch JSON schema. Call <code>response.raise_for_status()</code>. Return <code>response.json()["response"]</code>.</p>
+<p>Write standalone <code>def check_connection(base_url: str) -&gt; bool</code>. Make a <code>requests.get(f"{base_url}/api/tags", timeout=5)</code> call (use synchronous requests here, not async — this is a setup check). Return <code>True</code> on 200, <code>False</code> on any exception. Import <code>requests</code> at the top.</p>
+<p>Write <code>async def main()</code> that calls <code>check_connection</code> first. If it returns False, print: "Cannot connect to Ollama at {base_url}. Common causes: Ollama not running (run 'ollama serve'), wrong base_url, ngrok tunnel expired (re-copy URL from Colab Cell 4 and update .env)." Then exit. If connected, run a sample agent call.</p>
+<hr />
+<h3 id="examplesmodelsgroq_agentpy"><code>examples/models/groq_agent.py</code></h3>
+<p>Comment block explaining Groq: fast inference of open models (Llama3, Mistral), free tier with generous rate limits, OpenAI-compatible API. Good for development when you want fast responses from open models.</p>
+<p>Write <code>GroqAgent(LLMAgent)</code>. <code>_call_model</code> is identical to <code>OpenAIAgent._call_model</code> but hardcodes <code>base_url = "https://api.groq.com/openai/v1"</code> and reads api_key from <code>GROQ_API_KEY</code> environment variable. Available models: <code>llama3-8b-8192</code>, <code>llama3-70b-8192</code>, <code>mixtral-8x7b-32768</code>. Add a comment: "Because Groq is OpenAI-compatible, this implementation is identical to OpenAIAgent with a different base_url and API key — demonstrating that agentstatelib is truly provider-agnostic."</p>
+<hr />
+<h3 id="examplesmodelsrule_based_agentpy"><code>examples/models/rule_based_agent.py</code></h3>
+<p>Comment block:</p>
+<pre><code class="language-python"># Not all agents need LLMs.
+# Rule-based agents are deterministic, free, and instant.
+# agentstatelib treats them identically to LLM-backed agents — they return StatePatch.
+# Mix rule-based and LLM agents in the same graph freely.
+</code></pre>
+<p>Write three standalone async functions (not a class — demonstrating the minimal valid form):</p>
+<p><code>async def priority_classifier(context: dict) -&gt; StatePatch</code> — reads <code>context.get("facts", {}).get("customer_message", "")</code>. Checks for urgency keywords: "urgent", "cannot", "broken", "down", "immediately". If any found: returns <code>StatePatch(agent_id="classifier", target="tasks.classification", value={"priority": "high", "keywords_found": [list of matching keywords]}, reason="Urgency keywords detected in message")</code>. Otherwise: returns the patch with priority "normal" and an empty keywords list.</p>
+<p><code>async def task_router(context: dict) -&gt; StatePatch</code> — reads classification from <code>context.get("tasks", {}).get("classification", {})</code>. Defines a <code>ROUTING_RULES</code> dict mapping priority strings to team names (high → "tier2-support", normal → "tier1-support"). Returns <code>StatePatch(agent_id="router", target="tasks.routing", value={"assigned_team": team_name}, reason=f"Routed based on priority {priority}")</code>.</p>
+<p><code>async def completion_checker(context: dict) -&gt; StatePatch</code> — reads all tasks from <code>context.get("tasks", {})</code>. Counts tasks with status not equal to "done". If count is 0: returns patch setting <code>"status"</code> to <code>"complete"</code>. Otherwise: returns patch setting <code>"facts.pending_task_count"</code> to the count.</p>
+<hr />
+<h3 id="examplesbenchmarkrun_benchmarkpy"><code>examples/benchmark/run_benchmark.py</code></h3>
+<p>Import <code>asyncio</code>, <code>time</code>, <code>json</code>, <code>os</code>, <code>dataclasses</code>. Import <code>load_dotenv</code> from <code>dotenv</code>. Import <code>StatePatch</code> from <code>agentstatelib</code>. Import <code>OllamaAgent</code>, <code>check_connection</code> from <code>examples.models.ollama_agent</code>. Import <code>MaxRetriesExceeded</code> from <code>agentstatelib.contrib.base_agent</code>. Import <code>Path</code> from <code>pathlib</code>. Import <code>datetime</code> from <code>datetime</code>.</p>
+<p>Write <code>BenchmarkResult</code> as a <code>@dataclasses.dataclass</code> with fields: <code>model: str</code>, <code>use_grammar: bool</code>, <code>attempt: int</code>, <code>success: bool</code>, <code>retries_used: int</code>, <code>latency_seconds: float</code>, <code>error: str | None = None</code>.</p>
+<p>Write <code>async def run_single_attempt(model: str, base_url: str, context: dict, use_grammar: bool, max_retries: int = 3) -&gt; BenchmarkResult</code>. Record <code>start_time = time.time()</code>. Create <code>OllamaAgent(agent_id="benchmark", system_prompt="You are a benchmark test agent.", model=model, base_url=base_url, use_grammar=use_grammar, max_retries=max_retries)</code>. Count retries by tracking how many times <code>MaxRetriesExceeded</code> is raised or by patching the agent's call count. Try <code>await agent(context)</code> — on success return <code>BenchmarkResult(..., success=True, ...)</code>. On <code>MaxRetriesExceeded as e</code> return <code>BenchmarkResult(..., success=False, error=str(e), ...)</code>. Record <code>latency_seconds = time.time() - start_time</code>.</p>
+<p>Write <code>async def benchmark_model(model: str, base_url: str, n_runs: int = 20) -&gt; dict</code>. For each of <code>n_runs</code> attempts with <code>use_grammar=True</code>: call <code>run_single_attempt</code>. For each of <code>n_runs</code> attempts with <code>use_grammar=False</code>: call <code>run_single_attempt</code>. Compute from the results: <code>success_rate_with_grammar</code>, <code>success_rate_without_grammar</code>, <code>avg_retries_with_grammar</code>, <code>avg_retries_without_grammar</code>, <code>avg_latency_with_grammar</code>, <code>avg_latency_without_grammar</code>. Return all as a dict with those keys plus <code>model</code>.</p>
+<p>At module level define the standard benchmark context:</p>
+<pre><code class="language-python">BENCHMARK_CONTEXT = {
+    &quot;goal&quot;: &quot;Analyze architectural differences between monolithic and microservices systems&quot;,
+    &quot;tasks&quot;: {
+        &quot;task_1&quot;: {&quot;description&quot;: &quot;identify three core differences&quot;, &quot;status&quot;: &quot;pending&quot;}
+    },
+    &quot;facts&quot;: {&quot;domain&quot;: &quot;software architecture&quot;, &quot;depth&quot;: &quot;technical&quot;}
+}
+</code></pre>
+<p>Write <code>async def main()</code>. Call <code>load_dotenv()</code>. Get <code>base_url = os.environ.get("COLAB_OLLAMA_URL", "http://localhost:11434")</code>. Call <code>check_connection(base_url)</code> — if False, print error and return. Get <code>models = os.environ.get("BENCHMARK_MODELS", "llama3:8b,mistral:7b").split(",")</code>. For each model: print "Benchmarking {model}...", call <code>benchmark_model</code>, print a formatted table showing with/without grammar results. Save all results to <code>Path("examples/benchmark/results") / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"</code> using <code>json.dumps</code>.</p>
+<hr />
+<h3 id="docsguidesllm-integrationmd"><code>docs/guides/llm-integration.md</code></h3>
+<p>Written entirely for users — no mention of Colab.</p>
+<p><strong>Title:</strong> "Connecting LLMs to agentstatelib"</p>
+<p><strong>Opening paragraph:</strong> agentstatelib never calls a model. Your agent functions do. Any async function accepting a context dict and returning a StatePatch is a valid agent. This guide shows how to write those functions reliably for different providers.</p>
+<p><strong>Section 1 — The minimal pattern.</strong> Five lines that work with any provider. A plain async function that calls a model and returns StatePatch.</p>
+<p><strong>Section 2 — The retry-with-correction pattern.</strong> Why it matters: LLMs sometimes return malformed JSON, extra explanation, or markdown-wrapped output. In a multi-agent system one bad output breaks downstream agents. Introduce <code>LLMAgent</code> from <code>agentstatelib.contrib.base_agent</code>. Show the one-method subclass pattern. Explain the base class handles all retry logic.</p>
+<p><strong>Section 3 — Provider reference.</strong> One paragraph per provider, link to the example file in <code>examples/models/</code>:
+- OpenAI: response_format json mode, base_url works with any OpenAI-compatible endpoint
+- Anthropic: system field is top-level, no native JSON mode, retry loop is important
+- Ollama: grammar-constrained output via format parameter, base_url points to any Ollama server
+- Groq: OpenAI-compatible, fast open models, good for development
+- Rule-based: no LLM, pure Python, deterministic and free</p>
+<p><strong>Section 4 — Structured output reliability.</strong> This section is filled in after the benchmark runs. Space for the results table. Explain grammar-constrained output for Ollama.</p>
+<p><strong>Section 5 — Mixed-model workflows.</strong> Show GPT-4o for the planner, Llama3-8B for the researcher, rule-based for the classifier. All three work identically because all return StatePatch.</p>
+<p><strong>Section 6 — Production considerations.</strong> Token counting, Redis caching (link to week 10 guide), semaphore rate limiting, cost tracking as facts.</p>
+<hr />
+<h3 id="docsguideslocal-modelsmd"><code>docs/guides/local-models.md</code></h3>
+<p><strong>Section 1 — Why local models.</strong> Privacy (data stays on your servers), cost (no per-token charges), control (specific model versions). Use cases where they make sense.</p>
+<p><strong>Section 2 — Setting up Ollama.</strong> Point to ollama.com. Basic pull and verify commands. Models tested with agentstatelib.</p>
+<p><strong>Section 3 — Grammar-constrained output.</strong> Explain that smaller local models are unreliable at producing valid structured JSON. Explain how Ollama's <code>format</code> parameter constrains sampling. Show how <code>OllamaAgent</code> passes <code>StatePatch.model_json_schema()</code> as the format. This is the section where benchmark numbers go.</p>
+<p><strong>Section 4 — The retry-with-correction loop.</strong> Even with grammar constraints some models produce wrong field values. The correction loop re-prompts with the error. LLMAgent handles this automatically.</p>
+<p><strong>Section 5 — Choosing a model.</strong> Table: model name, VRAM needed (Q4), speed on typical hardware, observed reliability with grammar constraints.</p>
+<p><strong>Section 6 — Remote Ollama.</strong> Explain that <code>base_url</code> is the only thing that changes. Docker one-liner. Any server's IP address. agentstatelib does not care where Ollama runs.</p>
+<hr />
+<h3 id="docsbenchmarkmd"><code>docs/benchmark.md</code></h3>
+<p>Fill this in after running the benchmark. Sections: Methodology (models, runs, context, hardware), Results table (model, without grammar %, with grammar %, improvement), Interpretation (what the numbers mean for production workflows). This page is linked from the LLM integration guide.</p>
+<hr />
+<h3 id="update-mkdocsyml-nav-for-week-6">Update <code>mkdocs.yml</code> nav for Week 6</h3>
+<pre><code class="language-yaml">nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+    - Shared State: concepts/shared-state.md
+    - Patches: concepts/patches.md
+    - Conflict Detection: concepts/conflict.md
+    - Parallel Execution: concepts/parallelism.md
+    - Event Log: concepts/event-log.md
+  - API Reference:
+    - State: api-reference/state.md
+    - Patch: api-reference/patch.md
+    - Graph: api-reference/graph.md
+    - Conflicts: api-reference/conflicts.md
+    - Store: api-reference/store.md
+  - Guides:
+    - LLM Integration: guides/llm-integration.md
+    - Local Models: guides/local-models.md
+    - HTTP API: guides/http-api.md
+    - Checkpoint &amp; Recovery: guides/checkpoint-recovery.md
+    - Replay Debugger: guides/replay-debugger.md
+  - Benchmark: benchmark.md
+</code></pre>
+<hr />
+<h3 id="test-and-run-commands-for-week-6">Test and run commands for Week 6</h3>
+<pre><code class="language-powershell"># Library tests — always clean, never call real models
+pytest tests/ -v
+mypy agentstatelib/ --strict
+
+# Verify Colab connection
+python -c &quot;
+import os, requests
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('COLAB_OLLAMA_URL', 'http://localhost:11434')
+try:
+    r = requests.get(f'{url}/api/tags', timeout=10)
+    print('Connected. Models:', [m['name'] for m in r.json().get('models', [])])
+except Exception as e:
+    print('Failed:', e)
+&quot;
+
+# Run benchmark
+$env:BENCHMARK_MODELS = &quot;llama3:8b,mistral:7b&quot;
+python examples/benchmark/run_benchmark.py
+
+# Test OllamaAgent
+python examples/models/ollama_agent.py
+
+# Test mixed-model workflow (OllamaAgent + rule-based)
+python -c &quot;
+import asyncio, os, sys
+sys.path.insert(0, '.')
+from dotenv import load_dotenv
+load_dotenv()
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from examples.models.ollama_agent import OllamaAgent
+from examples.models.rule_based_agent import priority_classifier
+
+async def main():
+    base_url = os.environ.get('COLAB_OLLAMA_URL', 'http://localhost:11434')
+    graph = AgentGraph()
+    graph.node('classifier', context=['facts'])(priority_classifier)
+    planner = OllamaAgent(
+        agent_id='planner',
+        system_prompt='You are a planning agent for customer support.',
+        model='llama3:8b',
+        base_url=base_url,
+    )
+    graph.node('planner', context=['facts', 'tasks'])(planner)
+    graph.edge('classifier', 'planner',
+               lambda s: bool(s.get('tasks', {}).get('classification')))
+    state = SharedState(
+        goal='Handle support request',
+        facts={'customer_message': 'URGENT: Cannot log in'}
+    )
+    final = await graph.run(state, start='classifier')
+    print('Classification:', final.tasks.get('classification'))
+    print('Workflow done')
+
+asyncio.run(main())
+&quot;
+
+# Fill in docs/benchmark.md with real numbers from benchmark run
+mkdocs build --strict
+
+python -m build
+twine upload dist/*
+git tag v0.3.1
+git push origin v0.3.1
+mike deploy --push --update-aliases 0.3 latest
+</code></pre>
+<h3 id="done-when_6">Done when</h3>
+<p>Library tests pass. Benchmark runs and produces results JSON. OllamaAgent example connects and returns a valid StatePatch. Mixed-model workflow completes. <code>docs/benchmark.md</code> has real numbers. Docs build cleanly.</p>
+<hr />
+<h2 id="weeks-714-summary">Weeks 7–14 Summary</h2>
+<p>The remaining weeks follow the same detailed pattern. Each week's file instructions are:</p>
+<p><strong>Week 7 — OpenTelemetry:</strong> <code>agentstatelib/observability/tracing.py</code> (OTel imports in try/except, setup_tracing function, NoOpTracer and NoOpSpan with stub methods for all calls), <code>agentstatelib/observability/analysis.py</code> (WorkflowSummary model, AnomalyFlag model, analyze_workflow function iterating events once), <code>agentstatelib/router/graph.py</code> additions (import get_tracer, wrap run() body in workflow span, wrap _execute_round in round span, wrap _call_one in agent span with success/failure attributes). Install: <code>uv add --optional otel opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc</code>. Start Jaeger: <code>docker run -d --name jaeger -p 16686:16686 -p 4317:4317 jaegertracing/all-in-one:latest</code>.</p>
+<p><strong>Week 8 — Dashboard:</strong> <code>agentstatelib/observability/dashboard.py</code> (rich imports in try/except, WorkflowDashboard class with event_queue parameter, _build_display method returning rich Table with color-coded rows, async run method using asyncio.wait_for with 0.25s timeout and None sentinel, stop method). Install: <code>uv add --optional dashboard rich</code>. Run demo in Windows Terminal not VS Code integrated terminal.</p>
+<p><strong>Week 9 — Tests and Docker:</strong> <code>tests/conftest.py</code> with shared fixtures (sample_state, both store fixtures, stub agent functions), <code>tests/property/</code> directory with three hypothesis test files (patch roundtrips, replay determinism, invariant properties), <code>Dockerfile</code> (python:3.12-slim multi-stage build), <code>docker-compose.yml</code> (api, redis, jaeger services). Install: <code>uv add --dev hypothesis</code>.</p>
+<p><strong>Week 10 — API hardening:</strong> <code>agentstatelib/api/cache.py</code> (StatePatchCache class with Redis, sha256 cache key, SETEX with TTL), <code>agentstatelib/api/auth.py</code> additions (RateLimiter class using Redis INCR with EXPIRE, check method returning bool, 429 on exceeded). Install: <code>uv add redis</code>.</p>
+<p><strong>Week 11 — Library quality:</strong> <code>agentstatelib/__init__.pyi</code> (type stubs for all public names, <code>...</code> as function bodies), <code>agentstatelib/router/graph.pyi</code> (AgentGraph type signatures), <code>docs/decisions/ADR-001</code> through <code>ADR-005</code> (each with Context, Decision, Consequences sections). Run <code>mypy agentstatelib/ --strict</code> and fix every error before continuing.</p>
+<p><strong>Week 12 — Package and CI/CD:</strong> <code>.github/workflows/test.yml</code> (triggers on push/PR, runs ruff, mypy, pytest), <code>.github/workflows/publish.yml</code> (triggers on v<em> tags, runs mkdocs build --strict first, then python -m build, then twine upload using PYPI_TOKEN secret), <code>.github/workflows/docs.yml</code> (triggers on v</em> tags, runs mike deploy), <code>examples/integrations/</code> with three adapter files, final <code>README.md</code> with comparison table and benchmark numbers.</p>
+<p><strong>Weeks 13–14 — Write and ship:</strong> <code>docs/design.md</code> (1500–2000 words: problem statement, architecture, decisions, comparison, limitations, future), two annotated workflow notebooks in <code>examples/workflows/</code>, two blog posts, Show HN post, v1.0.0 release.</p>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<pre><code class="language-powershell"># Every session start
+.venv\Scripts\activate
+
+# After every file change
+ruff check agentstatelib/
+mypy agentstatelib/ --strict
+pytest tests/ -v
+
+# After every doc change
+mkdocs build --strict
+
+# Live doc preview
+mkdocs serve
+
+# Before every commit
+ruff check agentstatelib/
+mypy agentstatelib/ --strict
+pytest tests/ -v --tb=short
+mkdocs build --strict
+git add .
+git commit -m &quot;type: description&quot;
+
+# Colab session startup
+# 1. Open notebooks/colab_setup.ipynb in Colab Pro
+# 2. Runtime -&gt; Run all
+# 3. Wait for Cell 3 to finish pulling models
+# 4. Copy URL from Cell 4
+# 5. Update .env: COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app
+# 6. Keep Cell 6 running
+# 7. Verify: python -c &quot;import os,requests; from dotenv import load_dotenv; load_dotenv(); r=requests.get(os.environ['COLAB_OLLAMA_URL']+'/api/tags',timeout=10); print([m['name'] for m in r.json()['models']])&quot;
+
+# Release workflow
+# 1. Bump version in pyproject.toml and agentstatelib/__init__.py
+# 2. Add CHANGELOG.md entry
+# 3. git add . &amp;&amp; git commit -m &quot;release: vX.Y.Z&quot;
+# 4. git tag vX.Y.Z &amp;&amp; git push origin vX.Y.Z
+# 5. CI handles PyPI upload and docs deploy automatically
+
+# Commit message prefixes
+# feat:     new user-facing feature
+# fix:      bug fix
+# refactor: no behavior change
+# test:     tests only
+# docs:     documentation only
+# chore:    tooling, config, deps
+# perf:     performance improvement
+</code></pre>
+<hr />
+<h2 id="version-docs-mapping">Version → Docs Mapping</h2>
+<p>Every version must ship with its docs. Check this table before every publish.</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Feature</th>
+<th>Docs shipped</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0.1.0</td>
+<td>SharedState, StatePatch, AgentGraph, SQLiteStore</td>
+<td>quickstart, concepts/shared-state, concepts/patches, api-reference/state, api-reference/patch, api-reference/graph</td>
+</tr>
+<tr>
+<td>v0.2.0</td>
+<td>Conflicts, parallel execution, invariants</td>
+<td>concepts/conflict, concepts/parallelism, api-reference/conflicts</td>
+</tr>
+<tr>
+<td>v0.2.1</td>
+<td>FastAPI HTTP layer</td>
+<td>guides/http-api</td>
+</tr>
+<tr>
+<td>v0.3.0</td>
+<td>Checkpoint, ReplayDebugger, PostgreSQL stub</td>
+<td>concepts/event-log, guides/checkpoint-recovery, guides/replay-debugger, api-reference/store</td>
+</tr>
+<tr>
+<td>v0.3.1</td>
+<td>LLM integration, local models, benchmark</td>
+<td>guides/llm-integration, guides/local-models, benchmark.md</td>
+</tr>
+<tr>
+<td>v0.4.0</td>
+<td>OpenTelemetry, WorkflowSummary, dashboard</td>
+<td>concepts/observability, guides/opentelemetry, guides/dashboard</td>
+</tr>
+<tr>
+<td>v0.5.0</td>
+<td>Redis cache, rate limiting, Docker, property tests</td>
+<td>guides/production, guides/testing</td>
+</tr>
+<tr>
+<td>v1.0.0-alpha</td>
+<td>API stabilization, type stubs, ADRs, CI/CD</td>
+<td>decisions/, guides/integrations, guides/migration/v0.x-to-v1.md</td>
+</tr>
+<tr>
+<td>v1.0.0</td>
+<td>Final stable release</td>
+<td>design.md, full docs review complete</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Install:</strong> <code>pip install agentstate-lib</code>
+<strong>Import:</strong> <code>from agentstatelib import SharedState, AgentGraph, StatePatch</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
