@@ -8,17 +8,17 @@
       show_source: false
       members: true
 
-## ConflictRecord
+## BatchResolutionResult
 
-::: agentstatelib.coordination.conflicts.ConflictRecord
+::: agentstatelib.coordination.conflicts.BatchResolutionResult
     handler: python
     options:
       show_source: false
       members: true
 
-## BatchResolutionResult
+## ConflictRecord
 
-::: agentstatelib.coordination.conflicts.BatchResolutionResult
+::: agentstatelib.coordination.conflicts.ConflictRecord
     handler: python
     options:
       show_source: false
@@ -55,6 +55,8 @@
     options:
       show_source: false
       members: true
+
+# Invariants API
 
 ## InvariantChecker
 

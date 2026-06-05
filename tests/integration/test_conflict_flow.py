@@ -2,10 +2,15 @@ from __future__ import annotations
 
 import pytest
 
-from agentstatelib import AgentGraph, SharedState, StatePatch
-from agentstatelib.coordination import InvariantViolation
+from agentstatelib.coordination import (
+    InvariantChecker,
+    InvariantViolation,
+)
 from agentstatelib.core.events import ConflictDetected
+from agentstatelib.core.patch import StatePatch
+from agentstatelib.core.state import SharedState
 from agentstatelib.memory.store import InMemoryStore
+from agentstatelib.router.graph import AgentGraph
 
 
 @pytest.mark.asyncio
@@ -110,9 +115,27 @@ async def test_conflict_final_state_is_consistent() -> None:
 
 @pytest.mark.asyncio
 async def test_invariant_violation_halts_workflow() -> None:
+    class AlwaysError(InvariantChecker):
+        def check(
+            self,
+            state: SharedState,
+        ) -> list[InvariantViolation]:
+            return [
+                InvariantViolation(
+                    rule_name="AlwaysError",
+                    description="Always fails.",
+                    severity="error",
+                )
+            ]
+
     store = InMemoryStore()
-    graph = AgentGraph(store=store)
-    state = SharedState(goal="test_goal")
+
+    graph = AgentGraph(
+        store=store,
+        invariant_checkers=[AlwaysError()],
+    )
+
+    state = SharedState(goal="test")
 
     @graph.node("agent_a", context=["facts"])
     async def agent_a(ctx: dict) -> StatePatch:
@@ -120,20 +143,11 @@ async def test_invariant_violation_halts_workflow() -> None:
             agent_id="agent_a",
             target="facts.status",
             value="done",
-            reason="irrelevant",
+            reason="test",
         )
 
-    class AlwaysErrorInvariant:
-        def check(self, state: SharedState) -> list[InvariantViolation]:
-            return [
-                InvariantViolation(
-                    rule_name="AlwaysErrorInvariant",
-                    description="Always fails.",
-                    severity="error",
-                )
-            ]
-
-    graph.add_invariant(AlwaysErrorInvariant())
-
     with pytest.raises(RuntimeError):
-        await graph.run(state=state, start="agent_a")
+        await graph.run(
+            state,
+            start="agent_a",
+        )

@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from agentstatelib.core.state import SharedState
-from agentstatelib.core.patch import StatePatch, apply_patch
+import pytest
+
 from agentstatelib.coordination import (
+    CompletedGoalsHaveNoBlockingTasks,
     InvariantChecker,
     InvariantViolation,
-    check_all,
     TasksReferenceExistingGoals,
-    CompletedGoalsHaveNoBlockingTasks,
+    check_all,
 )
+from agentstatelib.core.patch import StatePatch, apply_patch
+from agentstatelib.core.state import SharedState
 
 
 def test_no_violations_on_clean_state() -> None:
@@ -100,3 +102,57 @@ def test_multiple_checkers_all_run() -> None:
     )
     # At least: one for missing goal_id "ghost", one for blocking task on g1
     assert len(violations) >= 2
+
+
+def test_task_with_none_goal_id_is_not_a_violation() -> None:
+    state = SharedState(goal="test")
+
+    patch = StatePatch(
+        agent_id="tester",
+        target="tasks.t1",
+        value={
+            "description": "do something",
+            "goal_id": None,
+            "status": "pending",
+        },
+        reason="add ungrouped task",
+    )
+
+    state = apply_patch(state, patch)
+
+    violations = check_all(
+        state,
+        [TasksReferenceExistingGoals()],
+    )
+
+    assert violations == []
+
+
+def test_invariant_handles_dict_tasks() -> None:
+    state = SharedState(goal="test")
+
+    patch = StatePatch(
+        agent_id="tester",
+        target="tasks.t1",
+        value={
+            "description": "dict task",
+            "goal_id": None,
+            "status": "pending",
+        },
+        reason="add dict task",
+    )
+
+    state = apply_patch(state, patch)
+
+    try:
+        violations = check_all(
+            state,
+            [
+                TasksReferenceExistingGoals(),
+                CompletedGoalsHaveNoBlockingTasks(),
+            ],
+        )
+    except AttributeError as exc:
+        pytest.fail(f"Dict-backed tasks should not raise AttributeError: {exc}")
+
+    assert isinstance(violations, list)

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from agentstatelib.coordination import (
+import pytest
+
+from agentstatelib.coordination.conflicts import (
     BatchResolutionResult,
     ConflictDetector,
     ConflictRecord,
@@ -29,6 +31,7 @@ def test_resolve_batch_no_conflict():
         make_patch("a2", "facts.b", 2, 1001.0),
     ]
     result = detector.resolve_batch(patches)
+    assert isinstance(result, BatchResolutionResult)
     assert len(result.winners) == 2
     assert result.conflicts == []
 
@@ -40,7 +43,9 @@ def test_resolve_batch_detects_collision():
         make_patch("a2", "facts.a", 2, 1001.0),
     ]
     result = detector.resolve_batch(patches)
+    assert isinstance(result, BatchResolutionResult)
     assert len(result.conflicts) == 1
+    assert isinstance(result.conflicts[0], ConflictRecord)
     assert len(result.winners) == 1
 
 

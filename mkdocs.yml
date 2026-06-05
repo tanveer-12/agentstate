@@ -34,6 +34,5 @@ nav:
   - API Reference:
     - State: api-reference/state.md
     - Patch: api-reference/patch.md
-    - Events: api-reference/events.md
     - Graph: api-reference/graph.md
     - Conflicts: api-reference/conflicts.md
