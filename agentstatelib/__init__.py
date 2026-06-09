@@ -34,12 +34,23 @@ from agentstatelib.core.state import (
     Task,
     WorkflowStatus,
 )
-from agentstatelib.memory.store import InMemoryStore, SQLiteStore, StateStore
+from agentstatelib.memory.checkpoint import (
+    Checkpoint,
+    load_latest_checkpoint,
+    save_checkpoint,
+)
+from agentstatelib.memory.replay import ReplayDebugger, replay
+from agentstatelib.memory.store import (
+    InMemoryStore,
+    PostgreSQLStore,
+    SQLiteStore,
+    StateStore,
+)
 from agentstatelib.router.context import slice_state
 from agentstatelib.router.graph import AgentGraph, EventQueue, WorkflowEvent
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.1.3"
+__version__ = "0.2.0"
 
 __all__ = [
     "SharedState",
@@ -70,6 +81,7 @@ __all__ = [
     "StateStore",
     "InMemoryStore",
     "SQLiteStore",
+    "PostgreSQLStore",
     # coordination
     "ConflictResolver",
     "LastWriteWins",
@@ -78,5 +90,10 @@ __all__ = [
     "InvariantChecker",
     "InvariantViolation",
     "BatchResolutionResult",
+    "Checkpoint",
+    "load_latest_checkpoint",
+    "save_checkpoint",
+    "ReplayDebugger",
+    "replay",
     "__version__",
 ]

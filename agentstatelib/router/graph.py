@@ -70,7 +70,7 @@ class AgentGraph:
         conflict_resolver: ConflictResolver | None = None,
         invariant_checkers: list[InvariantChecker] | None = None,
     ) -> None:
-        self._store: StateStore = store or InMemoryStore()
+        self._store = store if store is not None else InMemoryStore()
         self._nodes: dict[str, _Node] = {}
         self._edges: list[_Edge] = []
         self._sem = asyncio.Semaphore(max_concurrent)

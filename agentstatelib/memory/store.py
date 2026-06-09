@@ -1,8 +1,17 @@
-from typing import Protocol, runtime_checkable
+import json
+from typing import Any, Protocol, runtime_checkable
 
 import aiosqlite
 
 from agentstatelib.core.events import StateEvent, event_adapter
+
+try:
+    import asyncpg
+
+    HAS_ASYNCPG = True
+except ImportError:
+    asyncpg = None
+    HAS_ASYNCPG = False
 
 
 # Protocol : a rule sheet for what a store must be able to do
@@ -11,7 +20,7 @@ class StateStore(Protocol):
     """
     Protocol for agentstatelib persistence backends.
 
-    Any class implementing these four async methods satisfies this
+    Any class implementing these five async methods satisfies this
     protocol and works as a drop-in backend for AgentGraph.
 
     No base class import required — structural typing means any
@@ -30,6 +39,10 @@ class StateStore(Protocol):
     async def since(self, workflow_id: str, index: int) -> list[StateEvent]: ...
 
     async def count(self, workflow_id: str) -> int: ...
+
+    async def list_workflows(self) -> list[str]:
+        """Return all unique workflow_ids in the store, most recent first."""
+        ...
 
 
 class InMemoryStore:
@@ -64,6 +77,10 @@ class InMemoryStore:
     async def count(self, workflow_id: str) -> int:
         """Return event count for a workflow."""
         return len(self._events.get(workflow_id, []))
+
+    async def list_workflows(self) -> list[str]:
+        """Return all unique workflow_ids in the store, most recent first."""
+        return list(reversed(list(self._events.keys())))
 
 
 # this method should create the events table if it does not already exists
@@ -178,3 +195,120 @@ class SQLiteStore:
             )
             row = await cursor.fetchone()
             return int(row[0]) if row else 0
+
+    async def list_workflows(self) -> list[str]:
+        """Return all unique workflow_ids in the store, most recent first."""
+        async with aiosqlite.connect(self.path) as db:
+            await self._init_db(db)
+            cursor = await db.execute(
+                """
+                SELECT workflow_id 
+                FROM events
+                GROUP BY workflow_id
+                ORDER BY MAX(id) DESC
+                """
+            )
+            rows = await cursor.fetchall()
+            return [row[0] for row in rows]
+
+
+class PostgreSQLStore:
+    """
+    PostgreSQL-backed StateStore for production multi-process deployments.
+
+    Requires asyncpg: pip install asyncpg.
+    DSN format: postgresql://user:password@host/database.
+    Connection pool is created lazily on first use. Call close() when done.
+    """
+
+    def __init__(self, dsn: str) -> None:
+        if not HAS_ASYNCPG:
+            raise ImportError(
+                "asyncpg required for PostgreSQLStore. "
+                "Install with: pip install asyncpg"
+            )
+        self.dsn = dsn
+        self._pool = None
+
+    async def _get_pool(self) -> Any:
+        if self._pool is None:
+            if asyncpg is None:
+                raise ImportError(
+                    "asyncpg required for PostgreSQLStore. Install with: pip install asyncpg"
+                )
+            self._pool = await asyncpg.create_pool(self.dsn)
+            await self._init_db()
+        return self._pool
+
+    async def _init_db(self) -> None:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            async with conn.transaction():
+                await conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS events(
+                        id SERIAL PRIMARY KEY,
+                        event_id TEXT NOT NULL,
+                        workflow_id TEXT NOT NULL,
+                        type TEXT NOT NULL,
+                        data TEXT NOT NULL,
+                        timestamp DOUBLE PRECISION NOT NULL
+                    )
+                    """
+                )
+                await conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_wf_id ON events(workflow_id)"
+                )
+
+    async def append(self, workflow_id: str, event: StateEvent) -> None:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute(
+                "INSERT INTO events (event_id, workflow_id, type, data, timestamp) VALUES ($1, $2, $3, $4, $5)",
+                event.event_id,
+                workflow_id,
+                event.__class__.__name__,
+                event.model_dump_json(),
+                float(event.timestamp),
+            )
+
+    async def get_workflow(self, workflow_id: str) -> list[StateEvent]:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT data FROM events WHERE workflow_id=$1 ORDER BY id ASC",
+                workflow_id,
+            )
+        return [event_adapter.validate_json(str(row["data"])) for row in rows]
+
+    async def since(self, workflow_id: str, index: int) -> list[StateEvent]:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT data FROM events WHERE workflow_id=$1 ORDER BY id ASC OFFSET $2",
+                workflow_id,
+                index,
+            )
+        return [event_adapter.validate_json(str(row["data"])) for row in rows]
+
+    async def count(self, workflow_id: str) -> int:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            row = await conn.fetchrow(
+                "SELECT COUNT(*) FROM events WHERE workflow_id=$1",
+                workflow_id,
+            )
+        return int(row[0]) if row is not None else 0
+
+    async def list_workflows(self) -> list[str]:
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT workflow_id FROM events GROUP BY workflow_id ORDER BY MAX(id) DESC"
+            )
+        return [str(row["workflow_id"]) for row in rows]
+
+    async def close(self) -> None:
+        if self._pool is not None:
+            await self._pool.close()
+            self._pool = None

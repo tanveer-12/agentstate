@@ -31,8 +31,14 @@ nav:
     - Patches: concepts/patches.md
     - Conflict Detection: concepts/conflict.md
     - Parallel Execution: concepts/parallelism.md
+    - Event Log: concepts/event-log.md
   - API Reference:
     - State: api-reference/state.md
     - Patch: api-reference/patch.md
     - Graph: api-reference/graph.md
     - Conflicts: api-reference/conflicts.md
+    - Store: api-reference/store.md
+  - Guides:
+    - Http API: guides/http-api.md
+    - Checkpoint & Recovery: guides/checkpoint-recovery.md
+    - Replay Debugger: guides/replay-debugger.md

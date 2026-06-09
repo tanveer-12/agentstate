@@ -18,7 +18,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-api       = ["fastapi>=0.100", "uvicorn[standard]>=0.20"]
+api       = [
+    "fastapi>=0.100",
+    "uvicorn[standard]>=0.20",
+]
 otel      = ["opentelemetry-api", "opentelemetry-sdk",
              "opentelemetry-exporter-otlp-proto-grpc"]
 dashboard = ["rich>=13.0"]
@@ -55,3 +58,10 @@ testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["agentstatelib"]
+
+[dependency-groups]
+dev = [
+    "asyncpg>=0.31.0",
+    "httpx>=0.28.1",
+    "httpx2>=2.3.0",
+]
