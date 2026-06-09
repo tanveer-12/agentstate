@@ -1,0 +1,1818 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+        <link rel="prev" href="../shared-state/">
+      
+      
+        <link rel="next" href="../conflict/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Patches - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#patches" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Patches
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/http-api/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../benchmark/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Benchmark
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-patch-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a patch is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What a patch is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflict-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflict detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-patch-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The patch pipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The patch pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflictdetectorresolve_batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConflictDetector.resolve_batch()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply_patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        apply_patch()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invariantcheckercheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InvariantChecker.check()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-sharedstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New SharedState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchapplied-event" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PatchApplied event
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-target-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The target field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The target field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-path-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic path creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reason-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reason field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use priority
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../event-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/checkpoint-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/replay-debugger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replay Debugger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-patch-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a patch is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What a patch is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflict-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflict detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-patch-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The patch pipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The patch pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflictdetectorresolve_batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConflictDetector.resolve_batch()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply_patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        apply_patch()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invariantcheckercheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InvariantChecker.check()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-sharedstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New SharedState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchapplied-event" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PatchApplied event
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-target-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The target field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The target field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-path-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic path creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reason-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reason field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use priority
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="patches">Patches</h1>
+<h2 id="what-a-patch-is">What a patch is</h2>
+<p>A <code>StatePatch</code> is a <strong>proposal</strong>, not a write.</p>
+<p>Agents never modify <code>SharedState</code> directly. Instead, they return a <code>StatePatch</code> describing the change they want to make. The library then decides whether that change should actually be applied.</p>
+<pre><code class="language-python">from agentstatelib import StatePatch
+
+patch = StatePatch(
+    agent_id=&quot;research_agent&quot;,
+    target=&quot;facts.domain&quot;,
+    value=&quot;machine learning&quot;,
+    reason=&quot;Detected primary topic from source documents&quot;,
+)
+</code></pre>
+<p>This extra layer exists for several important reasons.</p>
+<h3 id="conflict-detection">Conflict detection</h3>
+<p>If two agents attempt to modify the same piece of state during the same parallel round, the library can detect the collision before anything is written.</p>
+<p>Without patches:</p>
+<pre><code class="language-text">Agent A writes facts.domain = &quot;biology&quot;
+Agent B writes facts.domain = &quot;physics&quot;
+</code></pre>
+<p>The last write silently wins.</p>
+<p>With patches:</p>
+<pre><code class="language-text">Agent A proposes facts.domain = &quot;biology&quot;
+Agent B proposes facts.domain = &quot;physics&quot;
+</code></pre>
+<p>The conflict is detected and resolved explicitly.</p>
+<h3 id="attribution">Attribution</h3>
+<p>Every patch contains the <code>agent_id</code> of the agent that produced it.</p>
+<p>This means the event log can answer questions such as:</p>
+<ul>
+<li>Which agent made this change?</li>
+<li>When was it made?</li>
+<li>What value was replaced?</li>
+<li>Why was it changed?</li>
+</ul>
+<h3 id="auditability">Auditability</h3>
+<p>Every patch requires a reason.</p>
+<p>This creates a human-readable history of workflow decisions and state transitions.</p>
+<p>Without patches, state changes happen silently.</p>
+<p>With patches, every change becomes an explicit event.</p>
+<hr />
+<h2 id="the-patch-pipeline">The patch pipeline</h2>
+<p>A patch travels through several stages before it becomes part of the workflow state.</p>
+<pre><code class="language-text">Agent
+  │
+  ▼
+StatePatch
+  │
+  ▼
+ConflictDetector.resolve_batch()
+  │
+  ▼
+apply_patch()
+  │
+  ▼
+InvariantChecker.check()
+  │
+  ▼
+New SharedState
+  │
+  ▼
+PatchApplied event logged
+</code></pre>
+<p>Each stage has a single responsibility.</p>
+<h3 id="agent">Agent</h3>
+<p>Produces a <code>StatePatch</code>.</p>
+<p>The agent does not modify state itself.</p>
+<h3 id="conflictdetectorresolve_batch">ConflictDetector.resolve_batch()</h3>
+<p>Receives all patches produced during the current parallel round.</p>
+<p>If multiple patches target the same path, the configured conflict resolution strategy chooses a winner.</p>
+<h3 id="apply_patch">apply_patch()</h3>
+<p>Applies the winning patch to a copy of the current state.</p>
+<p>The original state object remains unchanged.</p>
+<h3 id="invariantcheckercheck">InvariantChecker.check()</h3>
+<p>Validates that the updated state still satisfies workflow invariants.</p>
+<p>Examples:</p>
+<ul>
+<li>Tasks must reference valid goals.</li>
+<li>Completed goals cannot have unfinished tasks.</li>
+</ul>
+<p>If an error-level invariant fails, workflow execution stops.</p>
+<h3 id="new-sharedstate">New SharedState</h3>
+<p>A new immutable snapshot is created.</p>
+<p>All agents in the next round will read this updated snapshot.</p>
+<h3 id="patchapplied-event">PatchApplied event</h3>
+<p>A <code>PatchApplied</code> event is written to the event store.</p>
+<p>The event contains:</p>
+<ul>
+<li>patch ID</li>
+<li>target path</li>
+<li>old value</li>
+<li>new value</li>
+<li>reason</li>
+<li>workflow ID</li>
+<li>agent ID</li>
+</ul>
+<p>This event becomes part of the permanent audit trail.</p>
+<hr />
+<h2 id="the-target-field">The target field</h2>
+<p>The <code>target</code> field specifies <strong>where</strong> the update should be applied.</p>
+<p>Targets use dotted-path notation.</p>
+<pre><code class="language-python">StatePatch(
+    agent_id=&quot;agent&quot;,
+    target=&quot;facts.domain&quot;,
+    value=&quot;robotics&quot;,
+    reason=&quot;Detected topic&quot;,
+)
+</code></pre>
+<p>This updates:</p>
+<pre><code class="language-python">state.facts[&quot;domain&quot;]
+</code></pre>
+<h3 id="examples">Examples</h3>
+<p>Fact update:</p>
+<pre><code class="language-python">target=&quot;facts.domain&quot;
+</code></pre>
+<p>Task update:</p>
+<pre><code class="language-python">target=&quot;tasks.research.status&quot;
+</code></pre>
+<p>Artifact update:</p>
+<pre><code class="language-python">target=&quot;artifacts.draft.content&quot;
+</code></pre>
+<p>Decision metadata:</p>
+<pre><code class="language-python">target=&quot;facts.selected_model&quot;
+</code></pre>
+<h3 id="automatic-path-creation">Automatic path creation</h3>
+<p>Intermediate dictionaries are created automatically.</p>
+<pre><code class="language-python">set_nested({}, &quot;tasks.t1.status&quot;, &quot;done&quot;)
+</code></pre>
+<p>Produces:</p>
+<pre><code class="language-python">{
+    &quot;tasks&quot;: {
+        &quot;t1&quot;: {
+            &quot;status&quot;: &quot;done&quot;
+        }
+    }
+}
+</code></pre>
+<p>You do not need to manually create every level beforehand.</p>
+<p>This allows agents to propose updates using simple dotted paths regardless of how deeply nested the target location is.</p>
+<hr />
+<h2 id="the-reason-field">The reason field</h2>
+<p>The <code>reason</code> field is technically required and should be treated as required in spirit as well.</p>
+<p>A good reason explains <strong>why</strong> the change is being made.</p>
+<p>Poor example:</p>
+<pre><code class="language-python">reason=&quot;done&quot;
+</code></pre>
+<p>This tells future readers almost nothing.</p>
+<p>Better example:</p>
+<pre><code class="language-python">reason=&quot;Completed literature review and identified 12 relevant papers&quot;
+</code></pre>
+<p>Now the event log immediately communicates:</p>
+<ul>
+<li>what happened</li>
+<li>why it happened</li>
+<li>what work was completed</li>
+</ul>
+<p>When debugging workflows weeks later, the reason field often becomes the most valuable piece of information in the entire event log.</p>
+<p>Compare:</p>
+<pre><code class="language-text">facts.paper_count = 12
+reason = &quot;done&quot;
+</code></pre>
+<p>versus</p>
+<pre><code class="language-text">facts.paper_count = 12
+reason = &quot;Completed literature review and identified 12 relevant papers&quot;
+</code></pre>
+<p>The second entry explains the workflow state without requiring any additional investigation.</p>
+<p>As a rule, write reasons for humans, not machines.</p>
+<hr />
+<h2 id="priority">Priority</h2>
+<p><code>StatePatch</code> includes an optional <code>priority</code> field.</p>
+<pre><code class="language-python">patch = StatePatch(
+    agent_id=&quot;planner&quot;,
+    target=&quot;facts.strategy&quot;,
+    value=&quot;approach_a&quot;,
+    reason=&quot;Planner selected strategy&quot;,
+    priority=10,
+)
+</code></pre>
+<p>Default value:</p>
+<pre><code class="language-python">priority = 0
+</code></pre>
+<p>Priority becomes important when using the <code>PriorityBased</code> conflict resolver.</p>
+<pre><code class="language-text">Patch A priority = 5
+Patch B priority = 10
+</code></pre>
+<p>Patch B wins.</p>
+<p>If priorities are equal:</p>
+<pre><code class="language-text">Patch A priority = 10
+Patch B priority = 10
+</code></pre>
+<p>The resolver falls back to timestamp ordering (last-write-wins behavior).</p>
+<h3 id="when-to-use-priority">When to use priority</h3>
+<p>Use higher priorities for agents whose decisions should dominate others.</p>
+<p>Examples:</p>
+<ul>
+<li>Planner agent over worker agents</li>
+<li>Human approval agent over autonomous agents</li>
+<li>Validation agent over extraction agents</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-python">StatePatch(
+    agent_id=&quot;human_review&quot;,
+    target=&quot;facts.approved&quot;,
+    value=True,
+    reason=&quot;Human reviewer approved output&quot;,
+    priority=100,
+)
+</code></pre>
+<p>This ensures the human review decision wins conflicts against lower-priority automated agents.</p>
+<p>If you do not need hierarchical authority between agents, leave the priority field at its default value of <code>0</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
