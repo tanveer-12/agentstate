@@ -22,9 +22,14 @@ api       = [
     "fastapi>=0.100",
     "uvicorn[standard]>=0.20",
 ]
-otel      = ["opentelemetry-api", "opentelemetry-sdk",
-             "opentelemetry-exporter-otlp-proto-grpc"]
-dashboard = ["rich>=13.0"]
+otel      = [
+    "opentelemetry-api",
+    "opentelemetry-sdk",
+    "opentelemetry-exporter-otlp-proto-grpc",
+]
+dashboard = [
+    "rich>=13.0",
+]
 contrib   = []
 dev       = [
     "pytest>=7.0",

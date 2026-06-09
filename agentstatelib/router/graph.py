@@ -24,6 +24,7 @@ from agentstatelib.core.events import (
 from agentstatelib.core.patch import StatePatch, apply_patch, get_nested
 from agentstatelib.core.state import SharedState
 from agentstatelib.memory.store import InMemoryStore, StateStore
+from agentstatelib.observability.tracing import get_tracer
 from agentstatelib.router.context import slice_state
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
@@ -174,57 +175,64 @@ class AgentGraph:
         RuntimeError
             If invariant checks fail.
         """
-        start_ids = [start] if isinstance(start, str) else list(start)
-        for agent_id in start_ids:
-            if agent_id not in self._nodes:
-                raise ValueError(
-                    f"Start agent '{agent_id}' is not registered in this AgentGraph. "
-                    f"Registered agents: {list(self._nodes)}"
+        with get_tracer().start_as_current_span("workflow.run") as span:
+            start_ids = [start] if isinstance(start, str) else list(start)
+            span.set_attribute("workflow.id", state.workflow_id)
+            span.set_attribute("workflow.type", state.workflow_type)
+            span.set_attribute("workflow.start_agents", str(start_ids))
+
+            for agent_id in start_ids:
+                if agent_id not in self._nodes:
+                    raise ValueError(
+                        f"Start agent '{agent_id}' is not registered in this AgentGraph. "
+                        f"Registered agents: {list(self._nodes)}"
+                    )
+
+            # for now, use the state's workflow_id as the workflow identifier
+            workflow_id = state.workflow_id
+
+            # Emit WorkflowStarted
+            await self._emit(
+                WorkflowStarted(
+                    workflow_id=workflow_id,
+                    agent_id="system",
+                    workflow_type=state.workflow_type,
+                    goal=state.goal,
+                ),
+                event_queue,
+            )
+            # Reset conflict history for this run
+            self._conflict_detector.reset()
+            current_state = state
+            current_round_ids = start_ids
+
+            # Round loop
+            while current_round_ids:
+                current_state = await self._execute_round(
+                    agent_ids=current_round_ids,
+                    state=current_state,
+                    workflow_id=workflow_id,
+                    event_queue=event_queue,
                 )
 
-        # for now, use the state's workflow_id as the workflow identifier
-        workflow_id = state.workflow_id
+                # Compute the next round: all agents reachable from any agent
+                # that ran this round, whose edge condition fires on the new state
+                current_state_dict = current_state.model_dump()
+                current_round_ids = self._next_round(
+                    current_round_ids, current_state_dict
+                )
 
-        # Emit WorkflowStarted
-        await self._emit(
-            WorkflowStarted(
-                workflow_id=workflow_id,
-                agent_id="system",
-                workflow_type=state.workflow_type,
-                goal=state.goal,
-            ),
-            event_queue,
-        )
-        # Reset conflict history for this run
-        self._conflict_detector.reset()
-        current_state = state
-        current_round_ids = start_ids
-
-        # Round loop
-        while current_round_ids:
-            current_state = await self._execute_round(
-                agent_ids=current_round_ids,
-                state=current_state,
-                workflow_id=workflow_id,
-                event_queue=event_queue,
+            # Emit WorkflowCompleted
+            await self._emit(
+                WorkflowCompleted(
+                    workflow_id=workflow_id,
+                    agent_id="system",
+                    final_status=current_state.status,
+                ),
+                event_queue,
             )
 
-            # Compute the next round: all agents reachable from any agent
-            # that ran this round, whose edge condition fires on the new state
-            current_state_dict = current_state.model_dump()
-            current_round_ids = self._next_round(current_round_ids, current_state_dict)
-
-        # Emit WorkflowCompleted
-        await self._emit(
-            WorkflowCompleted(
-                workflow_id=workflow_id,
-                agent_id="system",
-                final_status=current_state.status,
-            ),
-            event_queue,
-        )
-
-        return current_state
+            return current_state
 
     async def _execute_round(
         self,
@@ -244,50 +252,59 @@ class AgentGraph:
         6. Run invariant checkers on the fully-updated state.
         7. Return new state.
         """
-        patches = await self._run_agents_parallel(agent_ids, state)
-        result: BatchResolutionResult = self._conflict_detector.resolve_batch(patches)
+        with get_tracer().start_as_current_span("round") as span:
+            span.set_attribute("round.agent_count", len(agent_ids))
+            span.set_attribute("round.agents", str(sorted(agent_ids)))
 
-        for record in result.conflicts:
-            await self._emit(
-                self._build_conflict_event(workflow_id, record),
-                event_queue,
+            patches = await self._run_agents_parallel(agent_ids, state)
+            result: BatchResolutionResult = self._conflict_detector.resolve_batch(
+                patches
             )
 
-        pre_round_dict = state.model_dump()
-        current_state = state
+            if result.conflicts:
+                span.set_attribute("round.conflict_count", len(result.conflicts))
 
-        for winner_patch in result.winners:
-            old_value = get_nested(pre_round_dict, winner_patch.target)
-            current_state = apply_patch(current_state, winner_patch)
-            new_value = get_nested(current_state.model_dump(), winner_patch.target)
-
-            await self._emit(
-                PatchApplied(
-                    workflow_id=workflow_id,
-                    agent_id=winner_patch.agent_id,
-                    patch_id=winner_patch.patch_id,
-                    target=winner_patch.target,
-                    old_value=old_value,
-                    new_value=new_value,
-                    reason=winner_patch.reason,
-                    timestamp=winner_patch.timestamp,
-                ),
-                event_queue,
-            )
-
-        # Step 6 — invariant checks run once after all patches in the round
-        # are applied, not after each individual patch
-        if self._invariant_checkers:
-            violations = check_all(current_state, self._invariant_checkers)
-            error_violations = [v for v in violations if v.severity == "error"]
-            if error_violations:
-                descriptions = "; ".join(v.description for v in error_violations)
-                raise RuntimeError(
-                    f"Invariant violations after round [{', '.join(agent_ids)}]: "
-                    f"{descriptions}"
+            for record in result.conflicts:
+                await self._emit(
+                    self._build_conflict_event(workflow_id, record),
+                    event_queue,
                 )
 
-        return current_state
+            pre_round_dict = state.model_dump()
+            current_state = state
+
+            for winner_patch in result.winners:
+                old_value = get_nested(pre_round_dict, winner_patch.target)
+                current_state = apply_patch(current_state, winner_patch)
+                new_value = get_nested(current_state.model_dump(), winner_patch.target)
+
+                await self._emit(
+                    PatchApplied(
+                        workflow_id=workflow_id,
+                        agent_id=winner_patch.agent_id,
+                        patch_id=winner_patch.patch_id,
+                        target=winner_patch.target,
+                        old_value=old_value,
+                        new_value=new_value,
+                        reason=winner_patch.reason,
+                        timestamp=winner_patch.timestamp,
+                    ),
+                    event_queue,
+                )
+
+            # Step 6 — invariant checks run once after all patches in the round
+            # are applied, not after each individual patch
+            if self._invariant_checkers:
+                violations = check_all(current_state, self._invariant_checkers)
+                error_violations = [v for v in violations if v.severity == "error"]
+                if error_violations:
+                    descriptions = "; ".join(v.description for v in error_violations)
+                    raise RuntimeError(
+                        f"Invariant violations after round [{', '.join(agent_ids)}]: "
+                        f"{descriptions}"
+                    )
+
+            return current_state
 
     async def _run_agents_parallel(
         self,
@@ -304,16 +321,28 @@ class AgentGraph:
         """
 
         async def _call_one(agent_id: str) -> StatePatch:
-            if agent_id not in self._nodes:
-                raise ValueError(
-                    f"Agent '{agent_id}' is not registered. "
-                    f"Registered agents: {list(self._nodes)}"
-                )
-            node = self._nodes[agent_id]
-            context = slice_state(state, list(node.context_keys))
+            with get_tracer().start_as_current_span(f"agent.{agent_id}") as span:
+                span.set_attribute("agent.id", agent_id)
 
-            async with self._sem:
-                return await node.fn(context)
+                if agent_id not in self._nodes:
+                    raise ValueError(
+                        f"Agent '{agent_id}' is not registered. "
+                        f"Registered agents: {list(self._nodes)}"
+                    )
+                node = self._nodes[agent_id]
+                context = slice_state(state, list(node.context_keys))
+
+                try:
+                    async with self._sem:
+                        patch = await node.fn(context)
+                    span.set_attribute("agent.patch_target", patch.target)
+                    span.set_attribute("agent.patch_reason", patch.reason)
+                    span.set_attribute("agent.success", True)
+                    return patch
+                except Exception as e:
+                    span.record_exception(e)
+                    span.set_attribute("agent.success", False)
+                    raise
 
         patches: list[StatePatch] = list(
             await asyncio.gather(*(_call_one(aid) for aid in agent_ids))

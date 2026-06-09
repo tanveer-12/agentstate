@@ -32,6 +32,7 @@ nav:
     - Conflict Detection: concepts/conflict.md
     - Parallel Execution: concepts/parallelism.md
     - Event Log: concepts/event-log.md
+    - Observability: concepts/observability.md
   - API Reference:
     - State: api-reference/state.md
     - Patch: api-reference/patch.md
@@ -44,4 +45,5 @@ nav:
     - Replay Debugger: guides/replay-debugger.md
     - LLM Integration: guides/llm-integration.md
     - Local Models: guides/local-models.md
+    - OpenTelemetry: guides/opentelemetry.md
   - Benchmark: benchmark.md
