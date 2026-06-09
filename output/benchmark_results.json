@@ -1,0 +1,756 @@
+{
+  "benchmarks": [
+    {
+      "model": "llama3:8b",
+      "n_runs": 20,
+      "with_grammar": {
+        "success_rate": 1.0,
+        "avg_retries": 0.0,
+        "avg_latency_seconds": 1.8568510550045176
+      },
+      "without_grammar": {
+        "success_rate": 1.0,
+        "avg_retries": 0.0,
+        "avg_latency_seconds": 2.009665260001202
+      },
+      "results": [
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 5.579869500012137,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6413596000056714,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.8886737000138965,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.0268419999920297,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.7132153999991715,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5133095000055619,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5779129000147805,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.8702368999947794,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.550907400000142,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6566580999933649,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.64111490000505,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.741571099992143,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.575768100010464,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.682299600011902,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5973879999946803,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5799349000153597,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6542057000042405,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5633157000120264,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6143069000099786,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.468131200002972,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.8406117999984417,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.584475800016662,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.532596699980786,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5505736999912187,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.8655374000081792,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.8930123999889474,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 3.140753899991978,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 4.667560200003209,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4873243999900296,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6280538999999408,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6716176000190899,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5915000999812037,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6880715000152122,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.611589100008132,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.7727238000079524,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.61496169999009,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6759201000095345,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5870729000016581,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.669154500006698,
+          "error": null
+        },
+        {
+          "model": "llama3:8b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 3.1201937000150792,
+          "error": null
+        }
+      ]
+    },
+    {
+      "model": "mistral:7b",
+      "n_runs": 20,
+      "with_grammar": {
+        "success_rate": 1.0,
+        "avg_retries": 0.0,
+        "avg_latency_seconds": 1.4411120799995842
+      },
+      "without_grammar": {
+        "success_rate": 1.0,
+        "avg_retries": 0.0,
+        "avg_latency_seconds": 1.8645591099979355
+      },
+      "results": [
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 3.1693092999921646,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3201495000103023,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.8077065999968909,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5544816000037827,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4086733000003733,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3742329999804497,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.2291437000094447,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.2541399999754503,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.1543867999862414,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.2009881999983918,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.317862800002331,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3505131999845617,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3611741999920923,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3674695999943651,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3257459000160452,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3522702000045683,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3539860000018962,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3885366000176873,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.333406300022034,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": true,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.1980648000026122,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3062801000196487,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.7000851999910083,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3609140000189655,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.7237069999973755,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6302998999890406,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5975860999897122,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 3.272745299997041,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.7703443999926094,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4460948999912944,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.6009690999926534,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4407780999899842,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4797211000113748,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.803429399995366,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 2.6628081999951974,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.5584019999951124,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.35323690000223,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3790130999987014,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.378105499985395,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.4430436000111513,
+          "error": null
+        },
+        {
+          "model": "mistral:7b",
+          "use_grammar": false,
+          "attempt": 1,
+          "success": true,
+          "retries_used": 0,
+          "latency_seconds": 1.3836182999948505,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

@@ -42,3 +42,6 @@ nav:
     - Http API: guides/http-api.md
     - Checkpoint & Recovery: guides/checkpoint-recovery.md
     - Replay Debugger: guides/replay-debugger.md
+    - LLM Integration: guides/llm-integration.md
+    - Local Models: guides/local-models.md
+  - Benchmark: benchmark.md
