@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 from agentstatelib.api.auth import is_valid_key, verify_api_key
+from agentstatelib.api.dashboard import DASHBOARD_HTML
 from agentstatelib.api.streaming import stream_workflow_events
 from agentstatelib.core.events import PatchApplied, WorkflowStarted
 from agentstatelib.core.patch import StatePatch

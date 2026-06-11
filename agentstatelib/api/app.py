@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
+from agentstatelib.api.dashboard import DASHBOARD_HTML
 from agentstatelib.memory.store import SQLiteStore
 
 
@@ -32,12 +33,7 @@ def create_app(db_path: str = "agentstatelib.db") -> FastAPI:
         include_in_schema=False,
     )
     async def dashboard() -> HTMLResponse:
-        return HTMLResponse(
-            "<html><body><h1>agentstatelib dashboard</h1>"
-            "<p>Full dashboard coming in v0.4.0. "
-            "<a href='/docs'>API docs →</a></p>"
-            "</body></html>"
-        )
+        return HTMLResponse(content=DASHBOARD_HTML)
 
     return app
 

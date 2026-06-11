@@ -46,6 +46,7 @@ from agentstatelib.memory.store import (
     SQLiteStore,
     StateStore,
 )
+from agentstatelib.observability.dashboard import WorkflowDashboard
 from agentstatelib.router.context import slice_state
 from agentstatelib.router.graph import AgentGraph, EventQueue, WorkflowEvent
 from agentstatelib.router.types import AgentFn, EdgeCondition
@@ -95,5 +96,6 @@ __all__ = [
     "save_checkpoint",
     "ReplayDebugger",
     "replay",
+    "WorkflowDashboard",
     "__version__",
 ]
