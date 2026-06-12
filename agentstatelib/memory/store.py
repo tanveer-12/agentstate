@@ -104,7 +104,6 @@ class SQLiteStore:
 
     async def _init_db(self, db: aiosqlite.Connection) -> None:
         """Create required tables and indexes if they do not exist."""
-
         await db.execute(
             """
             CREATE TABLE IF NOT EXISTS events(
@@ -112,6 +111,7 @@ class SQLiteStore:
                 event_id TEXT NOT NULL,
                 workflow_id TEXT NOT NULL,
                 type TEXT NOT NULL,
+                schema_version INTEGER NOT NULL DEFAULT 1,
                 data TEXT NOT NULL,
                 timestamp REAL NOT NULL
             )
@@ -125,23 +125,30 @@ class SQLiteStore:
             """
         )
 
+        cursor = await db.execute("PRAGMA table_info(events)")
+        rows = await cursor.fetchall()
+        columns = {row[1] for row in rows}
+        if "schema_version" not in columns:
+            await db.execute(
+                "ALTER TABLE events ADD COLUMN schema_version INTEGER NOT NULL DEFAULT 1"
+            )
+
         await db.commit()
 
     async def append(self, event: StateEvent) -> None:
-        """
-        Append an event to persistent storage.
-        """
+        """Append an event to persistent storage."""
         async with aiosqlite.connect(self.path) as db:
             await self._init_db(db)
             await db.execute(
                 """
-                INSERT INTO events(event_id, workflow_id, type, data, timestamp)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO events(event_id, workflow_id, type, schema_version, data, timestamp)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
                 (
                     event.event_id,
                     event.workflow_id,
                     event.type,
+                    getattr(event, "schema_version", 1),
                     event.model_dump_json(),
                     event.timestamp,
                 ),
@@ -202,7 +209,7 @@ class SQLiteStore:
             await self._init_db(db)
             cursor = await db.execute(
                 """
-                SELECT workflow_id 
+                SELECT workflow_id
                 FROM events
                 GROUP BY workflow_id
                 ORDER BY MAX(id) DESC
@@ -251,6 +258,7 @@ class PostgreSQLStore:
                         event_id TEXT NOT NULL,
                         workflow_id TEXT NOT NULL,
                         type TEXT NOT NULL,
+                        schema_version INTEGER NOT NULL DEFAULT 1,
                         data TEXT NOT NULL,
                         timestamp DOUBLE PRECISION NOT NULL
                     )
@@ -264,10 +272,11 @@ class PostgreSQLStore:
         pool = await self._get_pool()
         async with pool.acquire() as conn:
             await conn.execute(
-                "INSERT INTO events (event_id, workflow_id, type, data, timestamp) VALUES ($1, $2, $3, $4, $5)",
+                "INSERT INTO events (event_id, workflow_id, type, schema_version, data, timestamp) VALUES ($1, $2, $3, $4, $5, $6)",
                 event.event_id,
                 workflow_id,
                 event.__class__.__name__,
+                getattr(event, "schema_version", 1),
                 event.model_dump_json(),
                 float(event.timestamp),
             )

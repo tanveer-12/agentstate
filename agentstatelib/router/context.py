@@ -24,6 +24,11 @@ class ContextSlice(BaseModel):
             return self.goal
         return self.data[key]
 
+    def __contains__(self, key: str) -> bool:
+        if key in {"workflow_id", "workflow_type", "goal"}:
+            return True
+        return key in self.data
+
     def get(self, key: str, default: Any = None) -> Any:
         try:
             return self[key]

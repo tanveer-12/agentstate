@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
@@ -17,6 +18,7 @@ from agentstatelib.coordination.invariants import (
 )
 from agentstatelib.core.events import (
     ConflictDetected,
+    ContextSliced,
     PatchApplied,
     WorkflowCompleted,
     WorkflowStarted,
@@ -29,7 +31,13 @@ from agentstatelib.router.context import slice_state
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
 # Type Aliases
-WorkflowEvent = PatchApplied | WorkflowStarted | WorkflowCompleted | ConflictDetected
+WorkflowEvent = (
+    PatchApplied
+    | WorkflowStarted
+    | WorkflowCompleted
+    | ConflictDetected
+    | ContextSliced
+)
 EventQueue = asyncio.Queue[WorkflowEvent]
 
 
@@ -256,7 +264,7 @@ class AgentGraph:
             span.set_attribute("round.agent_count", len(agent_ids))
             span.set_attribute("round.agents", str(sorted(agent_ids)))
 
-            patches = await self._run_agents_parallel(agent_ids, state)
+            patches = await self._run_agents_parallel(agent_ids, state, event_queue)
             result: BatchResolutionResult = self._conflict_detector.resolve_batch(
                 patches
             )
@@ -310,6 +318,7 @@ class AgentGraph:
         self,
         agent_ids: list[str],
         state: SharedState,
+        event_queue: EventQueue | None,
     ) -> list[StatePatch]:
         """Run all agents in agent_ids concurrently against the same state snapshot.
 
@@ -331,6 +340,16 @@ class AgentGraph:
                     )
                 node = self._nodes[agent_id]
                 context = slice_state(state, list(node.context_keys))
+                await self._emit(
+                    ContextSliced(
+                        workflow_id=state.workflow_id,
+                        agent_id=agent_id,
+                        context_paths=list(node.context_keys),
+                        context_size_bytes=len(json.dumps(context, default=str)),
+                        snapshot_workflow_id=state.workflow_id,
+                    ),
+                    event_queue,
+                )
 
                 try:
                     async with self._sem:
@@ -341,7 +360,7 @@ class AgentGraph:
                         patches = [result]
                     else:
                         patches = list(result)
-                    span.set_attribute("agent.sucess", True)
+                    span.set_attribute("agent.success", True)
                     span.set_attribute("agent.patch_count", len(patches))
                     return patches
                 except Exception as e:

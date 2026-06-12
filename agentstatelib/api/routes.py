@@ -13,6 +13,7 @@ from agentstatelib.api.streaming import stream_workflow_events
 from agentstatelib.core.events import PatchApplied, WorkflowStarted
 from agentstatelib.core.patch import StatePatch
 from agentstatelib.core.state import SharedState
+from agentstatelib.memory.replay import get_agent_turns
 from agentstatelib.memory.store import StateStore
 
 # All API errors use:
@@ -224,3 +225,48 @@ async def workflow_event_list(
         "events": [event.model_dump() for event in events],
         "count": len(events),
     }
+
+
+@router.get("/v1/workflows/{workflow_id}/turns", tags=["workflows"])
+async def workflow_turns(
+    workflow_id: str,
+    _: str = Depends(verify_api_key),
+    store: StateStore = Depends(get_store),
+) -> dict[str, object]:
+    events = await store.get_workflow(workflow_id)
+    if not events:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "workflow_not_found",
+                "message": f"No events found for workflow {workflow_id!r}",
+            },
+        )
+
+    turns = get_agent_turns(events)
+    payload: list[dict[str, object]] = []
+
+    for turn in turns:
+        context_paths = turn.context_sliced.context_paths if turn.context_sliced else []
+        first_prompt_preview = turn.prompts[0].prompt_text[:150] if turn.prompts else ""
+        model = turn.model_calls[0][0].model if turn.model_calls else ""
+        patch_target = turn.patch_applied.target if turn.patch_applied else ""
+        patch_reason = turn.patch_applied.reason if turn.patch_applied else ""
+
+        payload.append(
+            {
+                "agent_id": turn.agent_id,
+                "attempt_count": turn.attempt_count,
+                "succeeded": turn.succeeded,
+                "total_latency_seconds": turn.total_latency_seconds,
+                "total_tokens": turn.total_tokens,
+                "context_paths": context_paths,
+                "first_prompt_preview": first_prompt_preview,
+                "model": model,
+                "validation_failure_count": len(turn.validation_failures),
+                "patch_target": patch_target,
+                "patch_reason": patch_reason,
+            }
+        )
+
+    return {"turns": payload, "count": len(payload)}

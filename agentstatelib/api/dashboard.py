@@ -21,6 +21,7 @@ DASHBOARD_HTML: str = """
       --yellow: #ecc94b;
       --blue: #63b3ed;
       --red: #fc8181;
+      --purple: #b794f4;
     }
 
     * { box-sizing: border-box; }
@@ -133,6 +134,7 @@ DASHBOARD_HTML: str = """
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 16px;
+      margin-bottom: 16px;
     }
 
     .section-title {
@@ -266,6 +268,167 @@ DASHBOARD_HTML: str = """
       border-radius: 12px;
       background: rgba(255,255,255,0.02);
     }
+
+    .trace-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .turn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: calc(100vh - 170px);
+    }
+
+    .turn-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface2);
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .turn-card:hover {
+      border-color: rgba(99, 179, 237, 0.35);
+    }
+
+    .turn-card.selected {
+      border-color: rgba(99, 179, 237, 0.75);
+      box-shadow: 0 0 0 1px rgba(99, 179, 237, 0.3) inset;
+    }
+
+    .turn-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .turn-card-title {
+      font-weight: 700;
+    }
+
+    .turn-card-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .turn-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .turn-section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface2);
+      overflow: hidden;
+    }
+
+    .turn-section summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .turn-section summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .turn-section .section-body {
+      padding: 0 14px 14px;
+      color: var(--text);
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      margin-left: 10px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .prompt-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .prompt-tab {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      font-size: 0.85rem;
+    }
+
+    .prompt-tab.active {
+      color: var(--text);
+      border-color: rgba(99, 179, 237, 0.75);
+      background: rgba(99, 179, 237, 0.12);
+    }
+
+    .border-green { border-color: rgba(72, 187, 120, 0.65) !important; }
+    .border-red { border-color: rgba(252, 129, 129, 0.65) !important; }
+    .border-yellow { border-color: rgba(236, 201, 75, 0.65) !important; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .tool-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-top: 8px;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+
+    .tool-item summary {
+      padding: 10px 12px;
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+    }
+
+    .tool-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .tool-item .section-body {
+      padding: 0 12px 12px;
+    }
   </style>
 </head>
 <body>
@@ -279,6 +442,7 @@ DASHBOARD_HTML: str = """
         <div class="tab active" data-tab="detail">Detail</div>
         <div class="tab" data-tab="live">Live</div>
         <div class="tab" data-tab="replay">Replay</div>
+        <div class="tab" data-tab="trace">Trace</div>
       </div>
       <div id="content"></div>
     </div>
@@ -295,6 +459,8 @@ DASHBOARD_HTML: str = """
     let detailState = {};
     let workflowStartTime = null;
     let currentTab = "detail";
+    let traceTurns = [];
+    let selectedTurnIndex = null;
 
     function apiFetch(path, options = {}) {
       const headers = new Headers(options.headers || {});
@@ -336,6 +502,12 @@ DASHBOARD_HTML: str = """
       return [];
     }
 
+    function normalizeTurns(payload) {
+      if (!payload) return [];
+      if (Array.isArray(payload.turns)) return payload.turns;
+      return [];
+    }
+
     function formatTimestamp(ts) {
       if (!workflowStartTime || typeof ts !== "number") return "";
       return `${(ts - workflowStartTime).toFixed(1)}s`;
@@ -360,10 +532,6 @@ DASHBOARD_HTML: str = """
       cur[parts[parts.length - 1]] = value;
     }
 
-    function badgeLabel(event) {
-      return event.agent_id || "";
-    }
-
     function eventType(event) {
       return event.type || event.event_type || "event";
     }
@@ -376,6 +544,15 @@ DASHBOARD_HTML: str = """
       if (type === "agent_errored") return "Agent errored";
       if (type === "checkpoint_saved") return "Checkpoint saved";
       return "";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
     }
 
     async function loadWorkflowList() {
@@ -410,6 +587,7 @@ DASHBOARD_HTML: str = """
       });
       loadDetail(workflowId);
       if (currentTab === "live") startLiveView(workflowId);
+      if (currentTab === "trace") loadTurns(workflowId);
     }
 
     async function loadDetail(workflowId) {
@@ -436,42 +614,42 @@ DASHBOARD_HTML: str = """
       if (type === "patch_applied") {
         detailHtml = `
           <div class="detail-grid">
-            <div class="detail-row"><strong>Target:</strong> ${event.target || ""}</div>
-            <div class="detail-row"><strong>Reason:</strong> ${event.reason || ""}</div>
-            <div class="detail-row"><strong>Old value:</strong><div class="json-block">${formatJson(event.old_value)}</div></div>
-            <div class="detail-row"><strong>New value:</strong><div class="json-block">${formatJson(event.new_value)}</div></div>
+            <div class="detail-row"><strong>Target:</strong> ${escapeHtml(event.target || "")}</div>
+            <div class="detail-row"><strong>Reason:</strong> ${escapeHtml(event.reason || "")}</div>
+            <div class="detail-row"><strong>Old value:</strong><div class="json-block">${escapeHtml(formatJson(event.old_value))}</div></div>
+            <div class="detail-row"><strong>New value:</strong><div class="json-block">${escapeHtml(formatJson(event.new_value))}</div></div>
           </div>
         `;
       } else if (type === "conflict_detected") {
         detailHtml = `
           <div class="detail-grid">
-            <div class="detail-row"><strong>Path:</strong> ${event.path || ""}</div>
+            <div class="detail-row"><strong>Path:</strong> ${escapeHtml(event.path || "")}</div>
             <div class="detail-row">
-              <span class="badge winner-badge">Winner: ${event.winner_agent_id || ""}</span>
-              <span class="badge loser-badge">Loser: ${event.loser_agent_id || ""}</span>
+              <span class="badge winner-badge">Winner: ${escapeHtml(event.winner_agent_id || "")}</span>
+              <span class="badge loser-badge">Loser: ${escapeHtml(event.loser_agent_id || "")}</span>
             </div>
-            <div class="detail-row"><strong>Strategy:</strong> ${event.resolution_strategy || ""}</div>
+            <div class="detail-row"><strong>Strategy:</strong> ${escapeHtml(event.resolution_strategy || "")}</div>
           </div>
         `;
       } else if (type === "agent_errored") {
         detailHtml = `
           <div class="detail-grid">
-            <div class="detail-row"><strong>Error type:</strong> ${event.error_type || ""}</div>
-            <div class="detail-row"><strong>Message:</strong> ${event.error_message || ""}</div>
-            <div class="detail-row"><strong>Retries:</strong> ${event.retry_count ?? 0}</div>
+            <div class="detail-row"><strong>Error type:</strong> ${escapeHtml(event.error_type || "")}</div>
+            <div class="detail-row"><strong>Message:</strong> ${escapeHtml(event.error_message || "")}</div>
+            <div class="detail-row"><strong>Retries:</strong> ${escapeHtml(event.retry_count ?? 0)}</div>
           </div>
         `;
       } else {
-        detailHtml = `<div class="detail-row">${formatJson(event)}</div>`;
+        detailHtml = `<div class="detail-row"><div class="json-block">${escapeHtml(formatJson(event))}</div></div>`;
       }
 
       return `
-        <div class="event-row" data-type="${type}" style="border-left-color: ${color};" onclick="this.classList.toggle('open')">
+        <div class="event-row" data-type="${escapeHtml(type)}" style="border-left-color: ${color};" onclick="this.classList.toggle('open')">
           <div class="event-header">
-            <div class="time">${formatTimestamp(event.timestamp || 0)}</div>
-            <div><span class="badge">${badgeLabel(event)}</span></div>
-            <div><span class="badge type-badge">${type}</span></div>
-            <div>${eventSummary(type)}</div>
+            <div class="time">${escapeHtml(formatTimestamp(event.timestamp || 0))}</div>
+            <div><span class="badge">${escapeHtml(event.agent_id || "")}</span></div>
+            <div><span class="badge type-badge">${escapeHtml(type)}</span></div>
+            <div>${escapeHtml(eventSummary(type))}</div>
           </div>
           <div class="details">${detailHtml}</div>
         </div>
@@ -494,9 +672,9 @@ DASHBOARD_HTML: str = """
 
       html.push("</div>");
       html.push("</div>");
-      html.push('<div class="panel" style="margin-top: 16px;">');
+      html.push('<div class="panel">');
       html.push('<h3 class="section-title">Current state</h3>');
-      html.push(`<pre class="state-view">${formatJson(state)}</pre>`);
+      html.push(`<pre class="state-view">${escapeHtml(formatJson(state))}</pre>`);
       html.push("</div>");
       content.innerHTML = html.join("");
     }
@@ -512,10 +690,10 @@ DASHBOARD_HTML: str = """
       row.style.borderLeftColor = row.dataset.type === "patch_applied" ? "var(--green)" : "var(--border)";
       row.innerHTML = `
         <div class="event-header">
-          <div class="time">${formatTimestamp(event.timestamp || 0)}</div>
-          <div><span class="badge">${badgeLabel(event)}</span></div>
-          <div><span class="badge type-badge">${eventType(event)}</span></div>
-          <div>${event.target || event.path || ""}</div>
+          <div class="time">${escapeHtml(formatTimestamp(event.timestamp || 0))}</div>
+          <div><span class="badge">${escapeHtml(event.agent_id || "")}</span></div>
+          <div><span class="badge type-badge">${escapeHtml(eventType(event))}</span></div>
+          <div>${escapeHtml(event.target || event.path || "")}</div>
         </div>
       `;
       table.prepend(row);
@@ -595,6 +773,170 @@ DASHBOARD_HTML: str = """
       replayToIndex(0);
     }
 
+    function loadTurns(workflowId) {
+      return apiFetch(`/v1/workflows/${workflowId}/turns`).then((payload) => {
+        traceTurns = normalizeTurns(payload);
+        if (currentTab === "trace") renderTraceTab();
+      });
+    }
+
+    function selectTurn(turnIndex) {
+      selectedTurnIndex = turnIndex;
+      renderTraceTab();
+      loadTurnDetail(currentWorkflowId, turnIndex);
+    }
+
+    function get_agent_turns_js(events) {
+      const turns = [];
+      let current = null;
+
+      for (const event of events) {
+        if (event.type === "context_sliced") {
+          if (current) turns.push(current);
+          current = {
+            agent_id: event.agent_id,
+            events: [event],
+            context_paths: event.context_paths || []
+          };
+          continue;
+        }
+        if (current) current.events.push(event);
+      }
+
+      if (current) turns.push(current);
+      return turns;
+    }
+
+    function renderPromptWithAttempts(prompts) {
+      if (!prompts || !prompts.length) return `<div class="placeholder">No prompt available.</div>`;
+      if (prompts.length === 1) {
+        return `<pre class="mono">${escapeHtml(prompts[0].prompt_text || "")}</pre>`;
+      }
+
+      const tabs = prompts.map((_, idx) =>
+        `<button class="prompt-tab ${idx === 0 ? "active" : ""}" data-prompt-index="${idx}">Attempt ${idx + 1}</button>`
+      ).join("");
+
+      const body = `<div id="prompt-attempt-body"><pre class="mono">${escapeHtml(prompts[0].prompt_text || "")}</pre></div>`;
+      return `<div class="prompt-tabs">${tabs}</div>${body}`;
+    }
+
+    function highlightJsonError(rawOutput, errorMessage) {
+      try {
+        JSON.parse(rawOutput);
+        return `<pre class="mono border-green">${escapeHtml(rawOutput)}</pre>`;
+      } catch (err) {
+        const idx = Math.max(0, Math.min(rawOutput.length - 1, (errorMessage && errorMessage.match(/position (\\d+)/i)?.[1]) ? parseInt(RegExp.$1, 10) : 0));
+        const before = escapeHtml(rawOutput.slice(0, idx));
+        const marked = escapeHtml(rawOutput.slice(idx, idx + 1));
+        const after = escapeHtml(rawOutput.slice(idx + 1));
+        return `<pre class="mono border-red">${before}<span style="color: var(--red); font-weight: 700;">${marked}</span>${after}\n\n<span style="color: var(--red);">${escapeHtml(errorMessage || "")}</span></pre>`;
+      }
+    }
+
+    async function loadTurnDetail(workflowId, turnIndex) {
+      const eventsResp = await apiFetch(`/v1/workflows/${workflowId}/events-list`);
+      const events = normalizeEvents(eventsResp);
+      const turns = get_agent_turns_js(events);
+      const turn = turns[turnIndex];
+      if (!turn) return;
+      const content = document.getElementById("content");
+      const section = (title, body, extraClass = "") => `
+        <details class="turn-section ${extraClass}" open>
+          <summary>${escapeHtml(title)}</summary>
+          <div class="section-body">${body}</div>
+        </details>
+      `;
+
+      const contextBody = turn.context_paths && turn.context_paths.length
+        ? `<ul>${turn.context_paths.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>`
+        : `<div class="placeholder">No context captured.</div>`;
+
+      const promptBody = renderPromptWithAttempts((turn.prompts || []).length ? turn.prompts : []);
+      const responseBody = turn.model_response
+        ? `<pre class="mono ${turn.succeeded ? "border-green" : "border-red"}">${escapeHtml(turn.model_response)}</pre>`
+        : `<div class="placeholder">No model response.</div>`;
+
+      const failuresBody = turn.validation_failures && turn.validation_failures.length
+        ? `<div class="turn-section border-red" style="padding: 12px; border-width:1px;">
+            <div class="pill">${turn.succeeded ? "Recovered via retry" : "Validation failures"}</div>
+            ${turn.validation_failures.map((f) => `
+              <div class="json-block" style="border-color: rgba(252,129,129,.65);">
+                <div><strong>${escapeHtml(f.error_type || "")}</strong></div>
+                <div>${escapeHtml(f.error_message || "")}</div>
+                <div>${escapeHtml(f.raw_output || "")}</div>
+              </div>
+            `).join("")}
+          </div>`
+        : `<div class="placeholder">No validation failures.</div>`;
+
+      const toolsBody = turn.tools && turn.tools.length
+        ? turn.tools.map((tool) => `
+            <details class="tool-item">
+              <summary>${escapeHtml(tool.tool_name || "")} · ${escapeHtml(tool.latency || "")} · ${escapeHtml(tool.result_summary || "")}</summary>
+              <div class="section-body"></div>
+            </details>
+          `).join("")
+        : `<div class="placeholder">No tools used.</div>`;
+
+      const patchBody = turn.patch_target
+        ? `<div class="json-block border-green">
+            <div><strong>Target:</strong> ${escapeHtml(turn.patch_target)}</div>
+            <div><strong>Reason:</strong> ${escapeHtml(turn.patch_reason || "")}</div>
+          </div>`
+        : `<div class="json-block border-red">No patch produced</div>`;
+
+      content.querySelector(".turn-detail").innerHTML = [
+        section("Context", contextBody),
+        section("Prompt", promptBody),
+        section("Model response", responseBody),
+        section("Validation failures", failuresBody, turn.validation_failure_count ? "border-red" : ""),
+        section("Tools", toolsBody),
+        section("Patch produced", patchBody, turn.patch_target ? "border-green" : "border-red")
+      ].join("");
+    }
+
+    function renderTraceTab() {
+      const content = document.getElementById("content");
+      const turnsHtml = traceTurns.map((turn, idx) => {
+        const selected = idx === selectedTurnIndex ? "selected" : "";
+        const status = turn.succeeded ? "✓" : "•";
+        return `
+          <div class="turn-card ${selected}" onclick="selectTurn(${idx})">
+            <div class="turn-card-top">
+              <div class="turn-card-title">${escapeHtml(turn.agent_id || "agent")}</div>
+              <div class="badge ${turn.succeeded ? "winner-badge" : "loser-badge"}">${status}</div>
+            </div>
+            <div class="turn-card-meta">
+              <span>${escapeHtml(turn.model || "")}</span>
+              <span>${escapeHtml(String(turn.total_latency_seconds ?? 0))}s</span>
+              <span>${escapeHtml(String(turn.attempt_count ?? 0))} attempts</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      content.innerHTML = `
+        <div class="trace-layout">
+          <div class="panel">
+            <h3 class="section-title">Agent turns</h3>
+            <div class="stats">${traceTurns.length} turns</div>
+            <div class="turn-list">${turnsHtml || '<div class="placeholder">No turns yet.</div>'}</div>
+          </div>
+          <div class="panel turn-detail">
+            <div class="placeholder">Select a turn to inspect full trace detail.</div>
+          </div>
+        </div>
+      `;
+
+      if (selectedTurnIndex === null && traceTurns.length) {
+        selectedTurnIndex = 0;
+      }
+      if (selectedTurnIndex !== null && traceTurns[selectedTurnIndex]) {
+        loadTurnDetail(currentWorkflowId, selectedTurnIndex);
+      }
+    }
+
     function setActiveTab(name) {
       currentTab = name;
       document.querySelectorAll(".tab").forEach((el) => {
@@ -607,6 +949,10 @@ DASHBOARD_HTML: str = """
         else renderLiveView();
       }
       if (name === "replay") renderReplayTab(allEvents);
+      if (name === "trace") {
+        if (currentWorkflowId) loadTurns(currentWorkflowId).then(renderTraceTab);
+        else renderTraceTab();
+      }
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -625,6 +971,9 @@ DASHBOARD_HTML: str = """
         try {
           await loadWorkflowList();
           if (currentWorkflowId) await loadDetail(currentWorkflowId);
+          if (currentWorkflowId && currentTab === "trace") {
+            await loadTurns(currentWorkflowId);
+          }
         } catch {}
       }, 5000);
     });
