@@ -12,10 +12,13 @@ import asyncio
 import time
 from typing import Any
 
+from rich import box
+
 from agentstatelib.core.events import (
     AgentErrored,
     ConflictDetected,
     PatchApplied,
+    StateEvent,
     WorkflowCompleted,
     WorkflowStarted,
 )
@@ -40,16 +43,16 @@ except ImportError:
 
 
 class WorkflowDashboard:
-    def __init__(self, event_queue: asyncio.Queue):
+    def __init__(self, event_queue: asyncio.Queue[StateEvent | None]):
         self._event_queue = event_queue
-        self._events: list = []
+        self._events: list[StateEvent] = []
         self._start_time: float = time.time()
         self._current_agent: str = "starting..."
         self._conflict_count: int = 0
         self._patch_count: int = 0
 
     def _build_display(self) -> Any:
-        table = Table(border_style="minimal")
+        table = Table(box=box.MINIMAL)
         table.add_column("Time", width=8)
         table.add_column("Agent", width=16)
         table.add_column("Event", width=20)

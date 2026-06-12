@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
+import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -10,10 +12,14 @@ from agentstatelib.core.patch import StatePatch
 from agentstatelib.core.state import SharedState
 
 
-def test_terminal_dashboard_import_without_rich() -> None:
-    from agentstatelib.observability.dashboard import WorkflowDashboard
+def test_terminal_dashboard_import_without_rich(monkeypatch) -> None:
+    monkeypatch.setitem(sys.modules, "rich", None)
+    monkeypatch.setitem(sys.modules, "rich.live", None)
+    monkeypatch.setitem(sys.modules, "rich.panel", None)
+    monkeypatch.setitem(sys.modules, "rich.table", None)
 
-    assert WorkflowDashboard is not None
+    module = importlib.import_module("agentstatelib.observability.dashboard")
+    assert module.WorkflowDashboard is not None
 
 
 @pytest.mark.asyncio
@@ -48,30 +54,23 @@ async def test_terminal_dashboard_receives_events() -> None:
 
 @pytest.mark.asyncio
 async def test_graph_emits_events_to_queue_for_terminal() -> None:
-    from agentstatelib.core.events import StateEvent
-    from agentstatelib.core.patch import StatePatch
-    from agentstatelib.observability.dashboard import WorkflowDashboard
     from agentstatelib.router.graph import AgentGraph
 
     queue: asyncio.Queue = asyncio.Queue()
-
     graph = AgentGraph()
 
     @graph.node("start")
-    async def start_node(state: SharedState) -> list[StatePatch]:
+    async def start_node(ctx) -> list[StatePatch]:
         return [
             StatePatch(
+                agent_id="agent-1",
                 target="facts.answer",
                 value="hello",
                 reason="test patch",
-                agent_id="agent-1",
             )
         ]
 
-    graph.edge("start", "end")
-
     state = SharedState(goal="test goal", workflow_type="general")
-
     await graph.run(state, start="start", event_queue=queue)
 
     events = []

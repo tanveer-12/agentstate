@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from agentstatelib.coordination.conflicts import (
@@ -320,7 +320,7 @@ class AgentGraph:
         The semaphore limits total concurrency across all rounds.
         """
 
-        async def _call_one(agent_id: str) -> StatePatch:
+        async def _call_one(agent_id: str) -> list[StatePatch]:
             with get_tracer().start_as_current_span(f"agent.{agent_id}") as span:
                 span.set_attribute("agent.id", agent_id)
 
@@ -334,20 +334,24 @@ class AgentGraph:
 
                 try:
                     async with self._sem:
-                        patch = await node.fn(context)
-                    span.set_attribute("agent.patch_target", patch.target)
-                    span.set_attribute("agent.patch_reason", patch.reason)
-                    span.set_attribute("agent.success", True)
-                    return patch
+                        result = await node.fn(context)
+
+                    patches: list[StatePatch]
+                    if isinstance(result, StatePatch):
+                        patches = [result]
+                    else:
+                        patches = list(result)
+                    span.set_attribute("agent.sucess", True)
+                    span.set_attribute("agent.patch_count", len(patches))
+                    return patches
                 except Exception as e:
                     span.record_exception(e)
                     span.set_attribute("agent.success", False)
                     raise
 
-        patches: list[StatePatch] = list(
-            await asyncio.gather(*(_call_one(aid) for aid in agent_ids))
-        )
-        return patches
+        nested = await asyncio.gather(*(_call_one(aid) for aid in agent_ids))
+
+        return [patch for batch in nested for patch in batch]
 
     # ── Routing ───────────────────────────────────────────────────────────────
 

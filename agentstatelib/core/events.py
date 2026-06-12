@@ -4,6 +4,8 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, TypeAdapter
 
+from agentstatelib.core.state import WorkflowStatus
+
 
 # This is the parent all events share
 class BaseStateEvent(BaseModel):
@@ -41,7 +43,7 @@ class WorkflowCompleted(BaseStateEvent):
     """
 
     type: Literal["workflow_completed"] = "workflow_completed"
-    final_status: Any
+    final_status: WorkflowStatus
 
 
 class PatchApplied(BaseStateEvent):
