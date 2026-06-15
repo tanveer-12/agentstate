@@ -148,7 +148,7 @@ class SQLiteStore:
                     event.event_id,
                     event.workflow_id,
                     event.type,
-                    getattr(event, "schema_version", 1),
+                    event.schema_version,
                     event.model_dump_json(),
                     event.timestamp,
                 ),
@@ -244,11 +244,11 @@ class PostgreSQLStore:
                     "asyncpg required for PostgreSQLStore. Install with: pip install asyncpg"
                 )
             self._pool = await asyncpg.create_pool(self.dsn)
-            await self._init_db()
+            # init_db receives the pool directly to avoid re-entering _get_pool
+            await self._init_db(self._pool)
         return self._pool
 
-    async def _init_db(self) -> None:
-        pool = await self._get_pool()
+    async def _init_db(self, pool: Any) -> None:
         async with pool.acquire() as conn:
             async with conn.transaction():
                 await conn.execute(
@@ -268,15 +268,15 @@ class PostgreSQLStore:
                     "CREATE INDEX IF NOT EXISTS idx_wf_id ON events(workflow_id)"
                 )
 
-    async def append(self, workflow_id: str, event: StateEvent) -> None:
+    async def append(self, event: StateEvent) -> None:
         pool = await self._get_pool()
         async with pool.acquire() as conn:
             await conn.execute(
                 "INSERT INTO events (event_id, workflow_id, type, schema_version, data, timestamp) VALUES ($1, $2, $3, $4, $5, $6)",
                 event.event_id,
-                workflow_id,
-                event.__class__.__name__,
-                getattr(event, "schema_version", 1),
+                event.workflow_id,
+                event.type,
+                event.schema_version,
                 event.model_dump_json(),
                 float(event.timestamp),
             )

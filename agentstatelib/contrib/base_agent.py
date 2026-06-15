@@ -49,9 +49,9 @@ class LLMAgent:
     """Optional base class for LLM-backed agent functions.
 
     Example:
-        from agentstate.router.graph import AgentGraph
-        from agentstate.contrib.base_agent import LLMAgent
-        from agentstate.core.patch import StatePatch
+        from agentstatelib.router.graph import AgentGraph
+        from agentstatelib.contrib.base_agent import LLMAgent
+        from agentstatelib.core.patch import StatePatch
 
         class MyOllamaAgent(LLMAgent):
             async def _call_model(self, prompt: str) -> str:
@@ -92,6 +92,11 @@ class LLMAgent:
             await self._store.append(event)
 
     async def __call__(self, context: dict[str, Any]) -> StatePatch:
+        # The context dict always includes workflow_id from slice_state.
+        # Use it as a fallback so trace events are stored under the correct
+        # workflow even when workflow_id was not set at construction time.
+        effective_workflow_id = self._workflow_id or str(context.get("workflow_id", ""))
+
         last_error: str | None = None
         last_output: str | None = None
 
@@ -99,7 +104,7 @@ class LLMAgent:
             prompt = self._build_prompt(context, error=last_error)
             await self._emit(
                 PromptAssembled(
-                    workflow_id=self._workflow_id or "",
+                    workflow_id=effective_workflow_id,
                     agent_id=self.agent_id,
                     prompt_text=prompt,
                     system_prompt_length=len(self.system_prompt),
@@ -114,7 +119,7 @@ class LLMAgent:
 
             await self._emit(
                 ModelCalled(
-                    workflow_id=self._workflow_id or "",
+                    workflow_id=effective_workflow_id,
                     agent_id=self.agent_id,
                     model=self.model,
                     provider=self.provider,
@@ -128,7 +133,7 @@ class LLMAgent:
 
             await self._emit(
                 ModelReturned(
-                    workflow_id=self._workflow_id or "",
+                    workflow_id=effective_workflow_id,
                     agent_id=self.agent_id,
                     call_id=call_id,
                     raw_response=raw,
@@ -155,7 +160,7 @@ class LLMAgent:
                 will_retry = attempt < self.max_retries - 1
                 await self._emit(
                     ValidationFailed(
-                        workflow_id=self._workflow_id or "",
+                        workflow_id=effective_workflow_id,
                         agent_id=self.agent_id,
                         attempt_number=attempt,
                         error_type="json_decode_error",
@@ -167,7 +172,7 @@ class LLMAgent:
                 if will_retry:
                     await self._emit(
                         RetryAttempted(
-                            workflow_id=self._workflow_id or "",
+                            workflow_id=effective_workflow_id,
                             agent_id=self.agent_id,
                             attempt_number=attempt + 1,
                             previous_error=str(e),
@@ -183,7 +188,7 @@ class LLMAgent:
                 will_retry = attempt < self.max_retries - 1
                 await self._emit(
                     ValidationFailed(
-                        workflow_id=self._workflow_id or "",
+                        workflow_id=effective_workflow_id,
                         agent_id=self.agent_id,
                         attempt_number=attempt,
                         error_type="schema_validation_error",
@@ -195,7 +200,7 @@ class LLMAgent:
                 if will_retry:
                     await self._emit(
                         RetryAttempted(
-                            workflow_id=self._workflow_id or "",
+                            workflow_id=effective_workflow_id,
                             agent_id=self.agent_id,
                             attempt_number=attempt + 1,
                             previous_error=str(e),

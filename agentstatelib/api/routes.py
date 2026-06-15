@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
@@ -15,6 +15,7 @@ from agentstatelib.core.patch import StatePatch
 from agentstatelib.core.state import SharedState
 from agentstatelib.memory.replay import get_agent_turns
 from agentstatelib.memory.store import StateStore
+from agentstatelib.router.graph import PendingApproval
 
 # All API errors use:
 #
@@ -36,6 +37,20 @@ class CreateWorkflowRequest(BaseModel):
     workflow_type: str = "general"
 
 
+class ApprovalDecisionRequest(BaseModel):
+    decision: Literal["approved", "rejected", "modified"]
+    reason: str | None = None
+    modified_patch: StatePatch | None = None
+
+
+class PendingApprovalResponse(BaseModel):
+    approval_id: str
+    workflow_id: str
+    agent_id: str
+    description: str
+    patch: dict[str, object]
+
+
 router = APIRouter()
 
 
@@ -46,7 +61,7 @@ async def health() -> dict[str, str]:
     Returns immediately with no side effects.
     No authentication required. Used by load balancers and monitoring systems.
     """
-    return {"status": "ok", "version": "0.2.0"}
+    return {"status": "ok", "version": "0.5.0"}
 
 
 @router.get("/workflows", tags=["workflows"])
@@ -92,7 +107,7 @@ async def get_workflow(
 ) -> SharedState:
     """
     Get the current reconstructed state of a workflow
-    by replacing its event log.
+    by replaying its event log.
     """
     events = await store.get_workflow(workflow_id)
     if not events:
@@ -227,7 +242,7 @@ async def workflow_event_list(
     }
 
 
-@router.get("/v1/workflows/{workflow_id}/turns", tags=["workflows"])
+@router.get("/workflows/{workflow_id}/turns", tags=["workflows"])
 async def workflow_turns(
     workflow_id: str,
     _: str = Depends(verify_api_key),
@@ -270,3 +285,72 @@ async def workflow_turns(
         )
 
     return {"turns": payload, "count": len(payload)}
+
+
+@router.get("/workflows/{workflow_id}/approvals", tags=["workflows"])
+async def list_approvals(
+    workflow_id: str,
+    request: Request,
+    _: str = Depends(verify_api_key),
+) -> dict[str, object]:
+    """
+    Return all pending approvals for a workflow.
+
+    Reads directly from the AgentGraph instance so the list is always
+    in sync with what the graph is actually waiting on.
+    """
+    graph = request.app.state.graph
+    pending_approvals: dict[str, PendingApproval] = getattr(graph, "pending_approvals", {})
+    items = [
+        {
+            "approval_id": approval_id,
+            "workflow_id": item.workflow_id,
+            "agent_id": item.agent_id,
+            "description": item.description,
+            "patch": item.patch.model_dump(),
+        }
+        for approval_id, item in pending_approvals.items()
+        if item.workflow_id == workflow_id
+    ]
+    return {"approvals": items, "count": len(items)}
+
+
+@router.post("/workflows/{workflow_id}/approvals/{approval_id}", tags=["workflows"])
+async def submit_approval(
+    workflow_id: str,
+    approval_id: str,
+    body: ApprovalDecisionRequest,
+    request: Request,
+    _: str = Depends(verify_api_key),
+) -> dict[str, object]:
+    """
+    Submit an approval decision for a pending patch.
+
+    The graph applies the patch (or modified patch) to state and emits
+    HumanApprovalResolved. Returns the decision summary.
+    """
+    graph = request.app.state.graph
+    pending_approvals: dict[str, PendingApproval] = getattr(graph, "pending_approvals", {})
+    pending = pending_approvals.get(approval_id)
+
+    if pending is None or pending.workflow_id != workflow_id:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "approval_not_found",
+                "message": f"No pending approval {approval_id!r} for workflow {workflow_id!r}",
+            },
+        )
+
+    await graph.resume_from_approval(
+        approval_id=approval_id,
+        decision=body.decision,
+        modified_patch=body.modified_patch,
+    )
+
+    return {
+        "approval_id": approval_id,
+        "workflow_id": workflow_id,
+        "decision": body.decision,
+        "reason": body.reason,
+    }

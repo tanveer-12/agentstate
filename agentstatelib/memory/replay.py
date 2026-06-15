@@ -65,7 +65,7 @@ class ReplayDebugger:
 
     def step(self) -> tuple[StateEvent, SharedState]:
         if self._cursor >= len(self._events):
-            raise StopIteration("No more evnts to replay")
+            raise StopIteration("No more events to replay")
         self._cursor += 1
         return self._events[self._cursor - 1], replay(self._events[: self._cursor])
 
@@ -163,7 +163,7 @@ def get_agent_turns(events: list[StateEvent]) -> list[AgentTurn]:
                     current.model_calls[i] = (call, event)
                     break
             else:
-                call = next(
+                matched_call: ModelCalled | None = next(
                     (
                         e
                         for e in events
@@ -171,8 +171,8 @@ def get_agent_turns(events: list[StateEvent]) -> list[AgentTurn]:
                     ),
                     None,
                 )
-                if call is not None:
-                    current.model_calls.append((call, event))
+                if matched_call is not None:
+                    current.model_calls.append((matched_call, event))
             current.total_latency_seconds += event.latency_seconds
             current.total_tokens += (event.input_tokens or 0) + (
                 event.output_tokens or 0

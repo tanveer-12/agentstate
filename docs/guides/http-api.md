@@ -82,7 +82,7 @@ Example response:
 ```json
 {
   "status": "ok",
-  "version": "0.2.0"
+  "version": "0.5.0"
 }
 ```
 
@@ -287,44 +287,75 @@ These headers are important when deploying behind:
 
 ## Human-in-the-loop workflows
 
-A common workflow pattern is:
+Register an approval gate on a graph edge. When the gate fires, the graph pauses and emits `HumanApprovalRequested`. The pending patch sits in `graph.pending_approvals` until resolved via the API.
 
-1. Run an agent graph until a checkpoint is reached.
-2. Expose the current workflow state to a human reviewer.
-3. Let the reviewer inspect the workflow.
-4. Allow the reviewer to submit an approved state change.
-5. Resume execution using the updated workflow state.
-
-Example flow:
-
-```text
-Agent Graph
-     │
-     ▼
-Checkpoint
-     │
-     ▼
-GET /v1/workflows/{id}
-     │
-     ▼
-Human Review
-     │
-     ▼
-POST /v1/workflows/{id}/patches
-     │
-     ▼
-PatchApplied Event
-     │
-     ▼
-Resume Graph Execution
+```python
+graph.edge(
+    "planner",
+    "executor",
+    condition=lambda s: s.get("status") == "ready",
+    approval_required=lambda state, patch: patch.target.startswith("financial."),
+)
 ```
 
-This pattern enables:
+The approval flow:
 
-* Human approval workflows.
-* Compliance review steps.
-* Escalation handling.
-* Manual corrections.
-* Expert-in-the-loop systems.
+```text
+AgentGraph.run()
+     │
+     ▼ (approval_required fires)
+HumanApprovalRequested emitted
+     │
+     ▼
+GET /v1/workflows/{id}/approvals   ← reviewer lists pending approvals
+     │
+     ▼
+POST /v1/workflows/{id}/approvals/{approval_id}   ← reviewer decides
+     │
+     ▼
+HumanApprovalResolved + PatchApplied emitted
+```
 
-The ability to safely inject reviewed changes into an event-sourced workflow is one of the primary reasons to expose workflow state through the HTTP API.
+### List pending approvals
+
+```bash
+curl -H "x-api-key: $KEY" \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals
+```
+
+### Approve
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"decision": "approved"}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+### Reject
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"decision": "rejected", "reason": "amount exceeds policy"}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+### Modify and approve
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "decision": "modified",
+    "modified_patch": {
+      "agent_id": "human",
+      "target": "financial.balance",
+      "value": -100,
+      "reason": "capped at policy limit"
+    }
+  }' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+See the [Human in the Loop guide](human-in-the-loop.md) for programmatic resolution, event trail details, and patterns like timeout auto-rejection.

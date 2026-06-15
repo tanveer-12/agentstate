@@ -13,8 +13,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from rich import box
-
 from agentstatelib.core.events import (
     AgentErrored,
     ConflictDetected,
@@ -34,12 +32,13 @@ runtime_Panel: Any = None
 runtime_Table: Any = None
 runtime_Group: Any = None
 runtime_Text: Any = None
-
+runtime_box: Any = None
 
 HAS_RICH = False
 
 
 try:
+    from rich import box as _rich_box
     from rich.console import Group
     from rich.live import Live
     from rich.panel import Panel
@@ -51,6 +50,7 @@ try:
     runtime_Table = Table
     runtime_Group = Group
     runtime_Text = Text
+    runtime_box = _rich_box
     HAS_RICH = True
 except ImportError:
     pass
@@ -134,10 +134,10 @@ class WorkflowDashboard:
         if self._total_tokens > 0 or self._estimated_cost_usd > 0:
             parts.append(f"tokens: {self._total_tokens}")
             parts.append(f"cost: ${self._estimated_cost_usd:.2f}")
-        return runtime_Panel(" · ".join(parts), title="Overview", box=box.MINIMAL)
+        return runtime_Panel(" · ".join(parts), title="Overview", box=runtime_box.MINIMAL if runtime_box is not None else None)
 
     def _build_turns_panel(self) -> Any:
-        table = runtime_Table(box=box.MINIMAL, show_header=True, expand=True)
+        table = runtime_Table(box=runtime_box.MINIMAL if runtime_box is not None else None, show_header=True, expand=True)
         table.add_column("Turn", width=6)
         table.add_column("Agent", width=16)
         table.add_column("Attempts", width=8)
@@ -175,7 +175,7 @@ class WorkflowDashboard:
                 details,
             )
 
-        return runtime_Panel(table, title="Agent Turns", box=box.MINIMAL)
+        return runtime_Panel(table, title="Agent Turns", box=runtime_box.MINIMAL if runtime_box is not None else None)
 
     def _render_turn_details(self, turn: _TurnView) -> str:
         lines: list[str] = []
@@ -208,7 +208,7 @@ class WorkflowDashboard:
             f"{self._retry_count} retries · {self._total_tokens} tokens · "
             f"{elapsed:.1f}s"
         )
-        return runtime_Panel(text, title="Summary", box=box.MINIMAL)
+        return runtime_Panel(text, title="Summary", box=runtime_box.MINIMAL if runtime_box is not None else None)
 
     def _ensure_current_turn(self, event: StateEvent) -> _TurnView:
         if self._current_turn is None:
@@ -331,7 +331,7 @@ class WorkflowDashboard:
                         break
                     self._handle_event(event)
                     live.update(self._build_display())
-                except TimeoutError:
+                except asyncio.TimeoutError:
                     live.update(self._build_display())
 
     def stop(self) -> None:

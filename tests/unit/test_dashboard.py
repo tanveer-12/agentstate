@@ -6,6 +6,7 @@ import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
+from rich.console import Console
 
 from agentstatelib.core.events import (
     ConflictDetected,
@@ -231,8 +232,9 @@ async def test_dashboard_render_includes_trace_details() -> None:
         live_instance.__exit__.return_value = None
         await dashboard.run()
 
-    display = dashboard._build_display()
-    rendered = str(display)
+    console = Console(record=True, width=120)
+    console.print(dashboard._build_display())
+    rendered = console.export_text()
 
     assert "test goal for dashboard rendering" in rendered
     assert "agent-1" in rendered

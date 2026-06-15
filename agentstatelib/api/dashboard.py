@@ -22,6 +22,7 @@ DASHBOARD_HTML: str = """
       --blue: #63b3ed;
       --red: #fc8181;
       --purple: #b794f4;
+      --orange: #f6ad55;
     }
 
     * { box-sizing: border-box; }
@@ -35,9 +36,25 @@ DASHBOARD_HTML: str = """
       overflow: hidden;
     }
 
+    .approval-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 16px;
+      background: rgba(236, 201, 75, 0.12);
+      color: #fef3c7;
+      border-bottom: 1px solid rgba(236, 201, 75, 0.35);
+      font-weight: 600;
+    }
+
+    .approval-banner.visible {
+      display: flex;
+    }
+
     #app {
       display: flex;
-      height: 100vh;
+      height: calc(100vh - 0px);
       width: 100vw;
     }
 
@@ -77,6 +94,10 @@ DASHBOARD_HTML: str = """
       transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       font-size: 0.92rem;
       word-break: break-word;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .workflow-item:hover {
@@ -88,6 +109,21 @@ DASHBOARD_HTML: str = """
       background: rgba(99, 179, 237, 0.12);
       color: var(--text);
       border-color: rgba(99, 179, 237, 0.35);
+    }
+
+    .workflow-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: rgba(236, 201, 75, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(236, 201, 75, 0.35);
+      font-size: 0.75rem;
+      font-weight: 700;
     }
 
     .main {
@@ -168,6 +204,13 @@ DASHBOARD_HTML: str = """
     .event-row[data-type="workflow_started"],
     .event-row[data-type="workflow_completed"] { border-left-color: var(--blue); }
     .event-row[data-type="agent_errored"] { border-left-color: var(--red); }
+    .event-row[data-type="human_approval_requested"] { border-left-color: var(--yellow); }
+    .event-row[data-type="human_approval_resolved"] { border-left-color: var(--purple); }
+
+    .approval-row {
+      background: rgba(236, 201, 75, 0.08);
+      border: 1px solid rgba(236, 201, 75, 0.28);
+    }
 
     .event-header {
       display: grid;
@@ -302,6 +345,11 @@ DASHBOARD_HTML: str = """
       box-shadow: 0 0 0 1px rgba(99, 179, 237, 0.3) inset;
     }
 
+    .turn-card.approval-turn {
+      border-color: rgba(236, 201, 75, 0.55);
+      background: rgba(236, 201, 75, 0.08);
+    }
+
     .turn-card-top {
       display: flex;
       justify-content: space-between;
@@ -429,9 +477,145 @@ DASHBOARD_HTML: str = """
     .tool-item .section-body {
       padding: 0 12px 12px;
     }
+
+    .approval-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .approval-modal.visible {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .modal-card {
+      position: relative;
+      z-index: 1;
+      width: min(980px, 96vw);
+      max-height: 90vh;
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
+      padding: 18px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-panel {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--surface2);
+    }
+
+    .modal-panel h4 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .modal-field {
+      margin-bottom: 10px;
+    }
+
+    .modal-field label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .modal-field input,
+    .modal-field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+    }
+
+    .modal-field textarea {
+      min-height: 220px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #0f1117;
+    }
+
+    .btn-approve { background: var(--green); }
+    .btn-reject { background: var(--red); }
+    .btn-modify { background: var(--yellow); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
+  <div id="approval-banner" class="approval-banner">
+    <div id="approval-banner-text">Pending approvals detected.</div>
+    <button class="btn btn-secondary" onclick="refreshApprovals()">Refresh approvals</button>
+  </div>
+
   <div id="app">
     <div class="sidebar">
       <div class="logo">agentstatelib</div>
@@ -448,6 +632,43 @@ DASHBOARD_HTML: str = """
     </div>
   </div>
 
+  <div id="approval-modal" class="approval-modal" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closeApprovalModal()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Pending approval</div>
+        <button class="modal-close" onclick="closeApprovalModal()">Close</button>
+      </div>
+      <div class="modal-grid">
+        <div class="modal-panel">
+          <h4>Patch details</h4>
+          <div class="modal-field"><label>Approval ID</label><div id="modal-approval-id" class="mono"></div></div>
+          <div class="modal-field"><label>Agent</label><div id="modal-agent" class="mono"></div></div>
+          <div class="modal-field"><label>Target</label><div id="modal-target" class="mono"></div></div>
+          <div class="modal-field"><label>Current value</label><pre id="modal-current" class="mono json-block"></pre></div>
+          <div class="modal-field"><label>Proposed new value</label><pre id="modal-proposed" class="mono json-block"></pre></div>
+          <div class="modal-field"><label>Reason</label><div id="modal-reason" class="mono"></div></div>
+        </div>
+        <div class="modal-panel">
+          <h4>Review</h4>
+          <div class="modal-field">
+            <label>Decision reason</label>
+            <input id="modal-review-reason" type="text" placeholder="Optional review note" />
+          </div>
+          <div id="modify-editor-wrap" class="modal-field hidden">
+            <label>Modified value (JSON)</label>
+            <textarea id="modal-modified-json"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-approve" onclick="submitApprovalDecision('approved')">Approve</button>
+            <button class="btn btn-reject" onclick="submitApprovalDecision('rejected')">Reject</button>
+            <button class="btn btn-modify" onclick="showModifyEditor()">Modify</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_KEY = new URLSearchParams(window.location.search).get("key") || "dev-key-123";
     const BASE_URL = window.location.origin;
@@ -461,6 +682,9 @@ DASHBOARD_HTML: str = """
     let currentTab = "detail";
     let traceTurns = [];
     let selectedTurnIndex = null;
+    let pendingApprovals = [];
+    let approvalIndex = new Map();
+    let activeApproval = null;
 
     function apiFetch(path, options = {}) {
       const headers = new Headers(options.headers || {});
@@ -521,17 +745,6 @@ DASHBOARD_HTML: str = """
       }
     }
 
-    function setNested(obj, path, value) {
-      const parts = path.split(".");
-      let cur = obj;
-      for (let i = 0; i < parts.length - 1; i++) {
-        const part = parts[i];
-        if (!cur[part] || typeof cur[part] !== "object") cur[part] = {};
-        cur = cur[part];
-      }
-      cur[parts[parts.length - 1]] = value;
-    }
-
     function eventType(event) {
       return event.type || event.event_type || "event";
     }
@@ -543,6 +756,8 @@ DASHBOARD_HTML: str = """
       if (type === "workflow_completed") return "Workflow completed";
       if (type === "agent_errored") return "Agent errored";
       if (type === "checkpoint_saved") return "Checkpoint saved";
+      if (type === "human_approval_requested") return "Pending approval";
+      if (type === "human_approval_resolved") return "Approval resolved";
       return "";
     }
 
@@ -553,6 +768,46 @@ DASHBOARD_HTML: str = """
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#39;");
+    }
+
+    function approvalKey(workflowId, approvalId) {
+      return `${workflowId}:${approvalId}`;
+    }
+
+    function buildApprovalIndex(approvals) {
+      approvalIndex = new Map();
+      pendingApprovals = approvals || [];
+      for (const item of pendingApprovals) {
+        approvalIndex.set(approvalKey(item.workflow_id, item.approval_id), item);
+      }
+    }
+
+    async function loadApprovals(workflowId) {
+      if (!workflowId) return [];
+      const payload = await apiFetch(`/v1/workflows/${workflowId}/approvals`);
+      const approvals = Array.isArray(payload.approvals) ? payload.approvals : [];
+      buildApprovalIndex(approvals);
+      updateApprovalBanner();
+      return approvals;
+    }
+
+    function updateApprovalBanner() {
+      const banner = document.getElementById("approval-banner");
+      const text = document.getElementById("approval-banner-text");
+      if (!pendingApprovals.length) {
+        banner.classList.remove("visible");
+        text.textContent = "Pending approvals detected.";
+        return;
+      }
+      banner.classList.add("visible");
+      text.textContent = `${pendingApprovals.length} pending approval${pendingApprovals.length === 1 ? "" : "s"} across the selected workflow.`;
+    }
+
+    async function refreshApprovals() {
+      if (!currentWorkflowId) return;
+      await loadApprovals(currentWorkflowId);
+      if (currentTab === "detail") renderDetailTab(allEvents, detailState);
+      if (currentTab === "trace") renderTraceTab();
     }
 
     async function loadWorkflowList() {
@@ -567,13 +822,22 @@ DASHBOARD_HTML: str = """
         return;
       }
 
-      workflowIds.forEach((workflowId) => {
+      for (const workflowId of workflowIds) {
+        let badgeCount = "";
+        try {
+          const approvals = await apiFetch(`/v1/workflows/${workflowId}/approvals`);
+          const count = Array.isArray(approvals.approvals) ? approvals.approvals.length : 0;
+          badgeCount = count ? `<span class="workflow-badge">${count}</span>` : "";
+        } catch {
+          badgeCount = "";
+        }
+
         const item = document.createElement("div");
         item.className = "workflow-item" + (workflowId === currentWorkflowId ? " selected" : "");
-        item.textContent = workflowId;
+        item.innerHTML = `<span>${escapeHtml(workflowId)}</span>${badgeCount}`;
         item.onclick = () => selectWorkflow(workflowId);
         list.appendChild(item);
-      });
+      }
 
       if (!currentWorkflowId || !workflowIds.includes(currentWorkflowId)) {
         selectWorkflow(workflowIds[0]);
@@ -583,7 +847,8 @@ DASHBOARD_HTML: str = """
     function selectWorkflow(workflowId) {
       currentWorkflowId = workflowId;
       document.querySelectorAll(".workflow-item").forEach((el) => {
-        el.classList.toggle("selected", el.textContent === workflowId);
+        const text = el.querySelector("span")?.textContent || el.textContent;
+        el.classList.toggle("selected", text === workflowId);
       });
       loadDetail(workflowId);
       if (currentTab === "live") startLiveView(workflowId);
@@ -593,13 +858,18 @@ DASHBOARD_HTML: str = """
     async function loadDetail(workflowId) {
       const stateResp = await apiFetch(`/v1/workflows/${workflowId}`);
       const eventsResp = await apiFetch(`/v1/workflows/${workflowId}/events-list`);
-
       detailState = normalizeState(stateResp);
       allEvents = normalizeEvents(eventsResp);
       workflowStartTime = allEvents.length ? (allEvents[0].timestamp || null) : null;
-
+      await loadApprovals(workflowId);
       if (currentTab === "detail") renderDetailTab(allEvents, detailState);
       if (currentTab === "replay") renderReplayTab(allEvents);
+      if (currentTab === "trace") renderTraceTab();
+    }
+
+    function approvalMatchesEvent(event) {
+      const key = approvalKey(currentWorkflowId, event.approval_id || "");
+      return approvalIndex.has(key);
     }
 
     function renderDetailEvent(event) {
@@ -608,7 +878,10 @@ DASHBOARD_HTML: str = """
         type === "patch_applied" ? "var(--green)" :
         type === "conflict_detected" ? "var(--yellow)" :
         (type === "workflow_started" || type === "workflow_completed") ? "var(--blue)" :
-        type === "agent_errored" ? "var(--red)" : "var(--border)";
+        type === "agent_errored" ? "var(--red)" :
+        (type === "human_approval_requested" ? "var(--yellow)" : "var(--border)");
+
+      const isApproval = type === "human_approval_requested" && approvalMatchesEvent(event);
 
       let detailHtml = "";
       if (type === "patch_applied") {
@@ -631,6 +904,21 @@ DASHBOARD_HTML: str = """
             <div class="detail-row"><strong>Strategy:</strong> ${escapeHtml(event.resolution_strategy || "")}</div>
           </div>
         `;
+      } else if (type === "human_approval_requested") {
+        detailHtml = `
+          <div class="detail-grid">
+            <div class="detail-row"><strong>Approval ID:</strong> ${escapeHtml(event.approval_id || "")}</div>
+            <div class="detail-row"><strong>Description:</strong> ${escapeHtml(event.description || event.reason || "")}</div>
+            <div class="detail-row"><strong>Pending patch:</strong><div class="json-block">${escapeHtml(formatJson(event.pending_patch || event.patch || {}))}</div></div>
+          </div>
+        `;
+      } else if (type === "human_approval_resolved") {
+        detailHtml = `
+          <div class="detail-grid">
+            <div class="detail-row"><strong>Approval ID:</strong> ${escapeHtml(event.approval_id || "")}</div>
+            <div class="detail-row"><strong>Decision:</strong> ${escapeHtml(event.decision || "")}</div>
+          </div>
+        `;
       } else if (type === "agent_errored") {
         detailHtml = `
           <div class="detail-grid">
@@ -643,8 +931,10 @@ DASHBOARD_HTML: str = """
         detailHtml = `<div class="detail-row"><div class="json-block">${escapeHtml(formatJson(event))}</div></div>`;
       }
 
+      const approvalClass = isApproval ? " approval-row" : "";
+      const approvalAttr = isApproval ? `data-approval-id="${escapeHtml(event.approval_id || "")}" onclick="openApprovalByEvent('${escapeHtml(event.approval_id || "")}')" ` : `onclick="this.classList.toggle('open')"`; 
       return `
-        <div class="event-row" data-type="${escapeHtml(type)}" style="border-left-color: ${color};" onclick="this.classList.toggle('open')">
+        <div class="event-row${approvalClass}" data-type="${escapeHtml(type)}" style="border-left-color: ${color};" ${approvalAttr}>
           <div class="event-header">
             <div class="time">${escapeHtml(formatTimestamp(event.timestamp || 0))}</div>
             <div><span class="badge">${escapeHtml(event.agent_id || "")}</span></div>
@@ -663,13 +953,11 @@ DASHBOARD_HTML: str = """
       html.push('<h3 class="section-title">Event timeline</h3>');
       html.push(`<div class="stats">${events.length} events</div>`);
       html.push('<div class="timeline">');
-
       if (!events.length) {
         html.push('<div class="placeholder">No events for this workflow yet.</div>');
       } else {
         events.forEach((event) => html.push(renderDetailEvent(event)));
       }
-
       html.push("</div>");
       html.push("</div>");
       html.push('<div class="panel">');
@@ -740,13 +1028,18 @@ DASHBOARD_HTML: str = """
     function replayToIndex(index) {
       let state = {};
       const events = allEvents.slice(0, index);
-
       for (const event of events) {
         if (event.type === "patch_applied") {
-          setNested(state, event.target, event.new_value);
+          const parts = event.target.split(".");
+          let cur = state;
+          for (let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            if (!cur[part] || typeof cur[part] !== "object") cur[part] = {};
+            cur = cur[part];
+          }
+          cur[parts[parts.length - 1]] = event.new_value;
         }
       }
-
       const pre = document.getElementById("replay-state");
       const label = document.getElementById("replay-progress");
       if (pre) pre.textContent = JSON.stringify(state, null, 2);
@@ -773,38 +1066,16 @@ DASHBOARD_HTML: str = """
       replayToIndex(0);
     }
 
-    function loadTurns(workflowId) {
-      return apiFetch(`/v1/workflows/${workflowId}/turns`).then((payload) => {
-        traceTurns = normalizeTurns(payload);
-        if (currentTab === "trace") renderTraceTab();
-      });
+    async function loadTurns(workflowId) {
+      const payload = await apiFetch(`/v1/workflows/${workflowId}/turns`);
+      traceTurns = normalizeTurns(payload);
+      if (currentTab === "trace") renderTraceTab();
     }
 
     function selectTurn(turnIndex) {
       selectedTurnIndex = turnIndex;
       renderTraceTab();
       loadTurnDetail(currentWorkflowId, turnIndex);
-    }
-
-    function get_agent_turns_js(events) {
-      const turns = [];
-      let current = null;
-
-      for (const event of events) {
-        if (event.type === "context_sliced") {
-          if (current) turns.push(current);
-          current = {
-            agent_id: event.agent_id,
-            events: [event],
-            context_paths: event.context_paths || []
-          };
-          continue;
-        }
-        if (current) current.events.push(event);
-      }
-
-      if (current) turns.push(current);
-      return turns;
     }
 
     function renderPromptWithAttempts(prompts) {
@@ -821,23 +1092,50 @@ DASHBOARD_HTML: str = """
       return `<div class="prompt-tabs">${tabs}</div>${body}`;
     }
 
-    function highlightJsonError(rawOutput, errorMessage) {
-      try {
-        JSON.parse(rawOutput);
-        return `<pre class="mono border-green">${escapeHtml(rawOutput)}</pre>`;
-      } catch (err) {
-        const idx = Math.max(0, Math.min(rawOutput.length - 1, (errorMessage && errorMessage.match(/position (\\d+)/i)?.[1]) ? parseInt(RegExp.$1, 10) : 0));
-        const before = escapeHtml(rawOutput.slice(0, idx));
-        const marked = escapeHtml(rawOutput.slice(idx, idx + 1));
-        const after = escapeHtml(rawOutput.slice(idx + 1));
-        return `<pre class="mono border-red">${before}<span style="color: var(--red); font-weight: 700;">${marked}</span>${after}\n\n<span style="color: var(--red);">${escapeHtml(errorMessage || "")}</span></pre>`;
-      }
-    }
-
     async function loadTurnDetail(workflowId, turnIndex) {
       const eventsResp = await apiFetch(`/v1/workflows/${workflowId}/events-list`);
       const events = normalizeEvents(eventsResp);
-      const turns = get_agent_turns_js(events);
+      const turns = [];
+      let current = null;
+      for (const event of events) {
+        if (event.type === "context_sliced") {
+          if (current) turns.push(current);
+          current = {
+            agent_id: event.agent_id,
+            events: [event],
+            context_paths: event.context_paths || [],
+            prompts: [],
+            model_responses: [],
+            validation_failures: [],
+            tool_calls: [],
+            patch_target: null,
+            patch_reason: null,
+            succeeded: false,
+          };
+          continue;
+        }
+        if (current) {
+          current.events.push(event);
+          if (event.type === "prompt_assembled") {
+            current.prompts.push(event);
+          } else if (event.type === "model_returned") {
+            current.model_responses.push(event);
+          } else if (event.type === "validation_failed") {
+            current.validation_failures.push(event);
+          } else if (event.type === "tool_called") {
+            current.tool_calls.push({ called: event, returned: null });
+          } else if (event.type === "tool_returned") {
+            const pair = current.tool_calls.find((t) => t.called.tool_call_id === event.tool_call_id);
+            if (pair) pair.returned = event;
+          } else if (event.type === "patch_applied") {
+            current.patch_target = event.target;
+            current.patch_reason = event.reason;
+            current.succeeded = true;
+          }
+        }
+      }
+      if (current) turns.push(current);
+
       const turn = turns[turnIndex];
       if (!turn) return;
       const content = document.getElementById("content");
@@ -852,12 +1150,14 @@ DASHBOARD_HTML: str = """
         ? `<ul>${turn.context_paths.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>`
         : `<div class="placeholder">No context captured.</div>`;
 
-      const promptBody = renderPromptWithAttempts((turn.prompts || []).length ? turn.prompts : []);
-      const responseBody = turn.model_response
-        ? `<pre class="mono ${turn.succeeded ? "border-green" : "border-red"}">${escapeHtml(turn.model_response)}</pre>`
+      const promptBody = renderPromptWithAttempts(turn.prompts.length ? turn.prompts : []);
+
+      const lastResp = turn.model_responses.length ? turn.model_responses[turn.model_responses.length - 1] : null;
+      const responseBody = lastResp
+        ? `<pre class="mono ${turn.succeeded ? "border-green" : "border-red"}">${escapeHtml(lastResp.raw_response || "")}</pre>`
         : `<div class="placeholder">No model response.</div>`;
 
-      const failuresBody = turn.validation_failures && turn.validation_failures.length
+      const failuresBody = turn.validation_failures.length
         ? `<div class="turn-section border-red" style="padding: 12px; border-width:1px;">
             <div class="pill">${turn.succeeded ? "Recovered via retry" : "Validation failures"}</div>
             ${turn.validation_failures.map((f) => `
@@ -870,10 +1170,10 @@ DASHBOARD_HTML: str = """
           </div>`
         : `<div class="placeholder">No validation failures.</div>`;
 
-      const toolsBody = turn.tools && turn.tools.length
-        ? turn.tools.map((tool) => `
+      const toolsBody = turn.tool_calls.length
+        ? turn.tool_calls.map((pair) => `
             <details class="tool-item">
-              <summary>${escapeHtml(tool.tool_name || "")} · ${escapeHtml(tool.latency || "")} · ${escapeHtml(tool.result_summary || "")}</summary>
+              <summary>${escapeHtml(pair.called.tool_name || "")} · ${pair.returned ? escapeHtml(String(pair.returned.latency_seconds || "")) + "s" : "pending"} · ${escapeHtml(pair.returned ? pair.returned.result_summary || "" : "")}</summary>
               <div class="section-body"></div>
             </details>
           `).join("")
@@ -890,7 +1190,7 @@ DASHBOARD_HTML: str = """
         section("Context", contextBody),
         section("Prompt", promptBody),
         section("Model response", responseBody),
-        section("Validation failures", failuresBody, turn.validation_failure_count ? "border-red" : ""),
+        section("Validation failures", failuresBody, turn.validation_failures.length ? "border-red" : ""),
         section("Tools", toolsBody),
         section("Patch produced", patchBody, turn.patch_target ? "border-green" : "border-red")
       ].join("");
@@ -901,8 +1201,12 @@ DASHBOARD_HTML: str = """
       const turnsHtml = traceTurns.map((turn, idx) => {
         const selected = idx === selectedTurnIndex ? "selected" : "";
         const status = turn.succeeded ? "✓" : "•";
+        const approvalTurn = pendingApprovals.some((approval) => {
+          const target = approval.target || approval.pending_patch?.target || "";
+          return target && String(turn.patch_target || "").includes(String(target));
+        });
         return `
-          <div class="turn-card ${selected}" onclick="selectTurn(${idx})">
+          <div class="turn-card ${selected} ${approvalTurn ? "approval-turn" : ""}" onclick="selectTurn(${idx})">
             <div class="turn-card-top">
               <div class="turn-card-title">${escapeHtml(turn.agent_id || "agent")}</div>
               <div class="badge ${turn.succeeded ? "winner-badge" : "loser-badge"}">${status}</div>
@@ -953,6 +1257,68 @@ DASHBOARD_HTML: str = """
         if (currentWorkflowId) loadTurns(currentWorkflowId).then(renderTraceTab);
         else renderTraceTab();
       }
+    }
+
+    function openApprovalByEvent(approvalId) {
+      const approval = approvalIndex.get(approvalKey(currentWorkflowId, approvalId));
+      if (!approval) return;
+      openApprovalModal(approval);
+    }
+
+    function openApprovalModal(approval) {
+      activeApproval = approval;
+      document.getElementById("approval-modal").classList.add("visible");
+      document.getElementById("approval-modal").setAttribute("aria-hidden", "false");
+      document.getElementById("modal-approval-id").textContent = approval.approval_id || "";
+      document.getElementById("modal-agent").textContent = approval.agent_id || "";
+      document.getElementById("modal-target").textContent = approval.target || approval.pending_patch?.target || "";
+      document.getElementById("modal-current").textContent = formatJson(approval.current_value ?? approval.pending_patch?.old_value ?? null);
+      document.getElementById("modal-proposed").textContent = formatJson(approval.proposed_value ?? approval.pending_patch?.value ?? approval.pending_patch?.new_value ?? null);
+      document.getElementById("modal-reason").textContent = approval.reason || approval.description || "";
+      document.getElementById("modal-review-reason").value = "";
+      document.getElementById("modify-editor-wrap").classList.add("hidden");
+      document.getElementById("modal-modified-json").value = formatJson(approval.proposed_value ?? approval.pending_patch?.value ?? approval.pending_patch?.new_value ?? null);
+    }
+
+    function closeApprovalModal() {
+      activeApproval = null;
+      document.getElementById("approval-modal").classList.remove("visible");
+      document.getElementById("approval-modal").setAttribute("aria-hidden", "true");
+    }
+
+    function showModifyEditor() {
+      document.getElementById("modify-editor-wrap").classList.remove("hidden");
+    }
+
+    async function submitApprovalDecision(decision) {
+      if (!activeApproval || !currentWorkflowId) return;
+      let modified_patch = null;
+      if (decision === "modified") {
+        try {
+          modified_patch = JSON.parse(document.getElementById("modal-modified-json").value);
+        } catch (err) {
+          alert("Modified patch must be valid JSON.");
+          return;
+        }
+      }
+
+      const body = {
+        decision,
+        reason: document.getElementById("modal-review-reason").value || "",
+        modified_patch
+      };
+
+      await apiFetch(`/v1/workflows/${currentWorkflowId}/approvals/${activeApproval.approval_id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      closeApprovalModal();
+      await loadDetail(currentWorkflowId);
+      if (currentTab === "trace") await loadTurns(currentWorkflowId);
+      await loadWorkflowList();
+      if (currentTab === "detail") renderDetailTab(allEvents, detailState);
     }
 
     document.addEventListener("DOMContentLoaded", async () => {

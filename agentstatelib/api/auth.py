@@ -34,7 +34,6 @@ def verify_api_key(
 
         python -c "import secrets; print(secrets.token_urlsafe(32))"
     """
-    print("HEADER", repr(x_api_key))
     if not x_api_key or not is_valid_key(x_api_key):
         raise HTTPException(
             status_code=401,

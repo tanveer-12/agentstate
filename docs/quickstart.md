@@ -158,15 +158,65 @@ Both agents execute concurrently in round 1 and their patches are batch-resolved
 - `start=["analyst_a", "analyst_b"]` runs both agents in parallel during the first round.
 - Conflicting patches are resolved before any state updates occur.
 
+## Event log
+
+Every graph run writes an append-only event log automatically. Use an `InMemoryStore` (tests) or `SQLiteStore` (persistent):
+
+```python
+from agentstatelib import SQLiteStore, AgentGraph
+
+store = SQLiteStore("workflows.db")
+graph = AgentGraph(store=store)
+
+final = await graph.run(state, start="planner")
+
+events = await store.get_workflow(state.workflow_id)
+print(f"Recorded {len(events)} events")
+```
+
+## Human approval gates
+
+Register an approval gate on any edge. The graph pauses, stores the pending patch in `graph.pending_approvals`, and waits:
+
+```python
+graph.edge(
+    "planner",
+    "executor",
+    condition=lambda s: s.get("status") == "ready",
+    approval_required=lambda state, patch: patch.target.startswith("financial."),
+)
+
+final = await graph.run(state, start="planner")
+
+# Resolve programmatically
+approval_id = next(iter(graph.pending_approvals))
+new_state = await graph.resume_from_approval(
+    approval_id=approval_id,
+    decision="approved",
+    modified_patch=None,
+)
+```
+
+See the [Human in the Loop guide](./guides/human-in-the-loop.md) for REST API resolution and patterns.
+
 ## Next Steps
 
-Learn the core concepts:
+Core concepts:
 
 - [SharedState](./concepts/shared-state.md)
 - [Patches](./concepts/patches.md)
+- [Event Log](./concepts/event-log.md)
+- [Trace Model](./concepts/trace-model.md)
 
-Explore the API:
+API reference:
 
 - [State Models](./api-reference/state.md)
 - [Patch API](./api-reference/patch.md)
 - [Graph API](./api-reference/graph.md)
+
+Guides:
+
+- [HTTP API](./guides/http-api.md)
+- [Human in the Loop](./guides/human-in-the-loop.md)
+- [Checkpoint & Recovery](./guides/checkpoint-recovery.md)
+- [Observability](./guides/observability.md)

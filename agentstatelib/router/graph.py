@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+import uuid
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from typing import Literal
 
 from agentstatelib.coordination.conflicts import (
     BatchResolutionResult,
@@ -19,6 +21,8 @@ from agentstatelib.coordination.invariants import (
 from agentstatelib.core.events import (
     ConflictDetected,
     ContextSliced,
+    HumanApprovalRequested,
+    HumanApprovalResolved,
     PatchApplied,
     WorkflowCompleted,
     WorkflowStarted,
@@ -37,6 +41,8 @@ WorkflowEvent = (
     | WorkflowCompleted
     | ConflictDetected
     | ContextSliced
+    | HumanApprovalRequested
+    | HumanApprovalResolved
 )
 EventQueue = asyncio.Queue[WorkflowEvent]
 
@@ -53,6 +59,16 @@ class _Edge:
     from_agent: str
     to_agent: str
     condition: EdgeCondition
+    approval_required: Callable[[SharedState, StatePatch], bool] | None = None
+
+
+@dataclass(frozen=True)
+class PendingApproval:
+    workflow_id: str
+    state: SharedState
+    patch: StatePatch
+    agent_id: str
+    description: str
 
 
 class AgentGraph:
@@ -86,6 +102,7 @@ class AgentGraph:
         resolver = conflict_resolver or LastWriteWins()
         self._conflict_detector = ConflictDetector(resolver)
         self._invariant_checkers: list[InvariantChecker] = invariant_checkers or []
+        self.pending_approvals: dict[str, PendingApproval] = {}
 
     def node(
         self,
@@ -123,6 +140,7 @@ class AgentGraph:
         from_agent: str,
         to_agent: str,
         condition: EdgeCondition | None = None,
+        approval_required: Callable[[SharedState, StatePatch], bool] | None = None,
     ) -> None:
         """
         Add a directed edge from from_agent to to_agent.
@@ -136,6 +154,7 @@ class AgentGraph:
                 from_agent=from_agent,
                 to_agent=to_agent,
                 condition=condition or (lambda _s: True),
+                approval_required=approval_required,
             )
         )
 
@@ -282,6 +301,31 @@ class AgentGraph:
             current_state = state
 
             for winner_patch in result.winners:
+                if self._approval_required_for_patch(current_state, winner_patch):
+                    approval_id = str(uuid.uuid4())
+                    pending_payload = (
+                        winner_patch.model_dump()
+                        if hasattr(winner_patch, "model_dump")
+                        else dict(winner_patch)
+                    )
+                    self.pending_approvals[approval_id] = PendingApproval(
+                        workflow_id=workflow_id,
+                        state=current_state,
+                        patch=winner_patch,
+                        agent_id=winner_patch.agent_id,
+                        description=winner_patch.reason,
+                    )
+                    await self._emit(
+                        HumanApprovalRequested(
+                            workflow_id=workflow_id,
+                            agent_id=winner_patch.agent_id,
+                            approval_id=approval_id,
+                            description=winner_patch.reason,
+                            pending_patch=pending_payload,
+                        ),
+                        event_queue,
+                    )
+                    continue
                 old_value = get_nested(pre_round_dict, winner_patch.target)
                 current_state = apply_patch(current_state, winner_patch)
                 new_value = get_nested(current_state.model_dump(), winner_patch.target)
@@ -313,6 +357,68 @@ class AgentGraph:
                     )
 
             return current_state
+
+    async def resume_from_approval(
+        self,
+        approval_id: str,
+        decision: Literal["approved", "rejected", "modified"],
+        modified_patch: StatePatch | None,
+    ) -> SharedState | None:
+        """
+        Resolve a pending approval and, if approved/modified, apply the patch.
+
+        Returns the updated SharedState when the patch is applied, or None
+        when the decision is 'rejected'.
+
+        Raises KeyError if approval_id is not found in pending_approvals.
+        Raises ValueError if the decision value is unrecognised.
+        """
+        pending = self.pending_approvals.pop(approval_id)
+        state: SharedState = pending.state
+        original_patch: StatePatch = pending.patch
+        workflow_id = pending.workflow_id
+        patch = modified_patch if modified_patch is not None else original_patch
+
+        await self._emit(
+            HumanApprovalResolved(
+                workflow_id=workflow_id,
+                agent_id="system",
+                approval_id=approval_id,
+                decision=decision,
+            ),
+            None,
+        )
+
+        if decision in ("approved", "modified"):
+            new_state = apply_patch(state, patch)
+            await self._emit(
+                PatchApplied(
+                    workflow_id=workflow_id,
+                    agent_id=patch.agent_id,
+                    patch_id=patch.patch_id,
+                    target=patch.target,
+                    old_value=None,
+                    new_value=patch.value,
+                    reason=patch.reason,
+                    timestamp=patch.timestamp,
+                ),
+                None,
+            )
+            return new_state
+        elif decision == "rejected":
+            return None
+        else:
+            raise ValueError(f"Unknown approval decision: {decision!r}")
+
+    def _approval_required_for_patch(
+        self, state: SharedState, patch: StatePatch
+    ) -> bool:
+        for edge in self._edges:
+            if edge.approval_required is None:
+                continue
+            if edge.approval_required(state, patch):
+                return True
+        return False
 
     async def _run_agents_parallel(
         self,
@@ -377,7 +483,7 @@ class AgentGraph:
     def _next_round(
         self,
         just_ran: list[str],
-        state_dict: dict,  # type: ignore[type-arg]
+        state_dict: dict[str, object],
     ) -> list[str]:
         """Compute the set of agents to run in the next round.
 

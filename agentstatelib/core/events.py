@@ -20,6 +20,7 @@ class BaseStateEvent(BaseModel):
     workflow_id: str
     agent_id: str
     timestamp: float = Field(default_factory=time.time)
+    schema_version: int = 1
 
 
 class WorkflowStarted(BaseStateEvent):

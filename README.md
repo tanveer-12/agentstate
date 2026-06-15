@@ -63,8 +63,19 @@ if __name__ == "__main__":
 
 ## Status
 
-Version `0.1.2` is an early preview:
-- SharedState data model
-- StatePatch + apply_patch
-- AgentGraph with decorator API
-- InMemory and SQLite event stores
+Version `0.5.0` — all Phase 2E features are implemented and tested (93 tests pass, mypy strict: 0 errors).
+
+**Phase 1–2E implemented:**
+- SharedState, StatePatch, AgentGraph, round-based parallel execution
+- Conflict detection with LastWriteWins, PriorityBased, RejectIncoming strategies
+- InvariantChecker framework with two built-in checkers
+- Append-only event log (16 typed events) — InMemoryStore, SQLiteStore, PostgreSQLStore
+- Checkpointing to disk with save/load/recovery
+- ReplayDebugger for step-through inspection of any past state
+- Full trace model: ContextSliced, PromptAssembled, ModelCalled, ModelReturned, ValidationFailed, RetryAttempted, ToolCalled, ToolReturned
+- LLMAgent base class with retry-with-correction loop
+- OpenTelemetry tracing (optional, graceful no-op fallback)
+- Rich terminal dashboard (optional)
+- FastAPI HTTP server with SSE streaming and web dashboard
+- Human-in-the-loop approval gates with REST API and programmatic resolution
+- WorkflowSummary analysis with anomaly detection
