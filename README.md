@@ -1,6 +1,6 @@
 # AgentStateLib
 
-[![Version](https://img.shields.io/badge/version-v0.2.0-2563eb?style=flat-square)](https://pypi.org/project/agentstate-lib/)
+[![Version](https://img.shields.io/badge/version-v0.5.0-2563eb?style=flat-square)](https://pypi.org/project/agentstate-lib/)
 [![Python](https://img.shields.io/badge/python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
