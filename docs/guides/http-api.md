@@ -20,38 +20,50 @@ Use the Python library directly when everything runs inside a single process. Di
 
 The `x-api-key` header authenticates callers to **your own server**.
 
-Agentstatelib does not issue API keys.
+Agentstatelib does not issue API keys or run a hosted service. You configure
+valid keys yourself — this works much like a database password.
 
-There is:
+### Option A — generate via the API
 
-* No sign-up process.
-* No hosted account.
-* No central registry.
-* No key management service.
+The server exposes an unauthenticated endpoint so a fresh deployment can
+bootstrap itself:
 
-You configure valid API keys yourself before starting the server.
+```bash
+curl -X POST http://localhost:8000/v1/keys/generate
+```
 
-This works much like a database password: whoever runs the server chooses the valid credentials.
+Response:
 
-Generate a secure key:
+```json
+{
+  "key": "abc123...",
+  "note": "Add this key to AGENTSTATE_API_KEYS on your server. Example: AGENTSTATE_API_KEYS=key1,key2"
+}
+```
+
+Add the returned key to the server's environment and restart:
+
+```bash
+export AGENTSTATE_API_KEYS=abc123...
+```
+
+### Option B — generate locally
 
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-Configure one or more valid keys:
+### Activating a key
+
+Set the `AGENTSTATE_API_KEYS` environment variable to a comma-separated list
+of valid keys before starting the server:
 
 ```bash
 AGENTSTATE_API_KEYS=key1,key2,key3
 ```
 
-Multiple keys are useful for key rotation. A new key can be added while old clients continue using the previous key, allowing credentials to be rotated without downtime.
-
-All protected endpoints require:
-
-```http
-x-api-key: your-key-here
-```
+Multiple keys support key rotation — add a new key while old clients continue
+using the previous one, then remove the old key when all clients have updated.
 
 ---
 
@@ -82,7 +94,7 @@ Example response:
 ```json
 {
   "status": "ok",
-  "version": "0.2.0"
+  "version": "0.5.0"
 }
 ```
 
@@ -193,6 +205,35 @@ http://localhost:8000/v1/workflows/WORKFLOW_ID/events?key=your-key-here
 
 ---
 
+### Export workflow (download JSON)
+
+Downloads the complete event log plus final reconstructed state as a JSON
+file. Useful for archiving, debugging, or sharing a run.
+
+```bash
+curl \
+  -H "x-api-key: your-key-here" \
+  -o "workflow_WF_ID.json" \
+  http://localhost:8000/v1/workflows/WF_ID/export
+```
+
+The response sets `Content-Disposition: attachment` so browsers prompt to
+save the file. The dashboard's **Download JSON** button uses this endpoint.
+
+Export schema:
+
+```json
+{
+  "workflow_id": "wf_3a9c2f1b4e8d",
+  "exported_at": 1718500000.0,
+  "event_count": 42,
+  "final_state": { ... },
+  "events": [ ... ]
+}
+```
+
+---
+
 ### Get workflow event history
 
 ```bash
@@ -287,44 +328,75 @@ These headers are important when deploying behind:
 
 ## Human-in-the-loop workflows
 
-A common workflow pattern is:
+Register an approval gate on a graph edge. When the gate fires, the graph pauses and emits `HumanApprovalRequested`. The pending patch sits in `graph.pending_approvals` until resolved via the API.
 
-1. Run an agent graph until a checkpoint is reached.
-2. Expose the current workflow state to a human reviewer.
-3. Let the reviewer inspect the workflow.
-4. Allow the reviewer to submit an approved state change.
-5. Resume execution using the updated workflow state.
-
-Example flow:
-
-```text
-Agent Graph
-     │
-     ▼
-Checkpoint
-     │
-     ▼
-GET /v1/workflows/{id}
-     │
-     ▼
-Human Review
-     │
-     ▼
-POST /v1/workflows/{id}/patches
-     │
-     ▼
-PatchApplied Event
-     │
-     ▼
-Resume Graph Execution
+```python
+graph.edge(
+    "planner",
+    "executor",
+    condition=lambda s: s.get("status") == "ready",
+    approval_required=lambda state, patch: patch.target.startswith("financial."),
+)
 ```
 
-This pattern enables:
+The approval flow:
 
-* Human approval workflows.
-* Compliance review steps.
-* Escalation handling.
-* Manual corrections.
-* Expert-in-the-loop systems.
+```text
+AgentGraph.run()
+     │
+     ▼ (approval_required fires)
+HumanApprovalRequested emitted
+     │
+     ▼
+GET /v1/workflows/{id}/approvals   ← reviewer lists pending approvals
+     │
+     ▼
+POST /v1/workflows/{id}/approvals/{approval_id}   ← reviewer decides
+     │
+     ▼
+HumanApprovalResolved + PatchApplied emitted
+```
 
-The ability to safely inject reviewed changes into an event-sourced workflow is one of the primary reasons to expose workflow state through the HTTP API.
+### List pending approvals
+
+```bash
+curl -H "x-api-key: $KEY" \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals
+```
+
+### Approve
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"decision": "approved"}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+### Reject
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"decision": "rejected", "reason": "amount exceeds policy"}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+### Modify and approve
+
+```bash
+curl -X POST -H "x-api-key: $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "decision": "modified",
+    "modified_patch": {
+      "agent_id": "human",
+      "target": "financial.balance",
+      "value": -100,
+      "reason": "capped at policy limit"
+    }
+  }' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/$APPROVAL_ID
+```
+
+See the [Human in the Loop guide](human-in-the-loop.md) for programmatic resolution, event trail details, and patterns like timeout auto-rejection.

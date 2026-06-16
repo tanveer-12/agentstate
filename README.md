@@ -1,28 +1,6 @@
 # AgentStateLib
 
-[![Version](https://img.shields.io/badge/version-v0.5.0-2563eb?style=flat-square)](https://pypi.org/project/agentstate-lib/)
-[![Python](https://img.shields.io/badge/python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-
-AgentStateLib is a Python library for coordinating multiple AI agents through a shared, typed state model.
-
-Instead of passing raw strings between agents, it gives each agent a structured slice of the same workflow state, so multi-agent systems are easier to validate, debug, and recover.
-
-## What it is
-
-AgentStateLib provides a coordination layer for multi-agent Python workflows with:
-
-- A typed `SharedState` model for goals, tasks, facts, decisions, and artifacts.
-- A `StatePatch` system for structured, auditable updates.
-- An `AgentGraph` router for connecting agent functions into workflows.
-- Context slicing so each agent sees only the state it needs.
-- Event-backed persistence for replay and debugging.
-- In-memory and SQLite storage backends.
-- Conflict detection and resolution primitives.
-
-## Current version
-
-**v0.2.0** is the current release line. It includes the core shared-state workflow engine, structured patch application, graph routing, event logging, persistence, and early reliability features.
+AgentStateLib is a Python library for building reliable multi-agent workflows. It gives multiple agents a shared, typed state and a simple graph router, so you can coordinate them without passing raw strings around.
 
 ## Installation
 
@@ -93,73 +71,29 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## How it works
+## Core ideas
 
-Each agent is a plain async Python function that receives a small context dictionary and returns a `StatePatch`. The graph applies patches to shared state, records the update in the event log, and decides which agent runs next based on edge conditions [web:12][web:21].
+- **SharedState**: a Pydantic model that holds the workflow’s goal, tasks, artifacts, decisions, and facts.
+- **StatePatch**: what agents return. A structured change like “set `facts.planned = True`”.
+- **AgentGraph**: runs agents as a directed graph. Each agent is just an async function that receives a small context dict and returns a `StatePatch`.
+- **Context slicing**: each agent declares which paths it needs (e.g. `["goal", "facts.planned"]`), and only sees that subset of the state.
+- **Event store**: every applied patch is recorded as an event in a pluggable store (in-memory or SQLite), so you can replay or debug workflows. [file:1]
 
-This makes the workflow explicit:
-- The planner marks the task as planned.
-- The researcher adds working notes or findings.
-- The writer turns those findings into a final result.
+## Status
 
-## Core concepts
+Version `0.5.1` — all Phase 2E features are implemented and tested (93 tests pass, mypy strict: 0 errors).
 
-### SharedState
-
-`SharedState` is the validated world model shared by all agents. It is designed to hold the information agents need to coordinate without relying on unstructured chat history.
-
-### StatePatch
-
-Agents do not mutate state directly. Instead, they return a patch describing what should change, why it should change, and which agent proposed it.
-
-### AgentGraph
-
-`AgentGraph` connects agent nodes with typed edges and conditional transitions. This keeps multi-agent workflows readable and testable.
-
-### Context slicing
-
-Each agent can request only the paths it needs, which keeps prompts smaller and makes local-model workflows more practical.
-
-### Event log
-
-Every patch application is captured as an event so you can replay, inspect, and debug workflow execution later.
-
-## Working around current limitations
-
-AgentStateLib is still early-stage, so some parts are intentionally minimal. Until the library grows more features, the best way to work around those limits is to keep workflows narrow, deterministic, and explicit.
-
-- Use small state paths like `facts.*` and `tasks.*` instead of large nested objects.
-- Keep each agent responsible for one job.
-- Prefer structured outputs over free-form text where possible.
-- Add your own validation around patches if you need stricter guarantees.
-- Use SQLite for local persistence while experimenting.
-- Replay workflows from the event log when debugging failures.
-- Split complex workflows into multiple graph steps instead of trying to do everything in one agent call.
-
-## Project status
-
-AgentStateLib is actively developed and currently focused on the shared-state coordination layer for multi-agent systems.
-
-Current capabilities include:
-- `SharedState`
-- `StatePatch`
-- `AgentGraph`
-- Event recording
-- In-memory storage
-- SQLite storage
-- Context slicing
-- Early conflict handling
-
-## Contributing
-
-Contributions are welcome, especially in these areas:
-- Graph execution improvements.
-- State validation and patch handling.
-- Conflict detection and resolution.
-- Persistence backends.
-- Examples and documentation.
-- Tests for multi-agent workflows.
-
-## License
-
-Licensed under the MIT License.
+**Phase 1–2E implemented:**
+- SharedState, StatePatch, AgentGraph, round-based parallel execution
+- Conflict detection with LastWriteWins, PriorityBased, RejectIncoming strategies
+- InvariantChecker framework with two built-in checkers
+- Append-only event log (16 typed events) — InMemoryStore, SQLiteStore, PostgreSQLStore
+- Checkpointing to disk with save/load/recovery
+- ReplayDebugger for step-through inspection of any past state
+- Full trace model: ContextSliced, PromptAssembled, ModelCalled, ModelReturned, ValidationFailed, RetryAttempted, ToolCalled, ToolReturned
+- LLMAgent base class with retry-with-correction loop
+- OpenTelemetry tracing (optional, graceful no-op fallback)
+- Rich terminal dashboard (optional)
+- FastAPI HTTP server with SSE streaming and web dashboard
+- Human-in-the-loop approval gates with REST API and programmatic resolution
+- WorkflowSummary analysis with anomaly detection

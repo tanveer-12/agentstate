@@ -14,8 +14,18 @@ from agentstatelib.core.events import (
     BaseStateEvent,
     CheckpointSaved,
     ConflictDetected,
+    ContextSliced,
+    HumanApprovalRequested,
+    HumanApprovalResolved,
+    ModelCalled,
+    ModelReturned,
     PatchApplied,
+    PromptAssembled,
+    RetryAttempted,
     StateEvent,
+    ToolCalled,
+    ToolReturned,
+    ValidationFailed,
     WorkflowCompleted,
     WorkflowStarted,
     event_adapter,
@@ -39,30 +49,48 @@ from agentstatelib.memory.checkpoint import (
     load_latest_checkpoint,
     save_checkpoint,
 )
-from agentstatelib.memory.replay import ReplayDebugger, replay
+from agentstatelib.memory.replay import (
+    AgentTurn,
+    ReplayDebugger,
+    get_agent_turns,
+    get_model_call_pairs,
+    get_turn_for_patch,
+    replay,
+)
 from agentstatelib.memory.store import (
     InMemoryStore,
     PostgreSQLStore,
     SQLiteStore,
     StateStore,
 )
+from agentstatelib.observability.analysis import (
+    AgentStats,
+    AnomalyFlag,
+    WorkflowSummary,
+    analyze_workflow,
+)
+from agentstatelib.observability.dashboard import WorkflowDashboard
+from agentstatelib.observability.tracing import get_tracer, setup_tracing
 from agentstatelib.router.context import slice_state
 from agentstatelib.router.graph import AgentGraph, EventQueue, WorkflowEvent
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.2.0"
+__version__ = "0.5.1"
 
 __all__ = [
+    # core state
     "SharedState",
     "Task",
     "Goal",
     "Artifact",
     "Decision",
     "WorkflowStatus",
+    # patches
     "StatePatch",
     "apply_patch",
     "set_nested",
     "get_nested",
+    # events — base + phase 1
     "StateEvent",
     "BaseStateEvent",
     "WorkflowStarted",
@@ -72,12 +100,26 @@ __all__ = [
     "CheckpointSaved",
     "AgentErrored",
     "event_adapter",
+    # events — phase 2A trace
+    "ContextSliced",
+    "PromptAssembled",
+    "ModelCalled",
+    "ModelReturned",
+    "ValidationFailed",
+    "RetryAttempted",
+    "ToolCalled",
+    "ToolReturned",
+    # events — phase 2E approval
+    "HumanApprovalRequested",
+    "HumanApprovalResolved",
+    # graph
     "AgentGraph",
     "EventQueue",
     "WorkflowEvent",
     "AgentFn",
     "EdgeCondition",
     "slice_state",
+    # persistence
     "StateStore",
     "InMemoryStore",
     "SQLiteStore",
@@ -90,10 +132,25 @@ __all__ = [
     "InvariantChecker",
     "InvariantViolation",
     "BatchResolutionResult",
+    # checkpointing
     "Checkpoint",
     "load_latest_checkpoint",
     "save_checkpoint",
+    # replay
     "ReplayDebugger",
     "replay",
+    "AgentTurn",
+    "get_agent_turns",
+    "get_model_call_pairs",
+    "get_turn_for_patch",
+    # observability
+    "WorkflowDashboard",
+    "analyze_workflow",
+    "WorkflowSummary",
+    "AnomalyFlag",
+    "AgentStats",
+    "setup_tracing",
+    "get_tracer",
+    # version
     "__version__",
 ]

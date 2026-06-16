@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentstate-lib"
-version = "0.2.0"
+version = "0.5.1"
 description = "Stateful coordination layer for multi-agent AI systems"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -22,9 +22,14 @@ api       = [
     "fastapi>=0.100",
     "uvicorn[standard]>=0.20",
 ]
-otel      = ["opentelemetry-api", "opentelemetry-sdk",
-             "opentelemetry-exporter-otlp-proto-grpc"]
-dashboard = ["rich>=13.0"]
+otel      = [
+    "opentelemetry-api",
+    "opentelemetry-sdk",
+    "opentelemetry-exporter-otlp-proto-grpc",
+]
+dashboard = [
+    "rich>=13.0",
+]
 contrib   = []
 dev       = [
     "pytest>=7.0",

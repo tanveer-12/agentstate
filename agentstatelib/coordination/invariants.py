@@ -75,8 +75,8 @@ class TasksReferenceExistingGoals:
 class CompletedGoalsHaveNoBlockingTasks:
     """
     A goal marked 'complete' must have no tasks still pending or running.
-    If a goal is complete but tasks that belong to it are still in-progressm,
-    the workflow stats is internally inconsistent.
+    If a goal is complete but tasks that belong to it are still in-progress,
+    the workflow state is internally inconsistent.
     """
 
     def check(self, state: SharedState) -> list[InvariantViolation]:

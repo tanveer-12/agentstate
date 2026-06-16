@@ -1,6 +1,21 @@
 from __future__ import annotations
 
-from agentstatelib.core.events import PatchApplied, StateEvent, WorkflowStarted
+from dataclasses import dataclass, field
+
+from agentstatelib.core.events import (
+    AgentErrored,
+    ContextSliced,
+    ModelCalled,
+    ModelReturned,
+    PatchApplied,
+    PromptAssembled,
+    RetryAttempted,
+    StateEvent,
+    ToolCalled,
+    ToolReturned,
+    ValidationFailed,
+    WorkflowStarted,
+)
 from agentstatelib.core.patch import StatePatch, apply_patch
 from agentstatelib.core.state import SharedState
 
@@ -50,7 +65,7 @@ class ReplayDebugger:
 
     def step(self) -> tuple[StateEvent, SharedState]:
         if self._cursor >= len(self._events):
-            raise StopIteration("No more evnts to replay")
+            raise StopIteration("No more events to replay")
         self._cursor += 1
         return self._events[self._cursor - 1], replay(self._events[: self._cursor])
 
@@ -79,3 +94,120 @@ class ReplayDebugger:
     @property
     def total_events(self) -> int:
         return len(self._events)
+
+
+@dataclass
+class AgentTurn:
+    agent_id: str
+    workflow_id: str
+    attempt_count: int
+    succeeded: bool
+    context_sliced: ContextSliced | None
+    prompts: list[PromptAssembled] = field(default_factory=list)
+    model_calls: list[tuple[ModelCalled, ModelReturned]] = field(default_factory=list)
+    validation_failures: list[ValidationFailed] = field(default_factory=list)
+    patch_applied: PatchApplied | None = None
+    tool_calls: list[tuple[ToolCalled, ToolReturned | None]] = field(
+        default_factory=list
+    )
+    total_latency_seconds: float = 0.0
+    total_tokens: int = 0
+
+
+def get_model_call_pairs(
+    events: list[StateEvent],
+) -> list[tuple[ModelCalled, ModelReturned]]:
+    calls: dict[str, ModelCalled] = {}
+    pairs: list[tuple[ModelCalled, ModelReturned]] = []
+
+    for event in events:
+        if isinstance(event, ModelCalled):
+            calls[event.call_id] = event
+        elif isinstance(event, ModelReturned) and event.call_id in calls:
+            pairs.append((calls[event.call_id], event))
+
+    return pairs
+
+
+def get_agent_turns(events: list[StateEvent]) -> list[AgentTurn]:
+    turns: list[AgentTurn] = []
+    current: AgentTurn | None = None
+    pending_tools: dict[str, tuple[ToolCalled, ToolReturned | None]] = {}
+
+    for event in events:
+        if isinstance(event, ContextSliced):
+            if current is not None:
+                current.tool_calls = list(pending_tools.values())
+                turns.append(current)
+            current = AgentTurn(
+                agent_id=event.agent_id,
+                workflow_id=event.workflow_id,
+                attempt_count=0,
+                succeeded=False,
+                context_sliced=event,
+            )
+            pending_tools = {}
+            continue
+
+        if current is None:
+            continue
+
+        if isinstance(event, PromptAssembled):
+            current.prompts.append(event)
+            current.attempt_count = max(current.attempt_count, event.attempt_number + 1)
+        elif isinstance(event, ModelCalled):
+            current.attempt_count = max(current.attempt_count, event.attempt_number + 1)
+        elif isinstance(event, ModelReturned):
+            for i, (call, ret) in enumerate(current.model_calls):
+                if call.call_id == event.call_id:
+                    current.model_calls[i] = (call, event)
+                    break
+            else:
+                matched_call: ModelCalled | None = next(
+                    (
+                        e
+                        for e in events
+                        if isinstance(e, ModelCalled) and e.call_id == event.call_id
+                    ),
+                    None,
+                )
+                if matched_call is not None:
+                    current.model_calls.append((matched_call, event))
+            current.total_latency_seconds += event.latency_seconds
+            current.total_tokens += (event.input_tokens or 0) + (
+                event.output_tokens or 0
+            )
+        elif isinstance(event, ValidationFailed):
+            current.validation_failures.append(event)
+        elif isinstance(event, ToolCalled):
+            pending_tools[event.tool_call_id] = (event, None)
+        elif isinstance(event, ToolReturned):
+            if event.tool_call_id in pending_tools:
+                called, _ = pending_tools[event.tool_call_id]
+                pending_tools[event.tool_call_id] = (called, event)
+        elif isinstance(event, PatchApplied):
+            current.patch_applied = event
+            current.succeeded = True
+            current.tool_calls = list(pending_tools.values())
+            turns.append(current)
+            current = None
+            pending_tools = {}
+        elif isinstance(event, AgentErrored):
+            current.succeeded = False
+            current.tool_calls = list(pending_tools.values())
+            turns.append(current)
+            current = None
+            pending_tools = {}
+
+    if current is not None:
+        current.tool_calls = list(pending_tools.values())
+        turns.append(current)
+
+    return turns
+
+
+def get_turn_for_patch(events: list[StateEvent], patch_id: str) -> AgentTurn | None:
+    for turn in get_agent_turns(events):
+        if turn.patch_applied is not None and turn.patch_applied.patch_id == patch_id:
+            return turn
+    return None

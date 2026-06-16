@@ -3,9 +3,22 @@
 from __future__ import annotations
 
 import json
+import time
+import uuid
 from typing import Any
 
+from pydantic import ValidationError
+
+from agentstatelib.core.events import (
+    ModelCalled,
+    ModelReturned,
+    PromptAssembled,
+    RetryAttempted,
+    StateEvent,
+    ValidationFailed,
+)
 from agentstatelib.core.patch import StatePatch
+from agentstatelib.memory.store import StateStore
 
 
 class MaxRetriesExceeded(Exception):
@@ -36,9 +49,9 @@ class LLMAgent:
     """Optional base class for LLM-backed agent functions.
 
     Example:
-        from agentstate.router.graph import AgentGraph
-        from agentstate.contrib.base_agent import LLMAgent
-        from agentstate.core.patch import StatePatch
+        from agentstatelib.router.graph import AgentGraph
+        from agentstatelib.contrib.base_agent import LLMAgent
+        from agentstatelib.core.patch import StatePatch
 
         class MyOllamaAgent(LLMAgent):
             async def _call_model(self, prompt: str) -> str:
@@ -62,17 +75,75 @@ class LLMAgent:
         system_prompt: str,
         model: str,
         max_retries: int = 3,
+        store: StateStore | None = None,
+        workflow_id: str | None = None,
+        provider: str = "unknown",
     ) -> None:
         self.agent_id = agent_id
         self.system_prompt = system_prompt
         self.model = model
         self.max_retries = max_retries
+        self._store = store
+        self._workflow_id = workflow_id
+        self.provider = provider
+
+    async def _emit(self, event: StateEvent) -> None:
+        if self._store is not None:
+            await self._store.append(event)
 
     async def __call__(self, context: dict[str, Any]) -> StatePatch:
+        # The context dict always includes workflow_id from slice_state.
+        # Use it as a fallback so trace events are stored under the correct
+        # workflow even when workflow_id was not set at construction time.
+        effective_workflow_id = self._workflow_id or str(context.get("workflow_id", ""))
+
         last_error: str | None = None
         last_output: str | None = None
-        for _ in range(self.max_retries):
-            raw = await self._call_model(self._build_prompt(context, error=last_error))
+
+        for attempt in range(self.max_retries):
+            prompt = self._build_prompt(context, error=last_error)
+            await self._emit(
+                PromptAssembled(
+                    workflow_id=effective_workflow_id,
+                    agent_id=self.agent_id,
+                    prompt_text=prompt,
+                    system_prompt_length=len(self.system_prompt),
+                    context_length=len(json.dumps(context, indent=2, default=str)),
+                    is_correction_attempt=last_error is not None,
+                    attempt_number=attempt,
+                )
+            )
+
+            call_id = str(uuid.uuid4())
+            started = time.perf_counter()
+
+            await self._emit(
+                ModelCalled(
+                    workflow_id=effective_workflow_id,
+                    agent_id=self.agent_id,
+                    model=self.model,
+                    provider=self.provider,
+                    attempt_number=attempt,
+                    call_id=call_id,
+                )
+            )
+
+            raw = await self._call_model(prompt)
+            latency = time.perf_counter() - started
+
+            await self._emit(
+                ModelReturned(
+                    workflow_id=effective_workflow_id,
+                    agent_id=self.agent_id,
+                    call_id=call_id,
+                    raw_response=raw,
+                    latency_seconds=latency,
+                    input_tokens=None,
+                    output_tokens=None,
+                    estimated_cost_usd=None,
+                )
+            )
+
             cleaned = (
                 raw.strip()
                 .removeprefix("```json")
@@ -80,18 +151,63 @@ class LLMAgent:
                 .removesuffix("```")
                 .strip()
             )
+
             try:
                 parsed: dict[str, Any] = json.loads(cleaned)
             except json.JSONDecodeError as e:
                 last_error = str(e)
                 last_output = raw
+                will_retry = attempt < self.max_retries - 1
+                await self._emit(
+                    ValidationFailed(
+                        workflow_id=effective_workflow_id,
+                        agent_id=self.agent_id,
+                        attempt_number=attempt,
+                        error_type="json_decode_error",
+                        error_message=str(e),
+                        raw_output=raw,
+                        will_retry=will_retry,
+                    )
+                )
+                if will_retry:
+                    await self._emit(
+                        RetryAttempted(
+                            workflow_id=effective_workflow_id,
+                            agent_id=self.agent_id,
+                            attempt_number=attempt + 1,
+                            previous_error=str(e),
+                        )
+                    )
                 continue
+
             try:
                 return StatePatch(agent_id=self.agent_id, **parsed)
-            except Exception as e:
+            except ValidationError as e:
                 last_error = str(e)
                 last_output = raw
+                will_retry = attempt < self.max_retries - 1
+                await self._emit(
+                    ValidationFailed(
+                        workflow_id=effective_workflow_id,
+                        agent_id=self.agent_id,
+                        attempt_number=attempt,
+                        error_type="schema_validation_error",
+                        error_message=str(e),
+                        raw_output=raw,
+                        will_retry=will_retry,
+                    )
+                )
+                if will_retry:
+                    await self._emit(
+                        RetryAttempted(
+                            workflow_id=effective_workflow_id,
+                            agent_id=self.agent_id,
+                            attempt_number=attempt + 1,
+                            previous_error=str(e),
+                        )
+                    )
                 continue
+
         raise MaxRetriesExceeded(
             agent_id=self.agent_id,
             attempts=self.max_retries,

@@ -1,18 +1,23 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, cast
+import json
+import time as _time
+from typing import Any, Literal, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from agentstatelib.api.auth import is_valid_key, verify_api_key
+from agentstatelib.api.dashboard import DASHBOARD_HTML
 from agentstatelib.api.streaming import stream_workflow_events
 from agentstatelib.core.events import PatchApplied, WorkflowStarted
 from agentstatelib.core.patch import StatePatch
 from agentstatelib.core.state import SharedState
+from agentstatelib.memory.replay import get_agent_turns
 from agentstatelib.memory.store import StateStore
+from agentstatelib.router.graph import PendingApproval
 
 # All API errors use:
 #
@@ -34,7 +39,43 @@ class CreateWorkflowRequest(BaseModel):
     workflow_type: str = "general"
 
 
+class ApprovalDecisionRequest(BaseModel):
+    decision: Literal["approved", "rejected", "modified"]
+    reason: str | None = None
+    modified_patch: StatePatch | None = None
+
+
+class PendingApprovalResponse(BaseModel):
+    approval_id: str
+    workflow_id: str
+    agent_id: str
+    description: str
+    patch: dict[str, object]
+
+
 router = APIRouter()
+
+
+@router.post("/keys/generate", tags=["auth"])
+async def generate_api_key() -> dict[str, str]:
+    """
+    Generate a cryptographically secure API key.
+
+    The returned key is not automatically active — you must add it to the
+    AGENTSTATE_API_KEYS environment variable (comma-separated) on the server
+    and restart (or reload) for it to be accepted.
+
+    No authentication required so new deployments can bootstrap themselves.
+    """
+    from agentstatelib.api.auth import generate_key
+
+    return {
+        "key": generate_key(),
+        "note": (
+            "Add this key to AGENTSTATE_API_KEYS on your server. "
+            "Example: AGENTSTATE_API_KEYS=key1,key2"
+        ),
+    }
 
 
 @router.get("/health", tags=["system"])
@@ -44,7 +85,7 @@ async def health() -> dict[str, str]:
     Returns immediately with no side effects.
     No authentication required. Used by load balancers and monitoring systems.
     """
-    return {"status": "ok", "version": "0.2.0"}
+    return {"status": "ok", "version": "0.5.0"}
 
 
 @router.get("/workflows", tags=["workflows"])
@@ -90,7 +131,7 @@ async def get_workflow(
 ) -> SharedState:
     """
     Get the current reconstructed state of a workflow
-    by replacing its event log.
+    by replaying its event log.
     """
     events = await store.get_workflow(workflow_id)
     if not events:
@@ -222,4 +263,160 @@ async def workflow_event_list(
     return {
         "events": [event.model_dump() for event in events],
         "count": len(events),
+    }
+
+
+@router.get("/workflows/{workflow_id}/turns", tags=["workflows"])
+async def workflow_turns(
+    workflow_id: str,
+    _: str = Depends(verify_api_key),
+    store: StateStore = Depends(get_store),
+) -> dict[str, object]:
+    events = await store.get_workflow(workflow_id)
+    if not events:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "workflow_not_found",
+                "message": f"No events found for workflow {workflow_id!r}",
+            },
+        )
+
+    turns = get_agent_turns(events)
+    payload: list[dict[str, object]] = []
+
+    for turn in turns:
+        context_paths = turn.context_sliced.context_paths if turn.context_sliced else []
+        first_prompt_preview = turn.prompts[0].prompt_text[:150] if turn.prompts else ""
+        model = turn.model_calls[0][0].model if turn.model_calls else ""
+        patch_target = turn.patch_applied.target if turn.patch_applied else ""
+        patch_reason = turn.patch_applied.reason if turn.patch_applied else ""
+
+        payload.append(
+            {
+                "agent_id": turn.agent_id,
+                "attempt_count": turn.attempt_count,
+                "succeeded": turn.succeeded,
+                "total_latency_seconds": turn.total_latency_seconds,
+                "total_tokens": turn.total_tokens,
+                "context_paths": context_paths,
+                "first_prompt_preview": first_prompt_preview,
+                "model": model,
+                "validation_failure_count": len(turn.validation_failures),
+                "patch_target": patch_target,
+                "patch_reason": patch_reason,
+            }
+        )
+
+    return {"turns": payload, "count": len(payload)}
+
+
+@router.get("/workflows/{workflow_id}/export", tags=["workflows"])
+async def export_workflow(
+    workflow_id: str,
+    _: str = Depends(verify_api_key),
+    store: StateStore = Depends(get_store),
+) -> Response:
+    """
+    Download the complete workflow log as a JSON file.
+
+    Returns all events, the reconstructed final state, and export metadata.
+    The browser will prompt to save the file as workflow_<id>.json.
+    """
+    events = await store.get_workflow(workflow_id)
+    if not events:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "workflow_not_found",
+                "message": f"No events found for workflow {workflow_id!r}",
+            },
+        )
+
+    from agentstatelib.memory.replay import replay
+
+    state = replay(events)
+    payload = {
+        "workflow_id": workflow_id,
+        "exported_at": _time.time(),
+        "event_count": len(events),
+        "final_state": state.model_dump(),
+        "events": [e.model_dump() for e in events],
+    }
+    content = json.dumps(payload, indent=2, default=str)
+    return Response(
+        content=content,
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f'attachment; filename="workflow_{workflow_id}.json"'
+        },
+    )
+
+
+@router.get("/workflows/{workflow_id}/approvals", tags=["workflows"])
+async def list_approvals(
+    workflow_id: str,
+    request: Request,
+    _: str = Depends(verify_api_key),
+) -> dict[str, object]:
+    """
+    Return all pending approvals for a workflow.
+
+    Reads directly from the AgentGraph instance so the list is always
+    in sync with what the graph is actually waiting on.
+    """
+    graph = request.app.state.graph
+    pending_approvals: dict[str, PendingApproval] = getattr(graph, "pending_approvals", {})
+    items = [
+        {
+            "approval_id": approval_id,
+            "workflow_id": item.workflow_id,
+            "agent_id": item.agent_id,
+            "description": item.description,
+            "patch": item.patch.model_dump(),
+        }
+        for approval_id, item in pending_approvals.items()
+        if item.workflow_id == workflow_id
+    ]
+    return {"approvals": items, "count": len(items)}
+
+
+@router.post("/workflows/{workflow_id}/approvals/{approval_id}", tags=["workflows"])
+async def submit_approval(
+    workflow_id: str,
+    approval_id: str,
+    body: ApprovalDecisionRequest,
+    request: Request,
+    _: str = Depends(verify_api_key),
+) -> dict[str, object]:
+    """
+    Submit an approval decision for a pending patch.
+
+    The graph applies the patch (or modified patch) to state and emits
+    HumanApprovalResolved. Returns the decision summary.
+    """
+    graph = request.app.state.graph
+    pending_approvals: dict[str, PendingApproval] = getattr(graph, "pending_approvals", {})
+    pending = pending_approvals.get(approval_id)
+
+    if pending is None or pending.workflow_id != workflow_id:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "approval_not_found",
+                "message": f"No pending approval {approval_id!r} for workflow {workflow_id!r}",
+            },
+        )
+
+    await graph.resume_from_approval(
+        approval_id=approval_id,
+        decision=body.decision,
+        modified_patch=body.modified_patch,
+    )
+
+    return {
+        "approval_id": approval_id,
+        "workflow_id": workflow_id,
+        "decision": body.decision,
+        "reason": body.reason,
     }
