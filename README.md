@@ -11,9 +11,7 @@ AgentStateLib is a Python library for building reliable multi-agent workflows. I
 pip install agentstate-lib
 ```
 
-## Example
-
-A simple multi-agent workflow usually has one agent plan, another execute, and a third summarize the result.
+## Quick start
 
 ```python
 import asyncio
@@ -28,41 +26,25 @@ async def planner(context: dict) -> StatePatch:
         agent_id="planner",
         target="facts.planned",
         value=True,
-        reason=f"planned workflow for {goal!r}",
+        reason=f"planned goal: {goal!r}",
     )
 
-@graph.node("researcher", context=["goal", "facts.planned"])
-async def researcher(context: dict) -> StatePatch:
-    goal = context["goal"]
-    planned = context.get("facts", {}).get("planned", False)
+@graph.node("summarizer", context=["facts.planned", "goal"])
+async def summarizer(context: dict) -> StatePatch:
+    planned = context.get("facts", {}).get("planned")
+    goal = context.get("goal")
+    summary = f"Workflow for goal {goal!r} planned={planned}"
     return StatePatch(
-        agent_id="researcher",
-        target="facts.research_summary",
-        value=f"researched {goal!r}, planned={planned}",
-        reason="store research findings",
-    )
-
-@graph.node("writer", context=["goal", "facts.research_summary"])
-async def writer(context: dict) -> StatePatch:
-    goal = context["goal"]
-    research_summary = context.get("facts", {}).get("research_summary", "")
-    return StatePatch(
-        agent_id="writer",
-        target="facts.final_summary",
-        value=f"Final output for {goal!r}: {research_summary}",
-        reason="compose final summary",
+        agent_id="summarizer",
+        target="facts.summary",
+        value=summary,
+        reason="add summary",
     )
 
 graph.edge(
     "planner",
-    "researcher",
+    "summarizer",
     condition=lambda s: s.get("facts", {}).get("planned") is True,
-)
-
-graph.edge(
-    "researcher",
-    "writer",
-    condition=lambda s: bool(s.get("facts", {}).get("research_summary")),
 )
 
 async def main() -> None:
