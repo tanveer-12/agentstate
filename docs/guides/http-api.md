@@ -23,31 +23,8 @@ The `x-api-key` header authenticates callers to **your own server**.
 Agentstatelib does not issue API keys or run a hosted service. You configure
 valid keys yourself — this works much like a database password.
 
-### Option A — generate via the API
 
-The server exposes an unauthenticated endpoint so a fresh deployment can
-bootstrap itself:
-
-```bash
-curl -X POST http://localhost:8000/v1/keys/generate
-```
-
-Response:
-
-```json
-{
-  "key": "abc123...",
-  "note": "Add this key to AGENTSTATE_API_KEYS on your server. Example: AGENTSTATE_API_KEYS=key1,key2"
-}
-```
-
-Add the returned key to the server's environment and restart:
-
-```bash
-export AGENTSTATE_API_KEYS=abc123...
-```
-
-### Option B — generate locally
+### Option A — generate locally
 
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(32))"
