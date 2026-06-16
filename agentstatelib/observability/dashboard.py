@@ -1,16 +1,17 @@
 """
-Live terminal dashboard for agentstatelib workflows. Install with
-pip install agentstate-lib[dashboard].
-Pass an asyncio.Queue as event_queue to AgentGraph.run()
-and the same queue to WorkflowDashboard.
-Run both concurrently with asyncio.gather.
+Live terminal dashboard for agentstatelib workflows.
+
+Pass an asyncio.Queue as event_queue to AgentGraph.run() and the same queue
+to WorkflowDashboard.  Run both concurrently with asyncio.gather.
+
+Events are streamed one line at a time in the style of Claude Code's terminal
+output: dim timestamp, coloured agent name, coloured event type, summary.
 """
 
 from __future__ import annotations
 
 import asyncio
 import time
-from dataclasses import dataclass, field
 from typing import Any
 
 from agentstatelib.core.events import (
@@ -21,319 +22,265 @@ from agentstatelib.core.events import (
     ModelReturned,
     PatchApplied,
     PromptAssembled,
+    RetryAttempted,
     StateEvent,
     ValidationFailed,
     WorkflowCompleted,
     WorkflowStarted,
 )
 
-runtime_Live: Any = None
-runtime_Panel: Any = None
-runtime_Table: Any = None
-runtime_Group: Any = None
-runtime_Text: Any = None
-runtime_box: Any = None
-
 HAS_RICH = False
-
+_console: Any = None
+_Text: Any = None
+_Panel: Any = None
+_Rule: Any = None
+_box: Any = None
 
 try:
-    from rich import box as _rich_box
-    from rich.console import Group
-    from rich.live import Live
+    from rich.console import Console
     from rich.panel import Panel
-    from rich.table import Table
+    from rich.rule import Rule
     from rich.text import Text
+    import rich.box as _rich_box
 
-    runtime_Live = Live
-    runtime_Panel = Panel
-    runtime_Table = Table
-    runtime_Group = Group
-    runtime_Text = Text
-    runtime_box = _rich_box
+    _console = Console()
+    _Text    = Text
+    _Panel   = Panel
+    _Rule    = Rule
+    _box     = _rich_box
     HAS_RICH = True
 except ImportError:
     pass
 
 
-@dataclass
-class _FailureView:
-    message: str
-    error_type: str
-    attempt_number: int
+# ── per-event rendering ─────────────────────────────────────────────────────
+
+def _event_line(ev: StateEvent, start_time: float) -> tuple[str, str]:
+    """Return (rich_markup_line, plain_fallback_line) for one event."""
+    elapsed = f"{ev.timestamp - start_time:>6.1f}s"
+    agent   = getattr(ev, "agent_id", "system") or "system"
+    agent   = agent[:18]
+
+    if isinstance(ev, WorkflowStarted):
+        goal = (ev.goal or "")[:60]
+        rich = f"[dim]{elapsed}[/dim]  [bold blue]workflow_started[/bold blue]  [dim]{goal}[/dim]"
+        plain = f"{elapsed}  workflow_started  {goal}"
+
+    elif isinstance(ev, WorkflowCompleted):
+        rich  = f"[dim]{elapsed}[/dim]  [bold blue]workflow_completed[/bold blue]"
+        plain = f"{elapsed}  workflow_completed"
+
+    elif isinstance(ev, ContextSliced):
+        paths = ", ".join(ev.context_paths[:4])
+        if len(ev.context_paths) > 4:
+            paths += f" +{len(ev.context_paths)-4}"
+        rich  = (f"[dim]{elapsed}  {agent:<18}  context_sliced[/dim]"
+                 f"  [dim]→ {paths}[/dim]")
+        plain = f"{elapsed}  {agent:<18}  context_sliced  → {paths}"
+
+    elif isinstance(ev, PromptAssembled):
+        chars = len(ev.prompt_text or "")
+        att   = ev.attempt_number + 1
+        rich  = (f"[dim]{elapsed}  {agent:<18}  prompt_assembled"
+                 f"  {chars} chars  attempt {att}[/dim]")
+        plain = f"{elapsed}  {agent:<18}  prompt_assembled  {chars} chars  attempt {att}"
+
+    elif isinstance(ev, ModelCalled):
+        model = ev.model or "model"
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [yellow]model_called[/yellow]"
+                 f"  [dim]→ {model}…[/dim]")
+        plain = f"{elapsed}  {agent:<18}  model_called  → {model}…"
+
+    elif isinstance(ev, ModelReturned):
+        lat = f"{ev.latency_seconds:.2f}s" if ev.latency_seconds is not None else "?s"
+        tok = (ev.input_tokens or 0) + (ev.output_tokens or 0)
+        cost = f"  ${ev.estimated_cost_usd:.4f}" if ev.estimated_cost_usd else ""
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [green]model_returned[/green]"
+                 f"  [green]✓ {lat} · {tok} tokens{cost}[/green]")
+        plain = f"{elapsed}  {agent:<18}  model_returned  ✓ {lat} · {tok} tokens{cost}"
+
+    elif isinstance(ev, PatchApplied):
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [bold green]patch_applied[/bold green]"
+                 f"  [bold green]→ {ev.target}[/bold green]"
+                 f"  [dim]{ev.reason or ''}[/dim]")
+        plain = f"{elapsed}  {agent:<18}  patch_applied  → {ev.target}  {ev.reason or ''}"
+
+    elif isinstance(ev, ValidationFailed):
+        att  = ev.attempt_number + 1
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [red]validation_failed[/red]"
+                 f"  [red]{ev.error_type}  attempt {att}[/red]")
+        plain = f"{elapsed}  {agent:<18}  validation_failed  {ev.error_type}  attempt {att}"
+
+    elif isinstance(ev, RetryAttempted):
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [yellow]retry_attempted[/yellow]"
+                 f"  [dim]attempt {ev.attempt_number}[/dim]")
+        plain = f"{elapsed}  {agent:<18}  retry_attempted  attempt {ev.attempt_number}"
+
+    elif isinstance(ev, ConflictDetected):
+        rich  = (f"[dim]{elapsed}[/dim]"
+                 f"  [yellow]conflict_detected[/yellow]"
+                 f"  [yellow]{ev.path}  → {ev.winner_agent_id} wins[/yellow]")
+        plain = f"{elapsed}  conflict_detected  {ev.path}  → {ev.winner_agent_id} wins"
+
+    elif isinstance(ev, AgentErrored):
+        msg = (ev.error_message or "")[:60]
+        rich  = (f"[dim]{elapsed}[/dim]  [cyan]{agent:<18}[/cyan]"
+                 f"  [bold red]agent_errored[/bold red]"
+                 f"  [red]{ev.error_type}: {msg}[/red]")
+        plain = f"{elapsed}  {agent:<18}  agent_errored  {ev.error_type}: {msg}"
+
+    else:
+        name  = type(ev).__name__
+        rich  = f"[dim]{elapsed}  {agent:<18}  {name}[/dim]"
+        plain = f"{elapsed}  {agent:<18}  {name}"
+
+    return rich, plain
 
 
-@dataclass
-class _TurnView:
-    agent_id: str
-    workflow_id: str
-    turn_number: int
-    started_at: float
-    attempt_count: int = 0
-    succeeded: bool = False
-    context_paths: list[str] = field(default_factory=list)
-    prompt_text: str = ""
-    model_name: str = ""
-    model_latency_seconds: float | None = None
-    validation_failures: list[_FailureView] = field(default_factory=list)
-    patch_target: str = ""
-    patch_reason: str = ""
-    patch_id: str = ""
-    input_tokens: int = 0
-    output_tokens: int = 0
-    estimated_cost_usd: float = 0.0
-    ended_at: float | None = None
-    in_progress: bool = True
-
-    @property
-    def duration_seconds(self) -> float:
-        end = self.ended_at if self.ended_at is not None else time.time()
-        return max(0.0, end - self.started_at)
-
+# ── WorkflowDashboard ───────────────────────────────────────────────────────
 
 class WorkflowDashboard:
-    def __init__(self, event_queue: asyncio.Queue[StateEvent | None]):
-        self._event_queue = event_queue
-        self._events: list[StateEvent] = []
-        self._start_time: float = time.time()
-        self._workflow_goal: str = ""
-        self._workflow_status: str = "starting"
-        self._current_agent: str = "starting..."
-        self._conflict_count: int = 0
-        self._patch_count: int = 0
-        self._retry_count: int = 0
-        self._total_tokens: int = 0
-        self._estimated_cost_usd: float = 0.0
-        self._turns: list[_TurnView] = []
-        self._current_turn: _TurnView | None = None
-        self._expanded_turn: int | None = None
-        self._model_call_started_at: float | None = None
-        self._active_model_name: str = ""
+    """
+    Streams workflow events to the terminal as they arrive.
 
-    def _build_display(self) -> Any:
-        header = self._build_header()
-        turns = self._build_turns_panel()
-        summary = self._build_summary()
+    Usage::
 
-        return runtime_Group(header, turns, summary)
-
-    def _build_header(self) -> Any:
-        goal = self._workflow_goal or "workflow"
-        goal = goal if len(goal) <= 40 else goal[:37] + "..."
-        elapsed = time.time() - self._start_time
-        status = f"[green]{self._workflow_status}[/green]"
-        agent = self._current_agent or "starting..."
-        parts = [
-            f"goal: {goal}",
-            f"status: {status}",
-            f"elapsed: {elapsed:.1f}s",
-            f"agent: {agent}",
-            f"retries: {self._retry_count}",
-            f"conflicts: {self._conflict_count}",
-        ]
-        if self._total_tokens > 0 or self._estimated_cost_usd > 0:
-            parts.append(f"tokens: {self._total_tokens}")
-            parts.append(f"cost: ${self._estimated_cost_usd:.2f}")
-        return runtime_Panel(" · ".join(parts), title="Overview", box=runtime_box.MINIMAL if runtime_box is not None else None)
-
-    def _build_turns_panel(self) -> Any:
-        table = runtime_Table(box=runtime_box.MINIMAL if runtime_box is not None else None, show_header=True, expand=True)
-        table.add_column("Turn", width=6)
-        table.add_column("Agent", width=16)
-        table.add_column("Attempts", width=8)
-        table.add_column("Duration", width=10)
-        table.add_column("Result", width=10)
-        table.add_column("Details")
-
-        for idx, turn in enumerate(self._turns, start=1):
-            badge = "[yellow]●[/yellow]"
-            if turn.succeeded:
-                badge = "[green]✓[/green]"
-            elif turn.in_progress:
-                badge = "[yellow]◌[/yellow]"
-            else:
-                badge = "[red]✗[/red]"
-
-            details = (
-                self._render_turn_details(turn)
-                if self._expanded_turn == idx - 1
-                else ""
-            )
-            if (
-                self._expanded_turn is None
-                and idx == len(self._turns)
-                and not turn.in_progress
-            ):
-                details = self._render_turn_details(turn)
-
-            table.add_row(
-                str(idx),
-                turn.agent_id,
-                str(turn.attempt_count),
-                f"{turn.duration_seconds:.1f}s",
-                badge,
-                details,
-            )
-
-        return runtime_Panel(table, title="Agent Turns", box=runtime_box.MINIMAL if runtime_box is not None else None)
-
-    def _render_turn_details(self, turn: _TurnView) -> str:
-        lines: list[str] = []
-        if turn.context_paths:
-            lines.append(f"context: {', '.join(turn.context_paths)}")
-        if turn.prompt_text:
-            prompt = turn.prompt_text
-            if len(prompt) > 200:
-                prompt = prompt[:200] + "..."
-            lines.append(f"prompt: {prompt}")
-        if turn.model_name:
-            latency = (
-                f"{turn.model_latency_seconds:.2f}s"
-                if turn.model_latency_seconds is not None
-                else "pending"
-            )
-            lines.append(f"model: {turn.model_name} · latency: {latency}")
-        for failure in turn.validation_failures:
-            lines.append(
-                f"[red]validation: {failure.error_type} - {failure.message}[/red]"
-            )
-        if turn.patch_target:
-            lines.append(f"patch: {turn.patch_target} — {turn.patch_reason}")
-        return "\n".join(lines)
-
-    def _build_summary(self) -> Any:
-        elapsed = time.time() - self._start_time
-        text = (
-            f"{self._patch_count} patches · {self._conflict_count} conflicts · "
-            f"{self._retry_count} retries · {self._total_tokens} tokens · "
-            f"{elapsed:.1f}s"
+        queue: asyncio.Queue = asyncio.Queue()
+        dashboard = WorkflowDashboard(queue)
+        state, _ = await asyncio.gather(
+            run_workflow(..., event_queue=queue),
+            dashboard.run(),
         )
-        return runtime_Panel(text, title="Summary", box=runtime_box.MINIMAL if runtime_box is not None else None)
+    """
 
-    def _ensure_current_turn(self, event: StateEvent) -> _TurnView:
-        if self._current_turn is None:
-            self._current_turn = _TurnView(
-                agent_id=getattr(event, "agent_id", "unknown"),
-                workflow_id=event.workflow_id,
-                turn_number=len(self._turns) + 1,
-                started_at=event.timestamp,
-            )
-            self._turns.append(self._current_turn)
-        return self._current_turn
+    def __init__(self, event_queue: asyncio.Queue[StateEvent | None]) -> None:
+        self._queue      = event_queue
+        self._start_time: float = time.time()
+        self._patch_count    = 0
+        self._conflict_count = 0
+        self._retry_count    = 0
+        self._total_tokens   = 0
+        self._total_cost     = 0.0
+        self._goal           = ""
+        self._workflow_type  = ""
+        self._events: list[StateEvent] = []
 
-    def _handle_event(self, event: StateEvent) -> None:
-        self._events.append(event)
+    def _print(self, rich_line: str, plain_line: str) -> None:
+        if HAS_RICH:
+            _console.print(rich_line)
+        else:
+            print(plain_line)
 
-        if isinstance(event, WorkflowStarted):
-            self._start_time = event.timestamp
-            self._workflow_goal = event.goal
-            self._workflow_status = "running"
-            self._current_agent = event.agent_id
-            return
+    def _handle(self, ev: StateEvent) -> None:
+        self._events.append(ev)
 
-        if isinstance(event, WorkflowCompleted):
-            self._workflow_status = "completed"
-            return
+        if isinstance(ev, WorkflowStarted):
+            self._start_time    = ev.timestamp
+            self._goal          = ev.goal or ""
+            self._workflow_type = ev.workflow_type or ""
 
-        if isinstance(event, ConflictDetected):
-            self._conflict_count += 1
-            return
+        if isinstance(ev, ModelReturned):
+            self._total_tokens += (ev.input_tokens or 0) + (ev.output_tokens or 0)
+            self._total_cost   += ev.estimated_cost_usd or 0.0
 
-        if isinstance(event, ContextSliced):
-            self._current_turn = _TurnView(
-                agent_id=event.agent_id,
-                workflow_id=event.workflow_id,
-                turn_number=len(self._turns) + 1,
-                started_at=event.timestamp,
-                context_paths=list(event.context_paths),
-            )
-            self._turns.append(self._current_turn)
-            self._current_agent = event.agent_id
-            self._model_call_started_at = None
-            self._active_model_name = ""
-            return
-
-        if self._current_turn is None:
-            self._current_turn = self._ensure_current_turn(event)
-
-        if isinstance(event, PromptAssembled):
-            self._current_turn.prompt_text = event.prompt_text
-            self._current_turn.attempt_count = max(
-                self._current_turn.attempt_count, event.attempt_number + 1
-            )
-            return
-
-        if isinstance(event, ModelCalled):
-            self._current_turn.model_name = event.model
-            self._current_turn.attempt_count = max(
-                self._current_turn.attempt_count, event.attempt_number + 1
-            )
-            self._model_call_started_at = event.timestamp
-            self._active_model_name = event.model
-            return
-
-        if isinstance(event, ModelReturned):
-            if self._model_call_started_at is not None:
-                self._current_turn.model_latency_seconds = (
-                    event.timestamp - self._model_call_started_at
-                )
-            self._total_tokens += (event.input_tokens or 0) + (event.output_tokens or 0)
-            self._estimated_cost_usd += event.estimated_cost_usd or 0.0
-            return
-
-        if isinstance(event, ValidationFailed):
-            self._retry_count += 1
-            self._current_turn.validation_failures.append(
-                _FailureView(
-                    message=event.error_message,
-                    error_type=event.error_type,
-                    attempt_number=event.attempt_number,
-                )
-            )
-            return
-
-        if isinstance(event, PatchApplied):
+        if isinstance(ev, PatchApplied):
             self._patch_count += 1
-            self._current_turn.succeeded = True
-            self._current_turn.in_progress = False
-            self._current_turn.ended_at = event.timestamp
-            self._current_turn.patch_target = event.target
-            self._current_turn.patch_reason = event.reason
-            self._current_turn.patch_id = event.patch_id
-            self._current_agent = event.agent_id
-            self._current_turn = None
-            self._model_call_started_at = None
-            self._active_model_name = ""
-            return
 
-        if isinstance(event, AgentErrored):
-            self._current_turn.succeeded = False
-            self._current_turn.in_progress = False
-            self._current_turn.ended_at = event.timestamp
-            self._current_turn = None
-            self._model_call_started_at = None
-            self._active_model_name = ""
+        if isinstance(ev, ConflictDetected):
+            self._conflict_count += 1
+
+        if isinstance(ev, (ValidationFailed, RetryAttempted)):
+            self._retry_count += 1
+
+    def _print_header(self) -> None:
+        goal_short = self._goal[:60] if self._goal else "workflow"
+        wf_type    = self._workflow_type or ""
+        if HAS_RICH:
+            title = f"[bold]{wf_type}[/bold]" if wf_type else "agentstatelib"
+            _console.print(
+                _Panel(
+                    f"[dim]goal:[/dim] {goal_short}",
+                    title=title,
+                    expand=False,
+                    border_style="blue",
+                )
+            )
+            _console.print()
+            # Column header
+            _console.print(
+                f"[dim]{'elapsed':>7}  {'agent':<18}  {'event':<20}  summary[/dim]"
+            )
+            _console.rule(style="dim")
+        else:
+            print(f"\n=== {wf_type or 'agentstatelib'} — {goal_short} ===")
+            print(f"{'elapsed':>7}  {'agent':<18}  {'event':<20}  summary")
+            print("-" * 80)
+
+    def _print_summary(self) -> None:
+        elapsed = time.time() - self._start_time
+        parts = [
+            f"{len(self._events)} events",
+            f"{self._patch_count} patches",
+            f"{self._conflict_count} conflicts",
+            f"{self._retry_count} retries",
+            f"{self._total_tokens} tokens",
+            f"{elapsed:.1f}s",
+        ]
+        if self._total_cost > 0:
+            parts.append(f"${self._total_cost:.4f}")
+        summary = " · ".join(parts)
+
+        if HAS_RICH:
+            _console.print()
+            _console.rule(style="dim")
+            _console.print(f"[dim]{summary}[/dim]")
+            _console.print()
+        else:
+            print("\n" + "-" * 80)
+            print(summary)
+            print()
 
     async def run(self) -> None:
+        """Consume events from the queue and stream them to the terminal."""
         if not HAS_RICH:
-            raise ImportError(
-                "rich required. Install with: pip install agentstate-lib[dashboard]"
+            import warnings
+            warnings.warn(
+                "rich is not installed — falling back to plain text output. "
+                "Install with: pip install agentstate-lib[dashboard]",
+                stacklevel=2,
             )
 
-        live = runtime_Live(refresh_per_second=4)
-        with live:
-            while True:
-                try:
-                    event = await asyncio.wait_for(
-                        self._event_queue.get(), timeout=0.25
-                    )
-                    if event is None:
-                        break
-                    self._handle_event(event)
-                    live.update(self._build_display())
-                except asyncio.TimeoutError:
-                    live.update(self._build_display())
+        header_printed = False
+
+        while True:
+            try:
+                ev = await asyncio.wait_for(self._queue.get(), timeout=30.0)
+            except asyncio.TimeoutError:
+                continue
+
+            if ev is None:
+                break
+
+            # Print header once, before the first real event
+            if not header_printed:
+                if isinstance(ev, WorkflowStarted):
+                    self._start_time = ev.timestamp
+                    self._goal = ev.goal or ""
+                    self._workflow_type = ev.workflow_type or ""
+                self._print_header()
+                header_printed = True
+
+            self._handle(ev)
+            rich_line, plain_line = _event_line(ev, self._start_time)
+            self._print(rich_line, plain_line)
+
+        self._print_summary()
 
     def stop(self) -> None:
-        """Signal the dashboard to stop after current event is processed."""
-        self._event_queue.put_nowait(None)
+        """Signal the dashboard to stop after the current event is processed."""
+        self._queue.put_nowait(None)

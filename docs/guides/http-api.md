@@ -20,38 +20,50 @@ Use the Python library directly when everything runs inside a single process. Di
 
 The `x-api-key` header authenticates callers to **your own server**.
 
-Agentstatelib does not issue API keys.
+Agentstatelib does not issue API keys or run a hosted service. You configure
+valid keys yourself — this works much like a database password.
 
-There is:
+### Option A — generate via the API
 
-* No sign-up process.
-* No hosted account.
-* No central registry.
-* No key management service.
+The server exposes an unauthenticated endpoint so a fresh deployment can
+bootstrap itself:
 
-You configure valid API keys yourself before starting the server.
+```bash
+curl -X POST http://localhost:8000/v1/keys/generate
+```
 
-This works much like a database password: whoever runs the server chooses the valid credentials.
+Response:
 
-Generate a secure key:
+```json
+{
+  "key": "abc123...",
+  "note": "Add this key to AGENTSTATE_API_KEYS on your server. Example: AGENTSTATE_API_KEYS=key1,key2"
+}
+```
+
+Add the returned key to the server's environment and restart:
+
+```bash
+export AGENTSTATE_API_KEYS=abc123...
+```
+
+### Option B — generate locally
 
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-Configure one or more valid keys:
+### Activating a key
+
+Set the `AGENTSTATE_API_KEYS` environment variable to a comma-separated list
+of valid keys before starting the server:
 
 ```bash
 AGENTSTATE_API_KEYS=key1,key2,key3
 ```
 
-Multiple keys are useful for key rotation. A new key can be added while old clients continue using the previous key, allowing credentials to be rotated without downtime.
-
-All protected endpoints require:
-
-```http
-x-api-key: your-key-here
-```
+Multiple keys support key rotation — add a new key while old clients continue
+using the previous one, then remove the old key when all clients have updated.
 
 ---
 
@@ -189,6 +201,35 @@ Required for browser EventSource connections.
 
 ```text
 http://localhost:8000/v1/workflows/WORKFLOW_ID/events?key=your-key-here
+```
+
+---
+
+### Export workflow (download JSON)
+
+Downloads the complete event log plus final reconstructed state as a JSON
+file. Useful for archiving, debugging, or sharing a run.
+
+```bash
+curl \
+  -H "x-api-key: your-key-here" \
+  -o "workflow_WF_ID.json" \
+  http://localhost:8000/v1/workflows/WF_ID/export
+```
+
+The response sets `Content-Disposition: attachment` so browsers prompt to
+save the file. The dashboard's **Download JSON** button uses this endpoint.
+
+Export schema:
+
+```json
+{
+  "workflow_id": "wf_3a9c2f1b4e8d",
+  "exported_at": 1718500000.0,
+  "event_count": 42,
+  "final_state": { ... },
+  "events": [ ... ]
+}
 ```
 
 ---

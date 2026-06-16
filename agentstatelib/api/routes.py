@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+import json
+import time as _time
 from typing import Any, Literal, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from agentstatelib.api.auth import is_valid_key, verify_api_key
@@ -52,6 +54,28 @@ class PendingApprovalResponse(BaseModel):
 
 
 router = APIRouter()
+
+
+@router.post("/keys/generate", tags=["auth"])
+async def generate_api_key() -> dict[str, str]:
+    """
+    Generate a cryptographically secure API key.
+
+    The returned key is not automatically active — you must add it to the
+    AGENTSTATE_API_KEYS environment variable (comma-separated) on the server
+    and restart (or reload) for it to be accepted.
+
+    No authentication required so new deployments can bootstrap themselves.
+    """
+    from agentstatelib.api.auth import generate_key
+
+    return {
+        "key": generate_key(),
+        "note": (
+            "Add this key to AGENTSTATE_API_KEYS on your server. "
+            "Example: AGENTSTATE_API_KEYS=key1,key2"
+        ),
+    }
 
 
 @router.get("/health", tags=["system"])
@@ -285,6 +309,48 @@ async def workflow_turns(
         )
 
     return {"turns": payload, "count": len(payload)}
+
+
+@router.get("/workflows/{workflow_id}/export", tags=["workflows"])
+async def export_workflow(
+    workflow_id: str,
+    _: str = Depends(verify_api_key),
+    store: StateStore = Depends(get_store),
+) -> Response:
+    """
+    Download the complete workflow log as a JSON file.
+
+    Returns all events, the reconstructed final state, and export metadata.
+    The browser will prompt to save the file as workflow_<id>.json.
+    """
+    events = await store.get_workflow(workflow_id)
+    if not events:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error_code": "workflow_not_found",
+                "message": f"No events found for workflow {workflow_id!r}",
+            },
+        )
+
+    from agentstatelib.memory.replay import replay
+
+    state = replay(events)
+    payload = {
+        "workflow_id": workflow_id,
+        "exported_at": _time.time(),
+        "event_count": len(events),
+        "final_state": state.model_dump(),
+        "events": [e.model_dump() for e in events],
+    }
+    content = json.dumps(payload, indent=2, default=str)
+    return Response(
+        content=content,
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f'attachment; filename="workflow_{workflow_id}.json"'
+        },
+    )
 
 
 @router.get("/workflows/{workflow_id}/approvals", tags=["workflows"])
