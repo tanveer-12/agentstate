@@ -1,6 +1,6 @@
 # AgentStateLib
 
-AgentStateLib is a Python library for building reliable multi-agent workflows. It gives multiple agents a shared, typed state and a simple graph router, so you can coordinate them without passing raw strings around. [file:1]
+AgentStateLib is a Python library for building reliable multi-agent workflows. It gives multiple agents a shared, typed state and a simple graph router, so you can coordinate them without passing raw strings around.
 
 ## Installation
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
 ## Status
 
-Version `0.5.0` — all Phase 2E features are implemented and tested (93 tests pass, mypy strict: 0 errors).
+Version `0.5.1` — all Phase 2E features are implemented and tested (93 tests pass, mypy strict: 0 errors).
 
 **Phase 1–2E implemented:**
 - SharedState, StatePatch, AgentGraph, round-based parallel execution

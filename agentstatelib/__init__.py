@@ -75,7 +75,7 @@ from agentstatelib.router.context import slice_state
 from agentstatelib.router.graph import AgentGraph, EventQueue, WorkflowEvent
 from agentstatelib.router.types import AgentFn, EdgeCondition
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 __all__ = [
     # core state
