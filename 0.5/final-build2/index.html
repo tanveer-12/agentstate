@@ -1,0 +1,3030 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+        <link rel="prev" href="../benchmark/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Implementation Status - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agentstatelib-implementation-status-v050-through-phase-2e" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Implementation Status
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../concepts/shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/http-api/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../benchmark/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Benchmark
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Implementation Status
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/event-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/trace-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/checkpoint-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/replay-debugger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replay Debugger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Status
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#package-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#product-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Product vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase implementation status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-by-file-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-by-file inventory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File-by-file inventory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/core/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statepy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        state.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        patch.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventspy-implemented-16-event-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        events.py — IMPLEMENTED (16 event types)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/coordination/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/coordination/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflictspy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        conflicts.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invariantspy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        invariants.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/router/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typespy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        types.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contextpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        context.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graphpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        graph.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/memory/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storepy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        store.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpointpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        checkpoint.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaypy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        replay.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibobservability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/observability/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/observability/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tracingpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tracing.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analysispy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analysis.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboardpy-implemented-optional-rich-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dashboard.py — IMPLEMENTED (optional Rich dependency)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/api/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apppy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        app.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routespy-implemented-10-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        routes.py — IMPLEMENTED (10 endpoints)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamingpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        streaming.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboardpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dashboard.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cachepy-stub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cache.py — STUB
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcontrib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/contrib/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/contrib/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#base_agentpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base_agent.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracingpy-implemented_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tracing.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-yet-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is NOT yet implemented
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the project
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api-surface-agentstatelib-top-level-exports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API surface (agentstatelib top-level exports)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#package-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#product-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Product vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase implementation status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-by-file-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-by-file inventory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File-by-file inventory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/core/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statepy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        state.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        patch.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventspy-implemented-16-event-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        events.py — IMPLEMENTED (16 event types)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/coordination/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/coordination/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflictspy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        conflicts.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invariantspy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        invariants.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/router/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typespy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        types.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contextpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        context.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graphpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        graph.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/memory/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storepy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        store.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpointpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        checkpoint.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaypy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        replay.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibobservability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/observability/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/observability/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tracingpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tracing.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analysispy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analysis.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboardpy-implemented-optional-rich-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dashboard.py — IMPLEMENTED (optional Rich dependency)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/api/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/api/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apppy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        app.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routespy-implemented-10-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        routes.py — IMPLEMENTED (10 endpoints)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamingpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        streaming.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboardpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dashboard.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cachepy-stub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cache.py — STUB
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcontrib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/contrib/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="agentstatelib/contrib/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#base_agentpy-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base_agent.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracingpy-implemented_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tracing.py — IMPLEMENTED
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-yet-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is NOT yet implemented
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the project
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api-surface-agentstatelib-top-level-exports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API surface (agentstatelib top-level exports)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="agentstatelib-implementation-status-v050-through-phase-2e">agentstatelib — Implementation Status (v0.5.0, through Phase 2E)</h1>
+<h2 id="package-identity">Package identity</h2>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PyPI package name</td>
+<td><code>agentstate-lib</code></td>
+</tr>
+<tr>
+<td>Importable module</td>
+<td><code>agentstatelib</code></td>
+</tr>
+<tr>
+<td>Current version</td>
+<td><code>0.5.0</code></td>
+</tr>
+<tr>
+<td>Python requirement</td>
+<td><code>&gt;=3.11</code></td>
+</tr>
+<tr>
+<td>Type checking</td>
+<td>mypy strict, 0 errors</td>
+</tr>
+<tr>
+<td>Test suite</td>
+<td>93 tests (unit + integration + property), all passing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="product-vision">Product vision</h2>
+<p><code>agentstatelib</code> is a stateful coordination layer for multi-agent AI systems. It gives multiple agents a shared, typed world model and handles every concern between the agent functions and the application layer:</p>
+<ul>
+<li><strong>Shared typed state</strong> — <code>SharedState</code> (Pydantic v2) is the single source of truth. Agents never mutate it directly.</li>
+<li><strong>StatePatch pipeline</strong> — agents return structured patches; the library validates, conflict-resolves, and applies them atomically.</li>
+<li><strong>Event-sourced audit log</strong> — every patch, conflict, checkpoint, and error is recorded as a typed immutable event. Any past state is reproducible from the log.</li>
+<li><strong>AgentGraph</strong> — round-based parallel execution engine with conflict detection, invariant checking, and approval gating.</li>
+<li><strong>Context slicing</strong> — agents receive only the state paths they declared, limiting context window usage and enforcing read boundaries.</li>
+<li><strong>Pluggable persistence</strong> — InMemoryStore (tests), SQLiteStore (single process), PostgreSQLStore (production).</li>
+<li><strong>Checkpointing</strong> — snapshot save/load with on-disk persistence for fault recovery.</li>
+<li><strong>OpenTelemetry</strong> — optional distributed tracing with no-op fallback; zero import overhead if otel is not installed.</li>
+<li><strong>Rich terminal dashboard</strong> — live workflow monitor with optional <code>rich</code> dependency.</li>
+<li><strong>FastAPI web dashboard</strong> — HTML/JS single-page app served from the same process, with SSE streaming, approval modals, and a turn-detail trace view.</li>
+<li><strong>Local model reliability</strong> — <code>LLMAgent</code> base class with retry-with-correction loop, validation, and per-attempt event emission.</li>
+<li><strong>Human-in-the-loop</strong> — approval gates on edges; <code>HumanApprovalRequested/Resolved</code> events; REST API and programmatic resolution via <code>resume_from_approval</code>.</li>
+</ul>
+<p>Competitive positioning: typed state + conflict detection + event sourcing + replay debugger is a combination that does not exist in LangGraph, CrewAI, or AutoGen.</p>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<pre><code>agentstatelib/
+├── core/           ← SharedState, StatePatch, apply_patch, 16 event types
+├── coordination/   ← ConflictDetector, 3 resolver strategies, InvariantChecker
+├── router/         ← AgentGraph, slice_state, AgentFn/EdgeCondition types
+├── memory/         ← StateStore protocol, 3 backends, Checkpoint, ReplayDebugger, AgentTurn
+├── observability/  ← OTel tracing, WorkflowDashboard (Rich), WorkflowSummary/analyze_workflow
+├── api/            ← FastAPI app, 10 endpoints, SSE streaming, web dashboard HTML
+└── contrib/        ← LLMAgent base class, @trace_tool decorator
+</code></pre>
+<hr />
+<h2 id="phase-implementation-status">Phase implementation status</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Week</th>
+<th>Feature</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Pre-work</td>
+<td>Project scaffold, pyproject.toml, tooling</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>SharedState, BaseStateEvent, SQLiteStore</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>StatePatch, apply_patch, AgentGraph, quickstart docs</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>Coordination layer: conflicts, invariants, parallel graph</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>Property tests (Hypothesis), first PyPI publish</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>5</td>
+<td>Event log: SQLite persistence, Checkpoint, ReplayDebugger</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>6</td>
+<td>LLM integration: LLMAgent base, retry loop, local models guide</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>7</td>
+<td>OpenTelemetry tracing, WorkflowSummary, analysis</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>8</td>
+<td>Terminal dashboard (Rich), web dashboard (FastAPI + HTML/JS)</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>9</td>
+<td>Full trace model: 10 Phase 2A events, AgentTurn, turn-detail API</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td>PostgreSQLStore, FastAPI endpoints v1, SSE streaming</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>11</td>
+<td>Human-in-the-loop: approval gates, resume_from_approval, REST API</td>
+<td><strong>DONE</strong></td>
+</tr>
+<tr>
+<td>3+</td>
+<td>12+</td>
+<td>Redis cache, migration guide, integrations, ADRs</td>
+<td><strong>NOT YET</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="file-by-file-inventory">File-by-file inventory</h2>
+<h3 id="agentstatelibcore"><code>agentstatelib/core/</code></h3>
+<h4 id="statepy-implemented"><code>state.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>WorkflowStatus</code> — <code>Literal["running", "complete", "failed", "paused"]</code></li>
+<li><code>Task</code> — <code>id</code>, <code>goal_id</code>, <code>description</code>, <code>status</code>, <code>result</code>, <code>created_at</code>, <code>updated_at</code></li>
+<li><code>Goal</code> — <code>id</code>, <code>description</code>, <code>status</code>, <code>created_at</code></li>
+<li><code>Artifact</code> — <code>id</code>, <code>produced_by</code>, <code>artifact_type</code>, <code>content</code>, <code>created_at</code></li>
+<li><code>Decision</code> — <code>id</code>, <code>made_by</code>, <code>description</code>, <code>rationale</code>, <code>timestamp</code></li>
+<li><code>SharedState</code> — <code>workflow_id</code> (uuid auto), <code>workflow_type</code>, <code>goal</code>, <code>goals</code>, <code>tasks</code>, <code>artifacts</code>, <code>decisions</code>, <code>facts</code>, <code>status</code>, <code>created_at</code>, <code>updated_at</code></li>
+</ul>
+<p>All Pydantic v2, full docstrings, all exported.</p>
+<h4 id="patchpy-implemented"><code>patch.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>StatePatch</code> — <code>patch_id</code>, <code>agent_id</code>, <code>target</code>, <code>value</code>, <code>reason</code>, <code>timestamp</code>, <code>priority</code></li>
+<li><code>set_nested(obj, path, value)</code> — creates intermediate dicts automatically</li>
+<li><code>get_nested(obj, path)</code> — returns <code>None</code> on missing, never raises</li>
+<li><code>apply_patch(state, patch)</code> → new <code>SharedState</code> — original never mutated</li>
+</ul>
+<h4 id="eventspy-implemented-16-event-types"><code>events.py</code> — IMPLEMENTED (16 event types)</h4>
+<p>All inherit <code>BaseStateEvent</code> which carries <code>event_id</code>, <code>workflow_id</code>, <code>agent_id</code>, <code>timestamp</code>, <code>schema_version</code>.</p>
+<p>Discriminated union via <code>type</code> field. <code>event_adapter = TypeAdapter(StateEvent)</code> for JSON deserialization.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Phase</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WorkflowStarted</code></td>
+<td>1</td>
+<td>Graph.run() begins</td>
+</tr>
+<tr>
+<td><code>WorkflowCompleted</code></td>
+<td>1</td>
+<td>Graph.run() finishes</td>
+</tr>
+<tr>
+<td><code>PatchApplied</code></td>
+<td>1</td>
+<td>Winning patch applied</td>
+</tr>
+<tr>
+<td><code>ConflictDetected</code></td>
+<td>1</td>
+<td>Two patches collide in same round</td>
+</tr>
+<tr>
+<td><code>CheckpointSaved</code></td>
+<td>1</td>
+<td>save_checkpoint() completes</td>
+</tr>
+<tr>
+<td><code>AgentErrored</code></td>
+<td>1</td>
+<td>Agent raised unhandled exception</td>
+</tr>
+<tr>
+<td><code>ContextSliced</code></td>
+<td>2A</td>
+<td>Agent context prepared, paths + size logged</td>
+</tr>
+<tr>
+<td><code>PromptAssembled</code></td>
+<td>2A</td>
+<td>Full prompt text recorded before model call</td>
+</tr>
+<tr>
+<td><code>ModelCalled</code></td>
+<td>2A</td>
+<td>Pre-call marker, links to ModelReturned via call_id</td>
+</tr>
+<tr>
+<td><code>ModelReturned</code></td>
+<td>2A</td>
+<td>Raw response, latency, tokens, estimated cost</td>
+</tr>
+<tr>
+<td><code>ValidationFailed</code></td>
+<td>2A</td>
+<td>JSON/schema parse error, includes raw_output</td>
+</tr>
+<tr>
+<td><code>RetryAttempted</code></td>
+<td>2A</td>
+<td>Correction attempt start, previous_error attached</td>
+</tr>
+<tr>
+<td><code>ToolCalled</code></td>
+<td>2A</td>
+<td>External tool invoked, tool_input logged</td>
+</tr>
+<tr>
+<td><code>ToolReturned</code></td>
+<td>2A</td>
+<td>Tool result, latency, success flag</td>
+</tr>
+<tr>
+<td><code>HumanApprovalRequested</code></td>
+<td>2E</td>
+<td>Graph paused, patch embedded for review</td>
+</tr>
+<tr>
+<td><code>HumanApprovalResolved</code></td>
+<td>2E</td>
+<td>Human decision recorded (approved/rejected/modified)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="agentstatelibcoordination"><code>agentstatelib/coordination/</code></h3>
+<h4 id="conflictspy-implemented"><code>conflicts.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>ConflictRecord</code> — <code>conflict_id</code>, <code>path</code>, <code>winner_agent_id</code>, <code>loser_agent_id</code>, <code>resolution_strategy</code>, <code>existing_patch</code>, <code>incoming_patch</code></li>
+<li><code>BatchResolutionResult</code> — <code>winners: list[StatePatch]</code>, <code>conflicts: list[ConflictRecord]</code></li>
+<li><code>ConflictResolver</code> — Protocol: <code>resolve(existing, incoming) → StatePatch</code></li>
+<li><code>LastWriteWins</code> — higher timestamp wins (default)</li>
+<li><code>PriorityBased</code> — higher <code>StatePatch.priority</code> wins</li>
+<li><code>RejectIncoming</code> — first writer wins, incoming always loses</li>
+<li><code>ConflictDetector</code> — <code>resolve_batch(patches)</code> for atomic round resolution; <code>submit(patch)</code> for sequential use; <code>reset()</code> clears history</li>
+</ul>
+<h4 id="invariantspy-implemented"><code>invariants.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>InvariantViolation</code> — <code>rule_name</code>, <code>description</code>, <code>severity: Literal["warning", "error"]</code></li>
+<li><code>InvariantChecker</code> — Protocol: <code>check(state) → list[InvariantViolation]</code></li>
+<li><code>TasksReferenceExistingGoals</code> — tasks with <code>goal_id</code> must reference a real goal</li>
+<li><code>CompletedGoalsHaveNoBlockingTasks</code> — complete goals must not have pending tasks</li>
+<li><code>check_all(state, checkers)</code> — runs all checkers, error violations halt graph with <code>RuntimeError</code></li>
+</ul>
+<hr />
+<h3 id="agentstatelibrouter"><code>agentstatelib/router/</code></h3>
+<h4 id="typespy-implemented"><code>types.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>AgentFn = Callable[[dict[str, Any]], Awaitable[StatePatch | list[StatePatch]]]</code></li>
+<li><code>EdgeCondition = Callable[[dict[str, object]], bool]</code></li>
+</ul>
+<h4 id="contextpy-implemented"><code>context.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>slice_state(state, include_paths)</code> → <code>dict[str, Any]</code></li>
+<li>Always includes <code>workflow_id</code>, <code>workflow_type</code>, <code>goal</code> in returned dict</li>
+<li>Handles nested dotted paths (<code>"facts.key"</code>, <code>"tasks.t1.status"</code>)</li>
+<li>Empty <code>include_paths</code> returns full state dict</li>
+</ul>
+<h4 id="graphpy-implemented"><code>graph.py</code> — IMPLEMENTED</h4>
+<p>Key types:
+- <code>_Node(frozen dataclass)</code> — <code>agent_id</code>, <code>fn</code>, <code>context_keys</code>
+- <code>_Edge(frozen dataclass)</code> — <code>from_agent</code>, <code>to_agent</code>, <code>condition</code>, <code>approval_required</code>
+- <code>PendingApproval(frozen dataclass)</code> — <code>workflow_id</code>, <code>state</code>, <code>patch</code>, <code>agent_id</code>, <code>description</code>
+- <code>WorkflowEvent</code> — union type alias for queue-able events
+- <code>EventQueue = asyncio.Queue[WorkflowEvent]</code></p>
+<p><code>AgentGraph</code> methods:
+- <code>__init__(store, max_concurrent, conflict_resolver, invariant_checkers)</code> — sets up semaphore, <code>ConflictDetector</code>, <code>pending_approvals: dict[str, PendingApproval]</code>
+- <code>node(agent_id, context)</code> — decorator, registers <code>_Node</code>
+- <code>edge(from_agent, to_agent, condition, approval_required)</code> — creates <code>_Edge</code> with optional approval predicate
+- <code>add_invariant(checker)</code> — appends to invariant checker list
+- <code>run(state, start, event_queue)</code> → <code>SharedState</code> — full round loop with OTel span
+- <code>resume_from_approval(approval_id, decision, modified_patch)</code> → <code>SharedState | None</code> — pops from <code>pending_approvals</code>, emits <code>HumanApprovalResolved</code>, applies patch if approved/modified
+- <code>_execute_round(...)</code> — parallel agent execution, conflict resolution, approval gating, invariant checks
+- <code>_run_agents_parallel(...)</code> — <code>asyncio.gather</code> with semaphore, emits <code>ContextSliced</code> per agent
+- <code>_next_round(just_ran, state_dict)</code> — edge condition evaluation, deduplication
+- <code>_emit(event, queue)</code> — store.append + queue.put_nowait
+- <code>_build_conflict_event(workflow_id, record)</code> — ConflictRecord → ConflictDetected</p>
+<hr />
+<h3 id="agentstatelibmemory"><code>agentstatelib/memory/</code></h3>
+<h4 id="storepy-implemented"><code>store.py</code> — IMPLEMENTED</h4>
+<p><code>StateStore</code> protocol (5 methods): <code>append</code>, <code>get_workflow</code>, <code>since</code>, <code>count</code>, <code>list_workflows</code></p>
+<p><code>InMemoryStore</code>:
+- <code>dict[str, list[StateEvent]]</code> backing store
+- All 5 protocol methods implemented
+- <code>list_workflows</code> returns keys in reverse insertion order</p>
+<p><code>SQLiteStore</code>:
+- <code>aiosqlite</code> async backend
+- Table: <code>events(id, event_id, workflow_id, type, schema_version, data, timestamp)</code>
+- Index on <code>workflow_id</code>
+- Auto-migration: adds <code>schema_version</code> column to existing databases
+- <code>list_workflows</code> orders by <code>MAX(id) DESC</code></p>
+<p><code>PostgreSQLStore</code>:
+- Optional <code>asyncpg</code> backend (<code>pip install asyncpg</code>)
+- Pool created lazily on first use
+- Mutual-recursion-free <code>_init_db(pool)</code> pattern
+- <code>close()</code> for graceful pool shutdown
+- <code>HAS_ASYNCPG</code> flag prevents import errors when asyncpg is absent</p>
+<h4 id="checkpointpy-implemented"><code>checkpoint.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>Checkpoint</code> — <code>checkpoint_id</code>, <code>workflow_id</code>, <code>event_count</code>, <code>state: SharedState</code>, <code>created_at</code></li>
+<li><code>save_checkpoint(state, store, directory)</code> — JSON serialized to <code>.checkpoints/</code> dir, emits <code>CheckpointSaved</code></li>
+<li><code>load_latest_checkpoint(workflow_id, directory)</code> → <code>Checkpoint | None</code></li>
+<li><code>load_checkpoint(checkpoint_id, directory)</code> → <code>Checkpoint</code></li>
+</ul>
+<h4 id="replaypy-implemented"><code>replay.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>replay(events)</code> → <code>SharedState</code> — finds <code>WorkflowStarted</code>, replays all <code>PatchApplied</code> events in timestamp order</li>
+<li><code>ReplayDebugger</code> — <code>step()</code>, <code>jump_to(index)</code>, <code>state_at(timestamp)</code>, <code>reset()</code>, <code>current_index</code>, <code>total_events</code></li>
+<li><code>AgentTurn</code> — dataclass grouping events for one agent attempt: <code>agent_id</code>, <code>workflow_id</code>, <code>attempt_count</code>, <code>succeeded</code>, <code>context_sliced</code>, <code>prompts</code>, <code>model_calls</code>, <code>validation_failures</code>, <code>patch_applied</code>, <code>tool_calls</code>, <code>total_latency_seconds</code>, <code>total_tokens</code></li>
+<li><code>get_agent_turns(events)</code> → <code>list[AgentTurn]</code> — streams through events, groups by <code>ContextSliced</code> boundaries</li>
+<li><code>get_model_call_pairs(events)</code> → <code>list[tuple[ModelCalled, ModelReturned]]</code> — pairs by <code>call_id</code></li>
+<li><code>get_turn_for_patch(events, patch_id)</code> → <code>AgentTurn | None</code></li>
+</ul>
+<hr />
+<h3 id="agentstatelibobservability"><code>agentstatelib/observability/</code></h3>
+<h4 id="tracingpy-implemented"><code>tracing.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>setup_tracing(service_name, endpoint)</code> — configures OTLP exporter, <code>BatchSpanProcessor</code></li>
+<li><code>get_tracer()</code> → real tracer if OTel installed, <code>_NoOpTracer</code> fallback otherwise</li>
+<li><code>_NoOpTracer</code> / <code>_NoOpSpan</code> — zero-overhead no-ops when OTel not installed</li>
+<li><code>HAS_OTEL</code> flag</li>
+</ul>
+<h4 id="analysispy-implemented"><code>analysis.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>AnomalyFlag</code> — <code>rule_name</code>, <code>description</code>, <code>severity: Literal["warning", "error"]</code></li>
+<li><code>AgentStats</code> — <code>agent_id</code>, <code>patch_count</code>, <code>error_count</code></li>
+<li><code>WorkflowSummary</code> — <code>workflow_id</code>, <code>total_duration_seconds</code>, <code>total_patches</code>, <code>total_conflicts</code>, <code>conflict_rate</code>, <code>agent_stats</code>, <code>is_anomalous</code>, <code>anomaly_flags</code>, <code>total_model_calls</code>, <code>total_validation_failures</code>, <code>total_retries</code>, <code>total_input_tokens</code>, <code>total_output_tokens</code>, <code>estimated_total_cost_usd</code>, <code>avg_model_latency_seconds</code>, <code>models_used</code></li>
+<li><code>analyze_workflow(events)</code> — aggregates all metrics, applies 6 anomaly rules (high conflict rate, long duration, dead agent, high retry rate, high cost, schema drift)</li>
+</ul>
+<h4 id="dashboardpy-implemented-optional-rich-dependency"><code>dashboard.py</code> — IMPLEMENTED (optional Rich dependency)</h4>
+<ul>
+<li><code>HAS_RICH</code> flag; all <code>rich</code> imports inside try/except</li>
+<li><code>runtime_box</code> module-level alias replaces <code>box.MINIMAL</code> references</li>
+<li><code>WorkflowDashboard</code> — live terminal UI using <code>rich.live.Live</code></li>
+<li><code>_TurnView</code> / <code>_FailureView</code> — internal display dataclasses</li>
+</ul>
+<hr />
+<h3 id="agentstatelibapi"><code>agentstatelib/api/</code></h3>
+<h4 id="apppy-implemented"><code>app.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>create_app(db_path)</code> → <code>FastAPI</code> — creates <code>SQLiteStore</code>, sets <code>app.state.store</code> and <code>app.state.graph = AgentGraph(store=store)</code>, mounts <code>/v1</code> router, serves <code>/dashboard</code></li>
+<li>Module-level <code>app</code> for <code>uvicorn agentstatelib.api.app:app</code></li>
+</ul>
+<h4 id="authpy-implemented"><code>auth.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>is_valid_key(key)</code> — checks against <code>AGENTSTATE_API_KEYS</code> env var (comma-separated)</li>
+<li><code>verify_api_key</code> — FastAPI dependency, raises 401 with structured error</li>
+<li><code>generate_key()</code> — <code>secrets.token_urlsafe(32)</code></li>
+<li>No debug prints (security fix applied)</li>
+</ul>
+<h4 id="routespy-implemented-10-endpoints"><code>routes.py</code> — IMPLEMENTED (10 endpoints)</h4>
+<p>All endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/health</code></td>
+<td>none</td>
+<td>Status check, version</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows</code></td>
+<td>yes</td>
+<td>List all workflow IDs</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workflows</code></td>
+<td>yes</td>
+<td>Create workflow, emit WorkflowStarted</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows/{id}</code></td>
+<td>yes</td>
+<td>Replay state from event log</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workflows/{id}/patches</code></td>
+<td>yes</td>
+<td>Submit patch outside graph run</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows/{id}/events</code></td>
+<td>yes/key</td>
+<td>SSE stream of workflow events</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows/{id}/events-list</code></td>
+<td>yes</td>
+<td>All events as JSON array</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows/{id}/turns</code></td>
+<td>yes</td>
+<td>AgentTurn list from event log</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workflows/{id}/approvals</code></td>
+<td>yes</td>
+<td>List pending approvals</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workflows/{id}/approvals/{appr_id}</code></td>
+<td>yes</td>
+<td>Submit approval decision</td>
+</tr>
+</tbody>
+</table>
+<p>Error format: <code>{"error_code": "...", "message": "..."}</code> on all failures.</p>
+<h4 id="streamingpy-implemented"><code>streaming.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>stream_workflow_events(store, workflow_id)</code> — async generator yielding SSE <code>data:</code> lines</li>
+<li>Polls <code>store.since()</code> every 0.5 seconds; max 5-minute duration</li>
+<li>Adds <code>Cache-Control: no-cache</code> and <code>X-Accel-Buffering: no</code> headers</li>
+</ul>
+<h4 id="dashboardpy-implemented"><code>dashboard.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>DASHBOARD_HTML</code> — single-page app string served at <code>/dashboard</code></li>
+<li>JavaScript: workflow list sidebar, event stream via EventSource, turn-detail modal, approval modal</li>
+<li><code>loadTurnDetail()</code> populates prompts, model_responses, validation_failures, tool_calls, patch_target, patch_reason, succeeded from event reconstruction loop</li>
+</ul>
+<h4 id="cachepy-stub"><code>cache.py</code> — STUB</h4>
+<ul>
+<li>Placeholder comment only. Redis-backed patch cache is not implemented. Phase 5+ work.</li>
+</ul>
+<hr />
+<h3 id="agentstatelibcontrib"><code>agentstatelib/contrib/</code></h3>
+<h4 id="base_agentpy-implemented"><code>base_agent.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>MaxRetriesExceeded</code> exception</li>
+<li><code>LLMAgent</code> abstract base class:</li>
+<li><code>__init__(agent_id, store, model, max_retries, workflow_id)</code></li>
+<li><code>__call__(context)</code> → <code>StatePatch</code> — full retry-with-correction loop</li>
+<li>Emits: <code>PromptAssembled</code>, <code>ModelCalled</code>, <code>ModelReturned</code>, <code>ValidationFailed</code>, <code>RetryAttempted</code>, <code>AgentErrored</code></li>
+<li>Reads <code>workflow_id</code> from <code>context["workflow_id"]</code> when not set in constructor</li>
+<li>Abstract methods: <code>build_prompt(context)</code>, <code>call_model(prompt)</code>, <code>parse_response(raw)</code></li>
+</ul>
+<h4 id="tracingpy-implemented_1"><code>tracing.py</code> — IMPLEMENTED</h4>
+<ul>
+<li><code>trace_tool(agent_id, tool_name, store)</code> — decorator factory</li>
+<li>Wraps any <code>async def tool(...)</code> — emits <code>ToolCalled</code> before, <code>ToolReturned</code> after</li>
+<li>Captures latency and error message</li>
+</ul>
+<hr />
+<h2 id="tests">Tests</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Count</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/unit/test_state.py</code></td>
+<td>4</td>
+<td>SharedState, Task, Goal, WorkflowStatus</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_patch.py</code></td>
+<td>6</td>
+<td>set_nested, get_nested, apply_patch</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_events.py</code></td>
+<td>5</td>
+<td>All 16 event types, round-trip serialization</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_conflicts.py</code></td>
+<td>8</td>
+<td>resolve_batch, all 3 strategies, submit</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_invariants.py</code></td>
+<td>—</td>
+<td>InvariantChecker, check_all</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_context.py</code></td>
+<td>3</td>
+<td>slice_state, nested paths, empty include</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_store.py</code></td>
+<td>6+</td>
+<td>InMemoryStore, SQLiteStore, protocol check</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_replay.py</code></td>
+<td>—</td>
+<td>replay, ReplayDebugger</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_tracing.py</code></td>
+<td>—</td>
+<td>OTel, _NoOpTracer</td>
+</tr>
+<tr>
+<td><code>tests/unit/test_dashboard.py</code></td>
+<td>—</td>
+<td>WorkflowDashboard</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_graph_run.py</code></td>
+<td>3</td>
+<td>Single agent, sequential pipeline, invalid start</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_parallel_execution.py</code></td>
+<td>—</td>
+<td>Multi-agent round</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_conflict_flow.py</code></td>
+<td>—</td>
+<td>End-to-end conflict resolution</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_checkpoint_recovery.py</code></td>
+<td>—</td>
+<td>save/load checkpoint</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_api.py</code></td>
+<td>—</td>
+<td>FastAPI endpoints</td>
+</tr>
+<tr>
+<td><code>tests/integration/test_approval_flow.py</code></td>
+<td>9</td>
+<td>Graph-level and HTTP approval flow</td>
+</tr>
+<tr>
+<td><code>tests/property/test_patch_properties.py</code></td>
+<td>—</td>
+<td>Hypothesis property tests</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total: 93 passing</strong></p>
+<hr />
+<h2 id="what-is-not-yet-implemented">What is NOT yet implemented</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Phase</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis-backed patch cache</td>
+<td>3 (Week 10)</td>
+<td><code>api/cache.py</code> is a stub comment</td>
+</tr>
+<tr>
+<td><code>docs/guides/testing.md</code></td>
+<td>3 (Week 9)</td>
+<td>File does not exist</td>
+</tr>
+<tr>
+<td><code>docs/guides/production.md</code></td>
+<td>3 (Week 10)</td>
+<td>File does not exist</td>
+</tr>
+<tr>
+<td><code>docs/guides/integrations.md</code></td>
+<td>3 (Week 12)</td>
+<td>File does not exist</td>
+</tr>
+<tr>
+<td><code>docs/guides/migration/v0.x-to-v1.md</code></td>
+<td>3 (Week 12)</td>
+<td>File does not exist</td>
+</tr>
+<tr>
+<td><code>docs/decisions/</code> ADRs</td>
+<td>3 (Week 11)</td>
+<td>Directory does not exist</td>
+</tr>
+<tr>
+<td><code>docs/design.md</code></td>
+<td>3 (Week 13)</td>
+<td>File does not exist</td>
+</tr>
+<tr>
+<td><code>CHANGELOG.md</code></td>
+<td>All</td>
+<td>File exists but is empty</td>
+</tr>
+<tr>
+<td>PostgreSQLStore: integration tests</td>
+<td>—</td>
+<td>No live DB tests (asyncpg is optional)</td>
+</tr>
+<tr>
+<td>Approval timeout auto-rejection</td>
+<td>2E extra</td>
+<td>Pattern documented, not wired into graph</td>
+</tr>
+<tr>
+<td>Grammar-constrained output</td>
+<td>2D</td>
+<td>Not yet implemented in LLMAgent</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="running-the-project">Running the project</h2>
+<pre><code class="language-powershell"># Install all dev dependencies
+pip install -e &quot;.[api,otel,dashboard,contrib,dev]&quot;
+
+# Type check (must be 0 errors)
+python -m mypy agentstatelib --ignore-missing-imports --no-error-summary
+
+# Run all tests
+python -m pytest tests/ -q --tb=short
+
+# Start the API server
+$env:AGENTSTATE_API_KEYS = &quot;dev-key-123&quot;
+uvicorn agentstatelib.api.app:app --reload --port 8000
+
+# Open the web dashboard
+# http://localhost:8000/dashboard
+</code></pre>
+<hr />
+<h2 id="public-api-surface-agentstatelib-top-level-exports">Public API surface (<code>agentstatelib</code> top-level exports)</h2>
+<p>57 public names as of v0.5.0:</p>
+<p><strong>State</strong> — <code>SharedState</code>, <code>Task</code>, <code>Goal</code>, <code>Artifact</code>, <code>Decision</code>, <code>WorkflowStatus</code></p>
+<p><strong>Patches</strong> — <code>StatePatch</code>, <code>apply_patch</code>, <code>set_nested</code>, <code>get_nested</code></p>
+<p><strong>Events (Phase 1)</strong> — <code>StateEvent</code>, <code>BaseStateEvent</code>, <code>WorkflowStarted</code>, <code>WorkflowCompleted</code>, <code>PatchApplied</code>, <code>ConflictDetected</code>, <code>CheckpointSaved</code>, <code>AgentErrored</code>, <code>event_adapter</code></p>
+<p><strong>Events (Phase 2A trace)</strong> — <code>ContextSliced</code>, <code>PromptAssembled</code>, <code>ModelCalled</code>, <code>ModelReturned</code>, <code>ValidationFailed</code>, <code>RetryAttempted</code>, <code>ToolCalled</code>, <code>ToolReturned</code></p>
+<p><strong>Events (Phase 2E approval)</strong> — <code>HumanApprovalRequested</code>, <code>HumanApprovalResolved</code></p>
+<p><strong>Graph</strong> — <code>AgentGraph</code>, <code>EventQueue</code>, <code>WorkflowEvent</code>, <code>AgentFn</code>, <code>EdgeCondition</code>, <code>slice_state</code></p>
+<p><strong>Persistence</strong> — <code>StateStore</code>, <code>InMemoryStore</code>, <code>SQLiteStore</code>, <code>PostgreSQLStore</code></p>
+<p><strong>Coordination</strong> — <code>ConflictResolver</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>, <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>BatchResolutionResult</code></p>
+<p><strong>Checkpointing</strong> — <code>Checkpoint</code>, <code>load_latest_checkpoint</code>, <code>save_checkpoint</code></p>
+<p><strong>Replay</strong> — <code>ReplayDebugger</code>, <code>replay</code>, <code>AgentTurn</code>, <code>get_agent_turns</code>, <code>get_model_call_pairs</code>, <code>get_turn_for_patch</code></p>
+<p><strong>Observability</strong> — <code>WorkflowDashboard</code>, <code>analyze_workflow</code>, <code>WorkflowSummary</code>, <code>AnomalyFlag</code>, <code>AgentStats</code>, <code>setup_tracing</code>, <code>get_tracer</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
