@@ -1,0 +1,1877 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+        <link rel="prev" href="../http-api/">
+      
+      
+        <link rel="next" href="../checkpoint-recovery/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Human in the Loop - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#human-in-the-loop" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Human in the Loop
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../concepts/shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../http-api/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../benchmark/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Benchmark
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../final-build2/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Implementation Status
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/event-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/trace-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the Loop
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#section-1-when-to-use-approval-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 1 — When to use approval gates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-2-registering-a-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2 — Registering a gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-3-the-approval-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 3 — The approval flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-4-resolving-approvals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 4 — Resolving approvals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 4 — Resolving approvals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#via-the-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Via the REST API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#via-resume_from_approval-programmatic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Via resume_from_approval (programmatic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-5-web-dashboard-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 5 — Web dashboard integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-6-event-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 6 — Event trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-7-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 7 — Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 7 — Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timeout-auto-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeout auto-rejection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-service-auto-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy service auto-approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-agent-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second-agent approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpoint-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../replay-debugger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replay Debugger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../final-build2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#section-1-when-to-use-approval-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 1 — When to use approval gates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-2-registering-a-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2 — Registering a gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-3-the-approval-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 3 — The approval flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-4-resolving-approvals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 4 — Resolving approvals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 4 — Resolving approvals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#via-the-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Via the REST API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#via-resume_from_approval-programmatic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Via resume_from_approval (programmatic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-5-web-dashboard-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 5 — Web dashboard integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-6-event-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 6 — Event trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-7-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 7 — Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 7 — Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timeout-auto-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeout auto-rejection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-service-auto-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy service auto-approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-agent-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second-agent approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="human-in-the-loop">Human in the Loop</h1>
+<p>Approval gates let a workflow pause at a risky edge and wait for human review before applying a patch. They are a good fit for workflows that touch financial data, send external communications, make irreversible changes, or operate in regulated domains.</p>
+<h2 id="section-1-when-to-use-approval-gates">Section 1 — When to use approval gates</h2>
+<p>Use approval gates when a patch is costly, irreversible, or hard to undo. Common examples include transferring money, sending customer-facing email, deleting data, changing production infrastructure, or taking an action that needs auditability and review.</p>
+<p>Approval gates are not for routine state updates. If a patch is low risk and easily reversible, let the graph apply it automatically so the workflow stays fast and simple.</p>
+<p>A good rule of thumb is this: if a human would reasonably ask "should this really happen?" before the system applies the change, it should probably be gated.</p>
+<h2 id="section-2-registering-a-gate">Section 2 — Registering a gate</h2>
+<p>Register a gate on an edge by passing <code>approval_required</code> to <code>graph.edge()</code>. The predicate receives the current <code>SharedState</code> and the proposed <code>StatePatch</code>, and returns <code>True</code> when the patch should pause for human review.</p>
+<pre><code class="language-python">from agentstatelib import AgentGraph, SharedState, StatePatch
+
+graph = AgentGraph()
+
+graph.edge(
+    &quot;planner&quot;,
+    &quot;executor&quot;,
+    condition=lambda state: state[&quot;status&quot;] == &quot;ready&quot;,
+    approval_required=lambda state, patch: (
+        patch.target.startswith(&quot;financial.&quot;)
+        or patch.target in {&quot;email.subject&quot;, &quot;email.body&quot;}
+        or patch.target.startswith(&quot;production.&quot;)
+    ),
+)
+</code></pre>
+<p>You can make the predicate as specific as you need. For example, gate only when the target is a sensitive path and the proposed value crosses a threshold, or when the patch would modify a field in a regulated object.</p>
+<h2 id="section-3-the-approval-flow">Section 3 — The approval flow</h2>
+<p>When the graph reaches a gated edge, the graph does <strong>not</strong> stop entirely. It:</p>
+<ol>
+<li>Emits <code>HumanApprovalRequested</code> to the event store with the proposed patch embedded.</li>
+<li>Stores the pending approval in <code>graph.pending_approvals</code> (keyed by <code>approval_id</code>).</li>
+<li>Skips applying that patch and continues processing any other non-gated patches in the same round.</li>
+</ol>
+<p>The pending patch sits in <code>graph.pending_approvals</code> until <code>resume_from_approval</code> is called — either by a human via the web dashboard/API, or programmatically by another agent or policy service.</p>
+<pre><code class="language-python"># Pause — graph run finishes without applying the gated patch
+final_state = await graph.run(state, start=&quot;planner&quot;)
+
+# The gated patch is waiting:
+print(graph.pending_approvals)
+# {'appr_abc123': PendingApproval(workflow_id=..., patch=StatePatch(...), ...)}
+</code></pre>
+<h2 id="section-4-resolving-approvals">Section 4 — Resolving approvals</h2>
+<h3 id="via-the-rest-api">Via the REST API</h3>
+<p>The web server exposes three approval endpoints (all require <code>x-api-key</code> authentication):</p>
+<pre><code>GET  /v1/workflows/{workflow_id}/approvals
+POST /v1/workflows/{workflow_id}/approvals/{approval_id}
+</code></pre>
+<p><strong>List pending approvals:</strong></p>
+<pre><code class="language-bash">curl -H &quot;x-api-key: $KEY&quot; \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals
+</code></pre>
+<pre><code class="language-json">{
+  &quot;approvals&quot;: [
+    {
+      &quot;approval_id&quot;: &quot;appr_abc123&quot;,
+      &quot;workflow_id&quot;: &quot;...&quot;,
+      &quot;agent_id&quot;: &quot;planner&quot;,
+      &quot;description&quot;: &quot;Transfer $500 to account 99&quot;,
+      &quot;patch&quot;: {&quot;target&quot;: &quot;financial.balance&quot;, &quot;value&quot;: -500, ...}
+    }
+  ],
+  &quot;count&quot;: 1
+}
+</code></pre>
+<p><strong>Approve:</strong></p>
+<pre><code class="language-bash">curl -X POST -H &quot;x-api-key: $KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;decision&quot;: &quot;approved&quot;}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/appr_abc123
+</code></pre>
+<p><strong>Reject:</strong></p>
+<pre><code class="language-bash">curl -X POST -H &quot;x-api-key: $KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;decision&quot;: &quot;rejected&quot;, &quot;reason&quot;: &quot;amount exceeds policy limit&quot;}' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/appr_abc123
+</code></pre>
+<p><strong>Modify and approve:</strong></p>
+<pre><code class="language-bash">curl -X POST -H &quot;x-api-key: $KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;decision&quot;: &quot;modified&quot;,
+    &quot;modified_patch&quot;: {
+      &quot;agent_id&quot;: &quot;human&quot;,
+      &quot;target&quot;: &quot;financial.balance&quot;,
+      &quot;value&quot;: -100,
+      &quot;reason&quot;: &quot;capped at policy limit&quot;
+    }
+  }' \
+  http://localhost:8000/v1/workflows/$WF_ID/approvals/appr_abc123
+</code></pre>
+<h3 id="via-resume_from_approval-programmatic">Via <code>resume_from_approval</code> (programmatic)</h3>
+<pre><code class="language-python"># Approve — returns the updated SharedState
+new_state = await graph.resume_from_approval(
+    approval_id=&quot;appr_abc123&quot;,
+    decision=&quot;approved&quot;,
+    modified_patch=None,
+)
+
+# Reject — returns None
+result = await graph.resume_from_approval(
+    approval_id=&quot;appr_abc123&quot;,
+    decision=&quot;rejected&quot;,
+    modified_patch=None,
+)
+
+# Modify
+from agentstatelib import StatePatch
+
+new_state = await graph.resume_from_approval(
+    approval_id=&quot;appr_abc123&quot;,
+    decision=&quot;modified&quot;,
+    modified_patch=StatePatch(
+        agent_id=&quot;policy_service&quot;,
+        target=&quot;financial.balance&quot;,
+        value=-100,
+        reason=&quot;capped at policy limit&quot;,
+    ),
+)
+</code></pre>
+<p><code>resume_from_approval</code> always:
+- Pops the approval from <code>graph.pending_approvals</code>.
+- Emits <code>HumanApprovalResolved</code> to the event store.
+- If approved or modified: applies the patch, emits <code>PatchApplied</code>, and returns the new <code>SharedState</code>.
+- If rejected: discards the patch and returns <code>None</code>.
+- Raises <code>KeyError</code> if the <code>approval_id</code> is not found.</p>
+<h2 id="section-5-web-dashboard-integration">Section 5 — Web dashboard integration</h2>
+<p>The web dashboard (served at <code>/dashboard</code>) shows:</p>
+<ul>
+<li><strong>Notification banner</strong> — appears at the top when there are pending approvals for the selected workflow.</li>
+<li><strong>Badge</strong> — a yellow <code>●</code> marker on workflow items in the sidebar that have pending approvals.</li>
+<li><strong>Highlighted rows</strong> — approval-related turns in the Trace tab are highlighted in amber.</li>
+<li><strong>Approval modal</strong> — click Review in the banner to open the modal, which shows:</li>
+<li><code>approval_id</code> and producing <code>agent_id</code></li>
+<li>patch target, current value (before), proposed value (after)</li>
+<li>Approve / Reject / Modify + Approve actions</li>
+</ul>
+<p>The dashboard polls <code>GET /v1/workflows/{id}/approvals</code> on every workflow selection and on a 5-second interval when a workflow is selected.</p>
+<h2 id="section-6-event-trail">Section 6 — Event trail</h2>
+<p>Every approval leaves a complete, ordered trace in the event log:</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When emitted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HumanApprovalRequested</code></td>
+<td>When the graph skips a gated patch and waits</td>
+</tr>
+<tr>
+<td><code>HumanApprovalResolved</code></td>
+<td>When <code>resume_from_approval</code> is called</td>
+</tr>
+<tr>
+<td><code>PatchApplied</code></td>
+<td>If the decision was <code>approved</code> or <code>modified</code></td>
+</tr>
+</tbody>
+</table>
+<p>These events are queryable via <code>GET /v1/workflows/{id}/events-list</code> and visible in the Trace and Detail tabs of the web dashboard.</p>
+<h2 id="section-7-patterns">Section 7 — Patterns</h2>
+<h3 id="timeout-auto-rejection">Timeout auto-rejection</h3>
+<pre><code class="language-python">import asyncio
+from agentstatelib import AgentGraph
+
+async def auto_reject_stale(graph: AgentGraph, timeout_seconds: float = 3600.0) -&gt; None:
+    &quot;&quot;&quot;Reject any approval that has been pending longer than timeout_seconds.&quot;&quot;&quot;
+    await asyncio.sleep(timeout_seconds)
+    for approval_id in list(graph.pending_approvals):
+        await graph.resume_from_approval(
+            approval_id=approval_id,
+            decision=&quot;rejected&quot;,
+            modified_patch=None,
+        )
+</code></pre>
+<h3 id="policy-service-auto-approval">Policy service auto-approval</h3>
+<pre><code class="language-python">async def policy_check(graph: AgentGraph) -&gt; None:
+    for approval_id, pending in list(graph.pending_approvals.items()):
+        patch = pending.patch
+        if patch.target.startswith(&quot;financial.&quot;) and abs(patch.value) &lt; 50:
+            # Low-risk: auto-approve small transactions
+            await graph.resume_from_approval(
+                approval_id=approval_id,
+                decision=&quot;approved&quot;,
+                modified_patch=None,
+            )
+</code></pre>
+<h3 id="second-agent-approval">Second-agent approval</h3>
+<p>You can run a second "reviewer" agent that reads the pending approval from the event log, decides, and calls <code>resume_from_approval</code>. This gives you a fully automated multi-stage approval pipeline while keeping the same approval primitive.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

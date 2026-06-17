@@ -1,0 +1,2327 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+        <link rel="prev" href="../llm-integration/">
+      
+      
+        <link rel="next" href="../opentelemetry/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Local Models - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#local-models-with-agentstatelib" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Local Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../concepts/shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../http-api/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../benchmark/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Benchmark
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../final-build2/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Implementation Status
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/event-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/trace-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpoint-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../replay-debugger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replay Debugger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-library-connects-to-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the library connects to models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-1-ollama-local-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 1 — Ollama (local install)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 1 — Ollama (local install)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-and-pull-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and pull a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-ollamaagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use OllamaAgent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-2-remote-ollama-ngrok-docker-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 2 — Remote Ollama (ngrok, Docker, VM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 2 — Remote Ollama (ngrok, Docker, VM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ngrok-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ngrok tunnel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-vm-or-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote VM or server
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-3-lm-studio-vllm-llamafile-localai-openai-compatible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lm-studio-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LM Studio example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vllm-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llamafile-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Llamafile example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-4-cloud-apis-no-local-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 4 — Cloud APIs (no local setup)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 4 — Cloud APIs (no local setup)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anthropic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anthropic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#groq-free-tier-very-fast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Groq (free tier, very fast)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-openai-compatible-cloud-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other OpenAI-compatible cloud services
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-5-no-model-at-all-rule-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 5 — No model at all (rule-based)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammar-constrained-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grammar-constrained output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retry-with-correction-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry-with-correction loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixed-model-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixed-model workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-which-example-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick-reference: which example to use
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../final-build2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-library-connects-to-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the library connects to models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-1-ollama-local-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 1 — Ollama (local install)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 1 — Ollama (local install)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-and-pull-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and pull a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-ollamaagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use OllamaAgent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-2-remote-ollama-ngrok-docker-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 2 — Remote Ollama (ngrok, Docker, VM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 2 — Remote Ollama (ngrok, Docker, VM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ngrok-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ngrok tunnel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-vm-or-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote VM or server
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-3-lm-studio-vllm-llamafile-localai-openai-compatible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lm-studio-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LM Studio example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vllm-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llamafile-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Llamafile example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-4-cloud-apis-no-local-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 4 — Cloud APIs (no local setup)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option 4 — Cloud APIs (no local setup)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anthropic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anthropic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#groq-free-tier-very-fast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Groq (free tier, very fast)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-openai-compatible-cloud-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other OpenAI-compatible cloud services
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-5-no-model-at-all-rule-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 5 — No model at all (rule-based)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammar-constrained-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grammar-constrained output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retry-with-correction-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry-with-correction loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixed-model-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixed-model workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-which-example-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick-reference: which example to use
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="local-models-with-agentstatelib">Local Models with agentstatelib</h1>
+<h2 id="how-the-library-connects-to-models">How the library connects to models</h2>
+<p><strong>agentstatelib never calls a model.</strong> The library only manages state: it applies patches, validates structure, and emits trace events. Every model call lives entirely in your own code.</p>
+<p>The connection point is <code>LLMAgent</code> in <code>agentstatelib.contrib.base_agent</code>. You subclass it, implement one method (<code>_call_model</code>), and the base class handles JSON parsing, <code>StatePatch</code> validation, and the retry-with-correction loop. Because the model is called through one method you control, the provider can be anything: a local Ollama server, an ngrok-tunnelled remote machine, a cloud API, or a pure Python function that never touches a network.</p>
+<p>The minimal shape looks like this:</p>
+<pre><code class="language-python">from agentstatelib.contrib.base_agent import LLMAgent
+
+class MyAgent(LLMAgent):
+    async def _call_model(self, prompt: str) -&gt; str:
+        # call any model here, return the raw string response
+        ...
+</code></pre>
+<p>Everything else — retry logic, structured-output correction, event tracing — is inherited from the base class. This means swapping providers requires changing only <code>_call_model</code>, not the surrounding coordination layer.</p>
+<hr />
+<h2 id="option-1-ollama-local-install">Option 1 — Ollama (local install)</h2>
+<p>Ollama is the easiest path for users who want a model running directly on their machine.</p>
+<h3 id="install-and-pull-a-model">Install and pull a model</h3>
+<p><strong>Linux / macOS:</strong></p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3:8b
+</code></pre>
+<p><strong>Windows:</strong></p>
+<p>Download and run the installer from <a href="https://ollama.com">ollama.com</a>. Then open a terminal:</p>
+<pre><code class="language-bash">ollama pull llama3:8b
+</code></pre>
+<p>Ollama starts a background server automatically on install. If it is not running, start it manually:</p>
+<pre><code class="language-bash">ollama serve
+</code></pre>
+<p>Verify it is alive:</p>
+<pre><code class="language-bash">!curl http://localhost:11434/api/tags
+</code></pre>
+<p>You should see a JSON response listing your installed models. If you see a connection error, Ollama is not running — start it with <code>ollama serve</code>.</p>
+<h3 id="use-ollamaagent">Use OllamaAgent</h3>
+<p>The example is in <code>examples/models/ollama_agent.py</code>. The default <code>base_url</code> is <code>http://localhost:11434</code>, which is exactly where Ollama listens. <strong>If you are running Ollama locally, you do not need to set any environment variable.</strong> The agent just works:</p>
+<pre><code class="language-python">from examples.models.ollama_agent import OllamaAgent
+
+agent = OllamaAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;You are a precise assistant that returns structured state patches.&quot;,
+    model=&quot;llama3:8b&quot;,
+    # base_url defaults to http://localhost:11434 — no change needed for local
+)
+</code></pre>
+<p>To use a different model, change the <code>model</code> argument to whatever you pulled:</p>
+<pre><code class="language-bash">ollama pull mistral:7b
+</code></pre>
+<pre><code class="language-python">agent = OllamaAgent(agent_id=&quot;researcher&quot;, system_prompt=&quot;...&quot;, model=&quot;mistral:7b&quot;)
+</code></pre>
+<p>List what you have installed:</p>
+<pre><code class="language-bash">ollama list
+</code></pre>
+<h3 id="environment-variables-optional">Environment variables (optional)</h3>
+<p>If you prefer to keep config in a <code>.env</code> file rather than hardcoding it:</p>
+<pre><code class="language-env">OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3:8b
+</code></pre>
+<p>The example file reads both of these automatically with <code>python-dotenv</code>. Without them, the defaults are used.</p>
+<hr />
+<h2 id="option-2-remote-ollama-ngrok-docker-vm">Option 2 — Remote Ollama (ngrok, Docker, VM)</h2>
+<p>The <code>OllamaAgent</code> pattern is designed so that <code>base_url</code> is the only thing that changes between local and remote. The same code works for all of these scenarios.</p>
+<h3 id="ngrok-tunnel">ngrok tunnel</h3>
+<p>If Ollama is running on a remote machine (or another laptop) exposed through ngrok, set <code>OLLAMA_BASE_URL</code> to the tunnel URL:</p>
+<pre><code class="language-env">OLLAMA_BASE_URL=https://your-tunnel-id.ngrok.io
+</code></pre>
+<pre><code class="language-python">agent = OllamaAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;llama3:8b&quot;,
+    base_url=&quot;https://your-tunnel-id.ngrok.io&quot;,
+)
+</code></pre>
+<p>No other change is needed. The library does not know or care whether the server is local or remote.</p>
+<h3 id="docker">Docker</h3>
+<pre><code class="language-bash">docker run -d --name ollama -p 11434:11434 ollama/ollama
+docker exec -it ollama ollama pull llama3:8b
+</code></pre>
+<p>The server is then available at <code>http://localhost:11434</code> — the default — so no <code>base_url</code> change is needed.</p>
+<h3 id="remote-vm-or-server">Remote VM or server</h3>
+<pre><code class="language-python">agent = OllamaAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;llama3:8b&quot;,
+    base_url=&quot;http://192.168.1.50:11434&quot;,  # your server's IP
+)
+</code></pre>
+<hr />
+<h2 id="option-3-lm-studio-vllm-llamafile-localai-openai-compatible">Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)</h2>
+<p>These tools run local models but expose an <strong>OpenAI-compatible API</strong>. That means you use the <code>OpenAIAgent</code> from <code>examples/models/openai_agent.py</code> — not the Ollama one — and just point <code>base_url</code> at the local port.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Default local URL</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LM Studio</td>
+<td><code>http://localhost:1234/v1</code></td>
+<td>Enable "Local Server" in the app first</td>
+</tr>
+<tr>
+<td>vLLM</td>
+<td><code>http://localhost:8000/v1</code></td>
+<td>GPU-focused, runs on Linux/cloud</td>
+</tr>
+<tr>
+<td>Llamafile</td>
+<td><code>http://localhost:8080/v1</code></td>
+<td>Single-file executable, no install needed</td>
+</tr>
+<tr>
+<td>LocalAI</td>
+<td><code>http://localhost:8080/v1</code></td>
+<td>Docker-based, many backends</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lm-studio-example">LM Studio example</h3>
+<ol>
+<li>Download LM Studio from <a href="https://lmstudio.ai">lmstudio.ai</a></li>
+<li>Download a model inside the app</li>
+<li>Go to <strong>Local Server</strong> tab and click <strong>Start Server</strong></li>
+<li>Note the model identifier shown in the UI (e.g., <code>lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF</code>)</li>
+</ol>
+<pre><code class="language-python">from examples.models.openai_agent import OpenAIAgent
+
+agent = OpenAIAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;You are a precise assistant that returns structured state patches.&quot;,
+    model=&quot;lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF&quot;,
+    api_key=&quot;not-needed&quot;,   # LM Studio ignores this but the field is required
+    base_url=&quot;http://localhost:1234/v1&quot;,
+)
+</code></pre>
+<h3 id="vllm-example">vLLM example</h3>
+<pre><code class="language-bash">pip install vllm
+python -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3-8B-Instruct
+</code></pre>
+<pre><code class="language-python">agent = OpenAIAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;,
+    api_key=&quot;not-needed&quot;,
+    base_url=&quot;http://localhost:8000/v1&quot;,
+)
+</code></pre>
+<h3 id="llamafile-example">Llamafile example</h3>
+<pre><code class="language-bash"># download a .llamafile from HuggingFace, then:
+chmod +x mistral-7b-instruct.llamafile
+./mistral-7b-instruct.llamafile --server
+</code></pre>
+<pre><code class="language-python">agent = OpenAIAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;mistral-7b-instruct&quot;,
+    api_key=&quot;not-needed&quot;,
+    base_url=&quot;http://localhost:8080/v1&quot;,
+)
+</code></pre>
+<hr />
+<h2 id="option-4-cloud-apis-no-local-setup">Option 4 — Cloud APIs (no local setup)</h2>
+<p>If you do not want to run anything locally, these cloud providers work out of the box.</p>
+<h3 id="openai">OpenAI</h3>
+<p>See <code>examples/models/openai_agent.py</code>.</p>
+<pre><code class="language-env">OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+</code></pre>
+<pre><code class="language-python">from examples.models.openai_agent import OpenAIAgent
+
+agent = OpenAIAgent(
+    agent_id=&quot;planner&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;gpt-4o-mini&quot;,
+)
+</code></pre>
+<h3 id="anthropic">Anthropic</h3>
+<p>See <code>examples/models/anthropic_agent.py</code>. Anthropic uses a different API shape (Messages API) so it has its own subclass. The usage is the same:</p>
+<pre><code class="language-env">ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_MODEL=claude-haiku-4-5-20251001
+</code></pre>
+<pre><code class="language-python">from examples.models.anthropic_agent import AnthropicAgent
+
+agent = AnthropicAgent(
+    agent_id=&quot;planner&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;claude-haiku-4-5-20251001&quot;,
+)
+</code></pre>
+<h3 id="groq-free-tier-very-fast">Groq (free tier, very fast)</h3>
+<p>Groq runs open models like Llama3 and Mistral in the cloud with extremely low latency. It has a free tier and uses the OpenAI-compatible API shape. See <code>examples/models/groq_agent.py</code>.</p>
+<pre><code class="language-env">GROQ_API_KEY=gsk_...
+GROQ_MODEL=llama3-8b-8192
+</code></pre>
+<pre><code class="language-python">from examples.models.groq_agent import GroqAgent
+
+agent = GroqAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;llama3-8b-8192&quot;,
+)
+</code></pre>
+<p>Groq is a good option if you want to use open models without running them locally.</p>
+<h3 id="other-openai-compatible-cloud-services">Other OpenAI-compatible cloud services</h3>
+<p>Together AI, Fireworks AI, Azure OpenAI, and most other providers expose an OpenAI-compatible endpoint. Use <code>OpenAIAgent</code> with the appropriate <code>base_url</code> and <code>api_key</code>:</p>
+<pre><code class="language-python">agent = OpenAIAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;mistralai/Mistral-7B-Instruct-v0.2&quot;,
+    api_key=os.environ[&quot;TOGETHER_API_KEY&quot;],
+    base_url=&quot;https://api.together.xyz/v1&quot;,
+)
+</code></pre>
+<hr />
+<h2 id="option-5-no-model-at-all-rule-based">Option 5 — No model at all (rule-based)</h2>
+<p>Any async function that accepts a <code>dict</code> and returns a <code>StatePatch</code> is a valid agent. You do not need a model. See <code>examples/models/rule_based_agent.py</code> for a complete example with a keyword classifier, a router, and a completion checker — all deterministic, instant, and free.</p>
+<pre><code class="language-python">from agentstatelib import StatePatch
+
+async def classify(context: dict) -&gt; StatePatch:
+    message = context.get(&quot;facts&quot;, {}).get(&quot;customer_message&quot;, &quot;&quot;).lower()
+    priority = &quot;high&quot; if &quot;urgent&quot; in message else &quot;normal&quot;
+    return StatePatch(
+        agent_id=&quot;classifier&quot;,
+        target=&quot;tasks.classification&quot;,
+        value={&quot;priority&quot;: priority},
+        reason=&quot;Classified by keyword match.&quot;,
+    )
+</code></pre>
+<p>Rule-based agents compose with LLM agents in the same graph. A common pattern is to use a rule-based router to decide which LLM agent runs next.</p>
+<hr />
+<h2 id="grammar-constrained-output">Grammar-constrained output</h2>
+<p>When using Ollama, you can pass a JSON schema in the <code>format</code> field to constrain sampling to outputs that match the schema. This reduces the number of malformed responses before they reach the retry loop.</p>
+<p>The <code>OllamaAgent</code> does this automatically when <code>use_grammar=True</code> (the default):</p>
+<pre><code class="language-python">agent = OllamaAgent(
+    agent_id=&quot;researcher&quot;,
+    system_prompt=&quot;...&quot;,
+    model=&quot;llama3:8b&quot;,
+    use_grammar=True,   # default — constrains output to the StatePatch schema
+)
+</code></pre>
+<p>To disable it:</p>
+<pre><code class="language-python">agent = OllamaAgent(..., use_grammar=False)
+</code></pre>
+<p>Grammar constraints are not available in all providers. OpenAI and Groq have a <code>response_format: {"type": "json_object"}</code> mode that serves a similar purpose and is enabled by default in the example agents.</p>
+<hr />
+<h2 id="retry-with-correction-loop">Retry-with-correction loop</h2>
+<p>Grammar constraints reduce failures but do not eliminate them. A model can still produce output that passes syntax but fails <code>StatePatch</code> validation. That is why <code>LLMAgent</code> includes a retry-with-correction loop.</p>
+<p>If the model's response fails to parse as JSON or fails schema validation, the next prompt automatically includes the error message and asks for corrected JSON only. The default is 3 attempts. You can change this:</p>
+<pre><code class="language-python">agent = OllamaAgent(..., max_retries=5)
+</code></pre>
+<p>The retry loop is the main reason the library is useful for local models specifically: smaller or quantized models are more likely to produce malformed output, and the correction loop recovers from those failures transparently.</p>
+<hr />
+<h2 id="choosing-a-model">Choosing a model</h2>
+<p>The best model is usually the smallest one that is reliable enough for your task. Structured-output tasks (returning a <code>StatePatch</code>) are less demanding than open-ended generation, so smaller models often work fine.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">VRAM required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mistral 7B</td>
+<td style="text-align: right;">~5 GB</td>
+<td>Fast structured output, lightweight reasoning</td>
+</tr>
+<tr>
+<td>Llama3 8B</td>
+<td style="text-align: right;">~6 GB</td>
+<td>Strong general-purpose choice</td>
+</tr>
+<tr>
+<td>Phi-3 Mini 3.8B</td>
+<td style="text-align: right;">~3 GB</td>
+<td>Surprisingly capable for its size</td>
+</tr>
+<tr>
+<td>Gemma 2 2B</td>
+<td style="text-align: right;">~2 GB</td>
+<td>Very fast, best for routing and classification</td>
+</tr>
+<tr>
+<td>Llama3 70B</td>
+<td style="text-align: right;">~40 GB</td>
+<td>Higher quality, much slower — needs a good GPU</td>
+</tr>
+</tbody>
+</table>
+<p>If you are unsure, start with <code>llama3:8b</code> with <code>use_grammar=True</code>. Run the benchmark in the examples directory to measure success rate and latency on your hardware before building a multi-agent workflow on top of it.</p>
+<hr />
+<h2 id="mixed-model-workflows">Mixed-model workflows</h2>
+<p>You do not need to use one model for everything. A practical workflow might use a cloud model as a planner, a local model as a researcher, and a rule-based function for cheap deterministic routing. Because every agent returns the same <code>StatePatch</code> type, the coordination layer does not care what is behind each agent.</p>
+<pre><code class="language-python">from examples.models.openai_agent import OpenAIAgent
+from examples.models.ollama_agent import OllamaAgent
+from examples.models.rule_based_agent import classify
+
+planner  = OpenAIAgent(agent_id=&quot;planner&quot;,     system_prompt=&quot;...&quot;, model=&quot;gpt-4o&quot;)
+research = OllamaAgent(agent_id=&quot;researcher&quot;,  system_prompt=&quot;...&quot;, model=&quot;llama3:8b&quot;)
+
+graph.node(&quot;planner&quot;,    planner)
+graph.node(&quot;researcher&quot;, research)
+graph.node(&quot;classifier&quot;, classify)   # plain async function, no class needed
+</code></pre>
+<p>High-value reasoning goes to the strongest model; repetitive or cheap steps stay local. The state layer stays the same regardless of the model mix.</p>
+<hr />
+<h2 id="quick-reference-which-example-to-use">Quick-reference: which example to use</h2>
+<table>
+<thead>
+<tr>
+<th>Your setup</th>
+<th>Example file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ollama local</td>
+<td><code>examples/models/ollama_agent.py</code></td>
+</tr>
+<tr>
+<td>Ollama via ngrok / Docker / remote</td>
+<td><code>examples/models/ollama_agent.py</code> — change <code>base_url</code></td>
+</tr>
+<tr>
+<td>LM Studio / vLLM / Llamafile / LocalAI</td>
+<td><code>examples/models/openai_agent.py</code> — change <code>base_url</code></td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td><code>examples/models/openai_agent.py</code></td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td><code>examples/models/anthropic_agent.py</code></td>
+</tr>
+<tr>
+<td>Groq</td>
+<td><code>examples/models/groq_agent.py</code></td>
+</tr>
+<tr>
+<td>Together AI / Fireworks / Azure</td>
+<td><code>examples/models/openai_agent.py</code> — change <code>base_url</code> + <code>api_key</code></td>
+</tr>
+<tr>
+<td>No model (deterministic)</td>
+<td><code>examples/models/rule_based_agent.py</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

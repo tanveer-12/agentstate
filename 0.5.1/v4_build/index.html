@@ -1,0 +1,3398 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed stateful coordination layer for parallel multi-agent AI systems">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>agentstatelib — Complete Build Instructions v4 - agentstatelib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agentstatelib-complete-build-instructions-v4" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="agentstatelib" class="md-header__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            agentstatelib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              agentstatelib — Complete Build Instructions v4
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quickstart
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../concepts/shared-state/" class="md-tabs__link">
+          
+  
+  
+  Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api-reference/state/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/http-api/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../benchmark/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Benchmark
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../final-build2/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Implementation Status
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="agentstatelib" class="md-nav__button md-logo" aria-label="agentstatelib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    agentstatelib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tanveer-12/agentstate" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    agentstate
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/shared-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shared State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/conflict/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/event-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/trace-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/patch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/graph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/checkpoint-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/replay-debugger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replay Debugger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/local-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../final-build2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to use this document
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-strategy-read-before-week-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation Strategy — Read Before Week 0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation Strategy — Read Before Week 0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#doc-stack-you-will-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Doc stack you will use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#doc-site-structure-built-incrementally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Doc site structure (built incrementally)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-docs-live-in-your-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where docs live in your repo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-0-pre-work-before-week-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 0 · Pre-work · Before Week 1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 0 · Pre-work · Before Week 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#part-a-library-scaffold-same-as-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part A — Library scaffold (same as before)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-b-documentation-scaffold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part B — Documentation scaffold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-c-google-colab-setup-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part C — Google Colab setup notebook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands-to-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commands to run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-know-it-worked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to know it worked
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-week-1-sharedstate-stateevent-sqlitestore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcorestatepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/state.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoreeventspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/events.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibmemorystorepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/memory/store.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsshared-statemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/shared-state.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referencestatemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/state.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referenceeventsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/events.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-week-2-statepatch-agentgraph-publish-v010" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcorepatchpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/core/patch.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutertypespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/types.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutercontextpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/context.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibroutergraphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/router/graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptspatchesmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/patches.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsquickstartmd-fill-in-completely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/quickstart.md — fill in completely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referencepatchmd-and-docsapi-referencegraphmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/patch.md and docs/api-reference/graph.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-v010" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish v0.1.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-week-3-coordination-layer-conflicts-invariants-parallel-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 · Week 3 · Coordination Layer — Conflicts, Invariants, Parallel Graph
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2 · Week 3 · Coordination Layer — Conflicts, Invariants, Parallel Graph">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcoordination__init__py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/coordination/__init__.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelib__init__py-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/__init__.py (update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsunittest_conflictspy-rewrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/unit/test_conflicts.py (rewrite)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_conflict_flowpy-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_conflict_flow.py (fix)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testsintegrationtest_parallel_executionpy-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integration/test_parallel_execution.py (new)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsconflictmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/conflict.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsparallelismmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/parallelism.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsapi-referenceconflictsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/api-reference/conflicts.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-mkdocsyml-nav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update mkdocs.yml nav
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-4-fastapi-http-layer-v02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-doc-files-for-week-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional doc files for Week 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-5-persistence-checkpoint-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 5 · Persistence · Checkpoint · Replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 5 · Persistence · Checkpoint · Replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-doc-files-for-week-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional doc files for Week 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-week-6-local-model-reliability-colab-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 · Week 6 · Local Model Reliability · Colab Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 · Week 6 · Local Model Reliability · Colab Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#part-a-colab-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part A — Colab setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-b-library-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part B — Library files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibcontribbase_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/contrib/base_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesmodelscolab_ollama_agentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/models/colab_ollama_agent.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examplesbenchmarkrun_benchmarkpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        examples/benchmark/run_benchmark.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguideslocal-modelsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/local-models.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidescolab-setupmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/colab-setup.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-the-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-week-7-observability-opentelemetry-jaeger-workflowsummary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 · Week 7 · Observability — OpenTelemetry · Jaeger · WorkflowSummary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 · Week 7 · Observability — OpenTelemetry · Jaeger · WorkflowSummary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibobservabilitytracingpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/observability/tracing.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibobservabilityanalysispy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/observability/analysis.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsconceptsobservabilitymd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/concepts/observability.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidesopentelemetrymd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/opentelemetry.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-commands-for-week-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test commands for Week 7
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-week-8-rich-dashboard-v04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 · Week 8 · Rich Dashboard · v0.4
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 · Week 8 · Rich Dashboard · v0.4">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#files-to-work-in_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files to work in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentstatelibobservabilitydashboardpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agentstatelib/observability/dashboard.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidesdashboardmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/dashboard.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-and-demo-commands-for-week-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test and demo commands for Week 8
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-5-weeks-910-production-hardening-v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 5 · Weeks 9–10 · Production Hardening · v0.5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 5 · Weeks 9–10 · Production Hardening · v0.5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-9-tests-property-tests-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Week 9 — Tests · Property tests · Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-doc-files-for-week-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional doc files for Week 9
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-10-api-hardening-redis-v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Week 10 — API Hardening · Redis · v0.5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-doc-files-for-week-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional doc files for Week 10
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-6-week-11-api-audit-type-stubs-adrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 6 · Week 11 · API Audit · Type Stubs · ADRs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 6 · Week 11 · API Audit · Type Stubs · ADRs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-doc-files-for-week-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional doc files for Week 11
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-6-week-12-package-cicd-integrations-v10-alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 6 · Week 12 · Package · CI/CD · Integrations · v1.0-alpha
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 6 · Week 12 · Package · CI/CD · Integrations · v1.0-alpha">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cicd-for-docs-githubworkflowsdocsyml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD for docs — .github/workflows/docs.yml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#githubworkflowspublishyml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .github/workflows/publish.yml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docsguidesintegrationsmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs/guides/integrations.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-readmemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update README.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-v100-alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish v1.0.0-alpha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-7-weeks-1314-write-and-ship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 7 · Weeks 13–14 · Write and Ship
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 7 · Weeks 13–14 · Write and Ship">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#week-13-design-document-notebooks-docs-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Week 13 — Design document · Notebooks · Docs review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#week-14-blog-posts-show-hn-v100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Week 14 — Blog posts · Show HN · v1.0.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-commands-every-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference — Commands Every Session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-feature-docs-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version → Feature → Docs Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="agentstatelib-complete-build-instructions-v4">agentstatelib — Complete Build Instructions v4</h1>
+<h2 id="how-to-use-this-document">How to use this document</h2>
+<p>Every week has the same structure:
+- <strong>Files to work in</strong> — exactly which files, in order
+- <strong>What to write</strong> — specific instructions, not code
+- <strong>Docs to write</strong> — what user-facing documentation ships with each version
+- <strong>How to test</strong> — exact commands to run in PowerShell
+- <strong>How to know it worked</strong> — what passing looks like</p>
+<p>Three rules:
+1. Run test commands at the end of every session, not just end of week
+2. Docs ship with every version — users should be able to use what you publish immediately
+3. Colab notebook stays running whenever you need local models</p>
+<hr />
+<h2 id="documentation-strategy-read-before-week-0">Documentation Strategy — Read Before Week 0</h2>
+<p>You are publishing to PyPI every few weeks. Users install your library the day you publish. If there are no docs, they cannot use it. Documentation is not a phase 6 activity — it ships incrementally with every version.</p>
+<h3 id="doc-stack-you-will-use">Doc stack you will use</h3>
+<p><strong>MkDocs + Material theme</strong> — generates a static doc site from Markdown files. Hosted free on GitHub Pages. Updates automatically when you push. This is what FastAPI, Pydantic, and httpx use.</p>
+<p><strong>mkdocstrings</strong> — reads your Python docstrings and generates API reference pages automatically. Every docstring you write in your source files becomes a searchable API page. This is why docstrings matter from week 1.</p>
+<p><strong>mike</strong> — manages versioned docs. When you publish v0.1, v0.2, v0.3, users can read docs for the exact version they installed. The landing page shows the latest stable version.</p>
+<h3 id="doc-site-structure-built-incrementally">Doc site structure (built incrementally)</h3>
+<pre><code>docs/
+├── index.md              ← landing page, competitive comparison table
+├── quickstart.md         ← 15-line working example, updated every version
+├── concepts/
+│   ├── shared-state.md   ← added week 1
+│   ├── patches.md        ← added week 2
+│   ├── conflict.md       ← added week 3
+│   ├── parallelism.md    ← added week 3
+│   ├── observability.md  ← added week 7
+│   └── local-models.md   ← added week 6
+├── api-reference/        ← auto-generated from docstrings by mkdocstrings
+│   ├── state.md
+│   ├── patch.md
+│   ├── graph.md
+│   ├── conflicts.md
+│   └── ...
+├── guides/
+│   ├── colab-local-models.md  ← added week 6
+│   ├── observability.md       ← added week 7
+│   └── migration/             ← added each major version
+├── changelog.md          ← CHANGELOG.md symlinked
+└── decisions/            ← ADRs, added week 11
+</code></pre>
+<h3 id="where-docs-live-in-your-repo">Where docs live in your repo</h3>
+<pre><code>agentstateliblib/                ← library source
+docs/                      ← MkDocs source files
+mkdocs.yml                 ← MkDocs configuration
+</code></pre>
+<hr />
+<h2 id="phase-0-pre-work-before-week-1">Phase 0 · Pre-work · Before Week 1</h2>
+<h3 id="part-a-library-scaffold-same-as-before">Part A — Library scaffold (same as before)</h3>
+<p><strong><code>pyproject.toml</code></strong> — replace entirely. Add <code>[build-system]</code> with hatchling. Add <code>[project]</code>: name <code>agentstatelib-lib</code>, version <code>0.1.0</code>, description <code>"Typed stateful coordination layer for parallel multi-agent AI systems"</code>, <code>requires-python = "&gt;=3.11"</code>, <code>dependencies = ["pydantic&gt;=2.0", "aiosqlite&gt;=0.19"]</code>. Add <code>[project.optional-dependencies]</code>: <code>api = ["fastapi&gt;=0.100", "uvicorn[standard]&gt;=0.20"]</code>, <code>otel = ["opentelemetry-api", "opentelemetry-sdk", "opentelemetry-exporter-otlp-proto-grpc"]</code>, <code>dashboard = ["rich&gt;=13.0"]</code>, <code>contrib = []</code>, <code>docs = ["mkdocs-material&gt;=9.0", "mkdocstrings[python]&gt;=0.24", "mike&gt;=2.0"]</code>, <code>dev = ["pytest&gt;=7.0", "pytest-asyncio&gt;=0.21", "mypy&gt;=1.0", "ruff&gt;=0.1", "hypothesis&gt;=6.0", "httpx&gt;=0.24"]</code>. Add <code>[tool.ruff]</code>, <code>[tool.mypy]</code>, <code>[tool.pytest.ini_options]</code> as before.</p>
+<p><strong>All <code>__init__.py</code> files</strong> — create empty files for <code>agentstatelib/</code>, <code>agentstatelib/core/</code>, <code>agentstatelib/router/</code>, <code>agentstatelib/coordination/</code>, <code>agentstatelib/memory/</code>, <code>agentstatelib/observability/</code>, <code>agentstatelib/api/</code>, <code>agentstatelib/contrib/</code>, <code>tests/</code>, <code>tests/unit/</code>, <code>tests/integration/</code>, <code>tests/property/</code>.</p>
+<p><strong><code>.gitignore</code></strong> — add <code>.venv/</code>, <code>__pycache__/</code>, <code>*.pyc</code>, <code>.mypy_cache/</code>, <code>.ruff_cache/</code>, <code>.pytest_cache/</code>, <code>dist/</code>, <code>*.egg-info/</code>, <code>.env</code>, <code>*.db</code>, <code>.checkpoints/</code>, <code>site/</code> (MkDocs build output).</p>
+<p><strong><code>.vscode/settings.json</code></strong> — <code>python.defaultInterpreterPath</code>: <code>.venv/Scripts/python.exe</code>, <code>editor.formatOnSave</code>: true, <code>editor.defaultFormatter</code>: <code>charliermarsh.ruff</code>, <code>python.testing.pytestEnabled</code>: true, <code>python.testing.pytestArgs</code>: <code>["tests"]</code>.</p>
+<h3 id="part-b-documentation-scaffold">Part B — Documentation scaffold</h3>
+<p><strong><code>mkdocs.yml</code></strong> — create in project root. Set <code>site_name: "agentstatelib"</code>, <code>site_description: "Typed stateful coordination layer for parallel multi-agent AI systems"</code>, <code>repo_url: https://github.com/yourusername/agentstate</code>, <code>repo_name: agentstate</code>. Set <code>theme: name: material</code> with features: <code>navigation.tabs</code>, <code>navigation.sections</code>, <code>content.code.copy</code>, <code>search.suggest</code>. Set <code>plugins: [search, mkdocstrings: handlers: python: options: show_source: true]</code>. Set <code>nav</code> structure matching the doc tree above (start minimal — just <code>index.md</code> and <code>quickstart.md</code>). Add <code>extra: version: provider: mike</code>.</p>
+<p><strong><code>docs/index.md</code></strong> — write the landing page. Two sentences describing what the library does. Then the competitive comparison table:</p>
+<pre><code>| Feature                    | agentstatelib | LangGraph | CrewAI | AutoGen |
+|----------------------------|-----------|-----------|--------|----------|
+| Typed shared state         | ✅        | ⚠️ dict   | ❌     | ❌     |
+| Append-only event log      | ✅        | ❌        | ❌     | ❌     |
+| Conflict detection         | ✅        | ❌        | ❌     | ❌     |
+| Parallel round execution   | ✅        | ⚠️ limited| ❌     | ❌     |
+| Replay debugger            | ✅        | ❌        | ❌     | ❌     |
+| Framework agnostic         | ✅        | ❌        | ⚠️     | ⚠️     |
+| Local model support        | ✅        | ⚠️        | ⚠️     | ⚠️     |
+| Built-in observability     | ✅        | ❌        | ❌     | ❌     |
+</code></pre>
+<p>Then install instructions and a one-paragraph description of the positioning.</p>
+<p><strong><code>docs/quickstart.md</code></strong> — placeholder for now: "Quickstart guide — coming with v0.1.0". You will fill this in at the end of week 2 when you publish.</p>
+<p><strong><code>docs/concepts/</code></strong> — create empty placeholder files for all concept pages. Each just says "Coming in version X.Y".</p>
+<h3 id="part-c-google-colab-setup-notebook">Part C — Google Colab setup notebook</h3>
+<p><strong><code>notebooks/colab_setup.ipynb</code></strong> — create this Jupyter notebook with the following cells. You will open this in Colab Pro whenever you need local model inference.</p>
+<p>Cell 1 — Install Ollama and dependencies (run once per session):</p>
+<pre><code>!curl -fsSL https://ollama.com/install.sh | sh
+!pip install pyngrok agentstateliblib -q
+</code></pre>
+<p>Cell 2 — Start Ollama server:</p>
+<pre><code class="language-python">import subprocess, time, requests
+
+proc = subprocess.Popen(
+    [&quot;ollama&quot;, &quot;serve&quot;],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL
+)
+time.sleep(3)
+
+try:
+    r = requests.get(&quot;http://localhost:11434/api/tags&quot;, timeout=5)
+    print(&quot;Ollama running. Models available:&quot;, [m[&quot;name&quot;] for m in r.json().get(&quot;models&quot;, [])])
+except Exception as e:
+    print(&quot;Ollama not responding:&quot;, e)
+</code></pre>
+<p>Cell 3 — Pull models (run once, cached for session):</p>
+<pre><code class="language-python">import subprocess
+
+gpu_info = subprocess.run(
+    [&quot;nvidia-smi&quot;, &quot;--query-gpu=name,memory.total&quot;, &quot;--format=csv,noheader&quot;],
+    capture_output=True, text=True
+).stdout.strip()
+print(&quot;GPU:&quot;, gpu_info)
+
+models = [&quot;llama3:8b&quot;, &quot;mistral:7b&quot;]
+if &quot;A100&quot; in gpu_info:
+    models.append(&quot;llama3:70b&quot;)
+    print(&quot;A100 detected — will pull 70B model too&quot;)
+
+for model in models:
+    print(f&quot;Pulling {model}...&quot;)
+    result = subprocess.run([&quot;ollama&quot;, &quot;pull&quot;, model], capture_output=True, text=True)
+    status = &quot;ready&quot; if result.returncode == 0 else f&quot;FAILED: {result.stderr[:100]}&quot;
+    print(f&quot;  {model}: {status}&quot;)
+</code></pre>
+<p>Cell 4 — Create ngrok tunnel and print URL:</p>
+<pre><code class="language-python">from pyngrok import ngrok
+import json
+
+ngrok.kill()
+tunnel = ngrok.connect(11434, &quot;http&quot;)
+ollama_url = tunnel.public_url
+
+print(&quot;=&quot; * 60)
+print(f&quot;OLLAMA URL: {ollama_url}&quot;)
+print(&quot;=&quot; * 60)
+print()
+print(&quot;Add this to your Windows .env file:&quot;)
+print(f&quot;COLAB_OLLAMA_URL={ollama_url}&quot;)
+print()
+print(&quot;This URL changes every Colab session.&quot;)
+</code></pre>
+<p>Cell 5 — Smoke test from Colab:</p>
+<pre><code class="language-python">import requests, json
+
+r = requests.post(
+    &quot;http://localhost:11434/api/generate&quot;,
+    json={
+        &quot;model&quot;: &quot;llama3:8b&quot;,
+        &quot;prompt&quot;: 'Return only this JSON: {&quot;target&quot;: &quot;facts.test&quot;, &quot;value&quot;: &quot;hello&quot;, &quot;reason&quot;: &quot;smoke test&quot;}',
+        &quot;stream&quot;: False
+    }
+)
+print(&quot;Response:&quot;, r.json()[&quot;response&quot;])
+print(&quot;Ollama working correctly.&quot;)
+</code></pre>
+<p>Cell 6 — Keep-alive (run last, loops forever):</p>
+<pre><code class="language-python">import time
+print(&quot;Keep-alive running. Do not stop this cell.&quot;)
+i = 0
+while True:
+    time.sleep(60)
+    i += 1
+    if i % 5 == 0:
+        print(f&quot;Session alive: {i} minutes&quot;)
+</code></pre>
+<p><strong><code>.env</code></strong> — create on Windows, add to <code>.gitignore</code>. Add:</p>
+<pre><code>OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+GROQ_API_KEY=
+COLAB_OLLAMA_URL=http://localhost:11434
+</code></pre>
+<h3 id="commands-to-run">Commands to run</h3>
+<pre><code class="language-powershell"># Install all dependencies including docs
+uv add pydantic aiosqlite
+uv add --optional docs mkdocs-material &quot;mkdocstrings[python]&quot; mike
+uv add --dev pytest pytest-asyncio mypy ruff hypothesis
+
+# Verify library scaffold
+ruff check agentstatelib/
+mypy agentstatelib/
+pytest tests/ -v
+python -c &quot;import agentstatelib; print('ok')&quot;
+
+# Verify docs build
+mkdocs build --strict
+# Should produce site/ directory with no errors
+
+# First commit
+git add .
+git commit -m &quot;chore: initial scaffold with docs&quot;
+git push -u origin main
+
+# Set up GitHub Pages for docs
+# In GitHub repo Settings → Pages → Source → GitHub Actions
+# Then create .github/workflows/docs.yml (described in week 12)
+</code></pre>
+<h3 id="how-to-know-it-worked">How to know it worked</h3>
+<p>Library imports clean. <code>mkdocs build</code> produces <code>site/</code> with no errors. Colab notebook cells 1–5 all run without error when opened in Colab Pro.</p>
+<hr />
+<h2 id="phase-1-week-1-sharedstate-stateevent-sqlitestore">Phase 1 · Week 1 · SharedState · StateEvent · SQLiteStore</h2>
+<h3 id="files-to-work-in">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/core/state.py</code></li>
+<li><code>agentstatelib/core/events.py</code></li>
+<li><code>agentstatelib/memory/store.py</code></li>
+<li><code>agentstatelib/memory/__init__.py</code></li>
+<li><code>agentstatelib/core/__init__.py</code></li>
+<li><code>tests/unit/test_state.py</code></li>
+<li><code>tests/unit/test_events.py</code></li>
+<li><code>tests/unit/test_store.py</code></li>
+<li><code>docs/concepts/shared-state.md</code></li>
+<li><code>docs/api-reference/state.md</code></li>
+<li><code>docs/api-reference/events.md</code></li>
+</ol>
+<hr />
+<h3 id="agentstatelibcorestatepy"><code>agentstatelib/core/state.py</code></h3>
+<p>Every class needs a complete docstring — these become your API reference pages via mkdocstrings.</p>
+<p>Write <code>WorkflowStatus</code> as <code>Literal["running", "complete", "failed", "paused"]</code>.</p>
+<p>Write <code>Task</code> model. Fields: <code>id</code> (str, uuid factory), <code>goal_id</code> (<code>str | None = None</code>), <code>description</code> (str), <code>status</code> (Literal pending/running/done/failed, default pending), <code>result</code> (<code>Any | None = None</code>), <code>created_at</code> (float, time factory), <code>updated_at</code> (float, time factory). Docstring: "A unit of work within a workflow. May optionally belong to a Goal via goal_id."</p>
+<p>Write <code>Goal</code> model. Fields: <code>id</code> (str, uuid factory), <code>description</code> (str), <code>status</code> (Literal pending/active/complete/failed, default pending), <code>created_at</code> (float, time factory). Docstring: "A high-level objective that groups related Tasks."</p>
+<p>Write <code>Artifact</code> model. Fields: <code>id</code> (str, uuid factory), <code>produced_by</code> (str), <code>artifact_type</code> (str), <code>content</code> (Any), <code>created_at</code> (float, time factory). Docstring: "An output produced by an agent. artifact_type is free-form: 'draft', 'source', 'summary', 'decision', etc."</p>
+<p>Write <code>Decision</code> model. Fields: <code>id</code> (str, uuid factory), <code>made_by</code> (str), <code>description</code> (str), <code>rationale</code> (str), <code>timestamp</code> (float, time factory). Docstring: "A recorded decision made during a workflow, with rationale for audit purposes."</p>
+<p>Write <code>SharedState</code> model. Fields: <code>workflow_id</code> (str, uuid factory), <code>workflow_type</code> (str, default "general"), <code>goal</code> (str), <code>goals</code> (<code>dict[str, Goal]</code>, default empty dict), <code>tasks</code> (<code>dict[str, Task]</code>, default empty dict), <code>artifacts</code> (<code>dict[str, Artifact]</code>, default empty dict), <code>decisions</code> (<code>list[Decision]</code>, default empty list), <code>facts</code> (<code>dict[str, Any]</code>, default empty dict), <code>status</code> (<code>WorkflowStatus</code>, default "running"), <code>created_at</code> (float, time factory), <code>updated_at</code> (float, time factory). Docstring must explain: "The single source of truth for a workflow. Never mutated directly — all changes go through StatePatch and apply_patch. All agents in a workflow round read the same SharedState snapshot."</p>
+<hr />
+<h3 id="agentstatelibcoreeventspy"><code>agentstatelib/core/events.py</code></h3>
+<p>Write <code>BaseStateEvent</code> model. Fields: <code>event_id</code> (str, uuid factory), <code>workflow_id</code> (str), <code>agent_id</code> (str), <code>timestamp</code> (float, time factory). Docstring: "Base class for all events in the agentstatelib event log. Every state change produces an event."</p>
+<p>Write six event subclasses. Each needs a <code>type: Literal["event_name"] = "event_name"</code> field plus their specific fields. Docstrings explain what triggers each event.</p>
+<p><code>WorkflowStarted</code> — triggered when <code>AgentGraph.run()</code> begins. Fields: <code>workflow_type</code>, <code>goal</code>.</p>
+<p><code>WorkflowCompleted</code> — triggered when all rounds complete. Fields: <code>final_status</code>.</p>
+<p><code>PatchApplied</code> — triggered after a winning patch is applied. Fields: <code>patch_id</code>, <code>target</code>, <code>old_value: Any</code>, <code>new_value: Any</code>, <code>reason</code>, <code>timestamp</code>. Docstring: "Records the before and after value of a specific state path. old_value and new_value are the values at patch.target only, not full state dumps."</p>
+<p><code>ConflictDetected</code> — triggered when two agents in the same round target the same path. Fields: <code>conflict_id</code>, <code>path</code>, <code>winner_agent_id</code>, <code>loser_agent_id</code>, <code>resolution_strategy</code>, <code>existing_patch: dict[str, object] | None = None</code>, <code>incoming_patch: dict[str, object] | None = None</code>. Docstring: "Emitted when resolve_batch() detects a path collision. The winning patch is applied. Both patches are stored as dicts for serializability."</p>
+<p><code>CheckpointSaved</code> — fields: <code>checkpoint_id</code>, <code>event_count</code>.</p>
+<p><code>AgentErrored</code> — fields: <code>error_type</code>, <code>error_message</code>, <code>retry_count</code>.</p>
+<p>Write <code>StateEvent</code> discriminated union using <code>Annotated[Union[...], Field(discriminator="type")]</code>. Write <code>event_adapter = TypeAdapter(StateEvent)</code> at module level.</p>
+<hr />
+<h3 id="agentstatelibmemorystorepy"><code>agentstatelib/memory/store.py</code></h3>
+<p>Write <code>StateStore</code> as a <code>@runtime_checkable Protocol</code>. Four async methods: <code>append</code>, <code>get_workflow</code>, <code>since</code>, <code>count</code>. Each method needs a one-line docstring. Class docstring: "Protocol for agentstatelib persistence backends. Any class implementing these four methods works with AgentGraph. Satisfied by InMemoryStore, SQLiteStore, and user-provided implementations."</p>
+<p>Write <code>InMemoryStore</code>. Docstring: "In-memory StateStore implementation. Data is lost when the process exits. Use for testing and development only."</p>
+<p>Write <code>SQLiteStore</code>. Docstring: "SQLite-backed StateStore. Events are stored as JSON rows in a local database file. Suitable for single-process workflows. For multi-process or high-throughput workloads, use PostgreSQLStore (install asyncpg)." Every write wrapped in a transaction.</p>
+<hr />
+<h3 id="docsconceptsshared-statemd"><code>docs/concepts/shared-state.md</code></h3>
+<p>Write a concept guide explaining SharedState to users. Structure:</p>
+<p>Section 1: What SharedState is — the shared world model all agents in a workflow read from. Quote the analogy: a blackboard that all agents can read and propose updates to.</p>
+<p>Section 2: Why you never mutate it directly — every change goes through StatePatch → apply_patch → new SharedState object. The original is immutable. Explain what this enables: audit trail, replay, conflict detection.</p>
+<p>Section 3: The fields — describe goals, tasks, artifacts, facts, decisions with one example each of when you would use each.</p>
+<p>Section 4: Code example — show creating a SharedState, applying a patch, and asserting the original is unchanged. Use literal code blocks that users can copy.</p>
+<p>Section 5: What's next — link to the Patches concept page.</p>
+<hr />
+<h3 id="docsapi-referencestatemd"><code>docs/api-reference/state.md</code></h3>
+<p>Write a reference page using mkdocstrings autodoc syntax. Add heading "State Models". Then for each class — SharedState, Task, Goal, Artifact, Decision — add:</p>
+<pre><code class="language-markdown">## SharedState
+
+::: agentstatelib.core.state.SharedState
+    options:
+      show_source: false
+      members: true
+</code></pre>
+<p>This pulls your docstrings into the rendered page automatically. Users see the class signature, all fields with types, and your docstring.</p>
+<hr />
+<h3 id="docsapi-referenceeventsmd"><code>docs/api-reference/events.md</code></h3>
+<p>Same pattern as state.md but for all event types. Also document <code>StateEvent</code>, <code>event_adapter</code>, and <code>BaseStateEvent</code>.</p>
+<hr />
+<h3 id="test-commands-for-week-1">Test commands for Week 1</h3>
+<pre><code class="language-powershell">pytest tests/unit/test_state.py tests/unit/test_events.py tests/unit/test_store.py -v
+
+mypy agentstateliblib/core/ agentstateliblib/memory/ --strict
+
+# Verify docs build with new content
+mkdocs build --strict
+# Open site/index.html in browser to preview
+
+python -c &quot;
+from agentstatelib.core.state import SharedState
+from agentstatelib.core.events import WorkflowStarted, event_adapter
+import json
+
+s = SharedState(goal='test')
+print('SharedState:', s.workflow_id)
+
+e = WorkflowStarted(workflow_id=s.workflow_id,type='workflow_started', agent_id='system',
+                    workflow_type='test', goal='test')
+serialized = e.model_dump_json()
+recovered = event_adapter.validate_json(serialized)
+print('Event round-trip:', recovered.type)
+print('week 1 ok')
+&quot;
+</code></pre>
+<hr />
+<h2 id="phase-1-week-2-statepatch-agentgraph-publish-v010">Phase 1 · Week 2 · StatePatch · AgentGraph · Publish v0.1.0</h2>
+<h3 id="files-to-work-in_1">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/core/patch.py</code></li>
+<li><code>agentstatelib/router/types.py</code></li>
+<li><code>agentstatelib/router/context.py</code></li>
+<li><code>agentstatelib/router/graph.py</code></li>
+<li><code>agentstatelib/router/__init__.py</code></li>
+<li><code>agentstatelib/__init__.py</code></li>
+<li><code>tests/unit/test_patch.py</code></li>
+<li><code>tests/unit/test_context.py</code></li>
+<li><code>tests/integration/test_graph_run.py</code></li>
+<li><code>docs/concepts/patches.md</code></li>
+<li><code>docs/api-reference/patch.md</code></li>
+<li><code>docs/api-reference/graph.md</code></li>
+<li><code>docs/quickstart.md</code> — fill in completely</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcorepatchpy"><code>agentstatelib/core/patch.py</code></h3>
+<p>Write <code>StatePatch</code> model. Fields: <code>patch_id</code> (str, uuid factory), <code>agent_id</code> (str), <code>target</code> (str), <code>value</code> (Any), <code>reason</code> (str), <code>timestamp</code> (float, time factory), <code>priority</code> (int, default 0). Docstring: "A structured state update proposal from an agent. Agents never write to SharedState directly — they return a StatePatch. The library validates, resolves conflicts, and applies the winning patch. Every field is required except priority."</p>
+<p>Write <code>set_nested(obj, path, value) -&gt; dict</code>. Docstring: "Set a value at a dotted path in a nested dict, creating intermediate dicts as needed. Never uses eval()."</p>
+<p>Write <code>get_nested(obj, path) -&gt; Any</code>. Docstring: "Get a value at a dotted path in a nested dict. Returns None for any missing intermediate key."</p>
+<p>Write <code>apply_patch(state, patch) -&gt; SharedState</code>. Docstring: "Apply a StatePatch to a SharedState, returning a new SharedState. The original state is never mutated. This immutability is what enables event replay and conflict detection."</p>
+<hr />
+<h3 id="agentstatelibroutertypespy"><code>agentstatelib/router/types.py</code></h3>
+<p>Write <code>AgentFn = Callable[[dict], Awaitable[StatePatch]]</code>. Module-level docstring: "Type aliases for agentstatelib's agent function interface." <code>AgentFn</code> docstring: "The complete interface for an agentstatelib agent. Any async function accepting a context dict and returning a StatePatch satisfies this type. No inheritance, no base class, no imports from agentstatelib required in agent code."</p>
+<p>Write <code>EdgeCondition = Callable[[dict], bool]</code>. Docstring: "A function that receives the current state as a dict and returns True if an edge should fire."</p>
+<hr />
+<h3 id="agentstatelibroutercontextpy"><code>agentstatelib/router/context.py</code></h3>
+<p>Write <code>slice_state(state, include_paths) -&gt; dict</code>. Docstring: "Extract a subset of SharedState by dotted path. Each agent receives only the state paths it declares, not the full state. This limits context window usage for LLM agents and prevents unintended cross-agent information leakage. Empty include_paths returns the full state."</p>
+<hr />
+<h3 id="agentstatelibroutergraphpy"><code>agentstatelib/router/graph.py</code></h3>
+<p>Use the parallel round-based version from the review session. Every public method needs a complete docstring.</p>
+<p><code>AgentGraph</code> class docstring must explain the execution model clearly: "Round-based parallel agent execution. Each round: (1) collect all agents whose edges fire, (2) run them concurrently against the same state snapshot, (3) batch-resolve any path conflicts, (4) apply winning patches, (5) check invariants, (6) repeat. This guarantees all agents in a round see consistent state and conflicts are resolved explicitly."</p>
+<p><code>run()</code> method docstring: explain Parameters, Returns, Raises. Note that <code>start</code> accepts both <code>str</code> and <code>list[str]</code> for parallel start.</p>
+<p><code>node()</code> decorator docstring: include a full working example in the docstring that users can copy.</p>
+<p><code>edge()</code> docstring: explain that multiple edges from the same source agent cause all reachable agents to run in the next round.</p>
+<hr />
+<h3 id="docsconceptspatchesmd"><code>docs/concepts/patches.md</code></h3>
+<p>Write the Patches concept guide. Sections: What a patch is (a proposal, not a write), why agents propose instead of write (audit, conflict, replay), the patch pipeline (agent returns patch → conflict detector → apply_patch → invariants → state), what <code>target</code> dotted paths look like with examples, how <code>priority</code> works in conflict resolution. End with a comparison: "Without agentstatelib, agent B silently overwrites agent A's work. With agentstatelib, the conflict is detected, resolved by your configured strategy, and logged."</p>
+<hr />
+<h3 id="docsquickstartmd-fill-in-completely"><code>docs/quickstart.md</code> — fill in completely</h3>
+<p>This is the most important doc page. Users land here first. Structure:</p>
+<p>Install section with pip command.</p>
+<p>Working example — a complete 25-line script using the decorator pattern with three sequential agents. The script must actually run. Test it before writing it into the docs.</p>
+<p>Parallel agents section — show the same three agents but with analyst_a and analyst_b running in parallel using <code>start=["analyst_a", "analyst_b"]</code>.</p>
+<p>What's happening section — bullet list explaining each part of the example: what SharedState is, what the decorator does, what StatePatch means, what the edge condition does.</p>
+<p>Next steps — links to concept guides.</p>
+<hr />
+<h3 id="docsapi-referencepatchmd-and-docsapi-referencegraphmd"><code>docs/api-reference/patch.md</code> and <code>docs/api-reference/graph.md</code></h3>
+<p>Same mkdocstrings autodoc pattern. Pull in StatePatch, apply_patch, set_nested, get_nested for patch.md. Pull in AgentGraph, WorkflowEvent, EventQueue for graph.md.</p>
+<hr />
+<h3 id="test-commands-for-week-2">Test commands for Week 2</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+# Verify the complete example from quickstart.md actually runs
+@'
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+
+graph = AgentGraph()
+
+@graph.node('planner', context=['goal'])
+async def planner(ctx):
+    return StatePatch(
+        agent_id='planner',
+        target='facts.plan',
+        value='done',
+        reason='planned',
+    )
+
+@graph.node('researcher', context=['facts'])
+async def researcher(ctx):
+    return StatePatch(
+        agent_id='researcher',
+        target='artifacts.result',
+        value={
+            'produced_by': 'researcher',
+            'artifact_type': 'summary',
+            'content': 'found',
+        },
+        reason='researched',
+    )
+
+graph.edge('planner', 'researcher', lambda s: s.get('facts', {}).get('plan') == 'done')
+
+async def main():
+    state = SharedState(goal='test workflow')
+    final = await graph.run(state, start='planner')
+    assert final.facts.get('plan') == 'done'
+    assert final.artifacts['result'].content == 'found'
+    print('quickstart example passes')
+
+asyncio.run(main())
+'@ | python
+
+# Build and verify docs
+mkdocs build --strict
+
+# Build package
+python -m build
+</code></pre>
+<h3 id="publish-v010">Publish v0.1.0</h3>
+<pre><code class="language-powershell"># Upload to test PyPI first
+twine upload --repository testpypi dist/*
+
+# Install from test PyPI and verify
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ agentstateliblib==0.1.0
+python -c &quot;import agentstatelib; print(agentstatelib.__version__)&quot;
+
+# Upload to real PyPI
+twine upload dist/*
+
+# Tag and push
+git tag v0.1.0
+git push origin v0.1.0
+
+# Deploy versioned docs
+mike deploy --push --update-aliases 0.1 latest
+mike set-default --push latest
+</code></pre>
+<p>After this, your docs site is live at <code>https://yourusername.github.io/agentstatelib</code> showing v0.1 docs.</p>
+<hr />
+<h2 id="phase-2-week-3-coordination-layer-conflicts-invariants-parallel-graph">Phase 2 · Week 3 · Coordination Layer — Conflicts, Invariants, Parallel Graph</h2>
+<p>You have working versions of <code>conflicts.py</code>, <code>invariants.py</code>, and <code>graph.py</code> from the review session. This week: update tests for the parallel model, fix the failing integration test, write new parallel execution tests, update exports, and ship docs for the coordination layer.</p>
+<h3 id="files-to-work-in_2">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/coordination/__init__.py</code></li>
+<li><code>agentstatelib/__init__.py</code> (update exports)</li>
+<li><code>tests/unit/test_conflicts.py</code> (rewrite for batch API)</li>
+<li><code>tests/unit/test_invariants.py</code> (verify still passing)</li>
+<li><code>tests/integration/test_conflict_flow.py</code> (fix failing test)</li>
+<li><code>tests/integration/test_parallel_execution.py</code> (new)</li>
+<li><code>docs/concepts/conflict.md</code> (new)</li>
+<li><code>docs/concepts/parallelism.md</code> (new)</li>
+<li><code>docs/api-reference/conflicts.md</code> (new)</li>
+<li><code>mkdocs.yml</code> (add new pages to nav)</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcoordination__init__py"><code>agentstatelib/coordination/__init__.py</code></h3>
+<p>From <code>conflicts</code>: export <code>ConflictResolver</code>, <code>ConflictDetector</code>, <code>ConflictRecord</code>, <code>BatchResolutionResult</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>.</p>
+<p>From <code>invariants</code>: export <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>check_all</code>, <code>TasksReferenceExistingGoals</code>, <code>CompletedGoalsHaveNoBlockingTasks</code>.</p>
+<hr />
+<h3 id="agentstatelib__init__py-update"><code>agentstatelib/__init__.py</code> (update)</h3>
+<p>Add to top-level exports: <code>ConflictResolver</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>, <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>BatchResolutionResult</code>, <code>WorkflowEvent</code>, <code>EventQueue</code>.</p>
+<p>Update <code>__version__ = "0.2.0"</code>.</p>
+<hr />
+<h3 id="testsunittest_conflictspy-rewrite"><code>tests/unit/test_conflicts.py</code> (rewrite)</h3>
+<p><code>submit()</code> now returns <code>(winner, conflict_or_none)</code>. Primary API is <code>resolve_batch(patches) -&gt; BatchResolutionResult</code>. All tests use the correct API.</p>
+<p>Write eight tests:</p>
+<p><code>test_resolve_batch_no_conflict</code> — different paths, assert <code>result.winners</code> has length 2, <code>result.conflicts</code> is empty.</p>
+<p><code>test_resolve_batch_detects_collision</code> — same path, assert <code>result.conflicts</code> has length 1, <code>result.winners</code> has length 1.</p>
+<p><code>test_resolve_batch_last_write_wins</code> — two patches, same path, timestamps 1000.0 and 2000.0. Assert winner is newer.</p>
+<p><code>test_resolve_batch_priority_based</code> — priorities 1 and 10. Assert winner has priority 10.</p>
+<p><code>test_resolve_batch_reject_incoming</code> — <code>RejectIncoming()</code>. Assert winner is first patch.</p>
+<p><code>test_resolve_batch_three_patches_same_path</code> — three patches ascending timestamps. Assert one winner, two conflicts, winner has latest timestamp.</p>
+<p><code>test_submit_returns_tuple</code> — <code>submit(patch)</code> returns tuple of <code>(StatePatch, ConflictRecord | None)</code>. No conflict: second element is None.</p>
+<p><code>test_conflicts_accumulate_across_batches</code> — call <code>resolve_batch</code> twice each with a collision. Assert <code>len(detector.conflicts) == 2</code>. Assert <code>reset()</code> clears to zero.</p>
+<hr />
+<h3 id="testsintegrationtest_conflict_flowpy-fix"><code>tests/integration/test_conflict_flow.py</code> (fix)</h3>
+<p>Conflict only occurs within a round. Fix by running agents in parallel:</p>
+<p><code>test_conflict_detected_and_logged_in_store</code> — run with <code>start=["agent_a", "agent_b"]</code> (no edge). Assert at least one <code>ConflictDetected</code> event.</p>
+<p><code>test_conflict_event_has_correct_fields</code> — assert <code>path</code>, <code>winner_agent_id</code>, <code>loser_agent_id</code>, <code>resolution_strategy</code> are all populated correctly.</p>
+<p><code>test_conflict_final_state_is_consistent</code> — assert <code>final_state.facts["status"]</code> is exactly one value, not corrupted.</p>
+<p><code>test_invariant_violation_halts_workflow</code> — unchanged. Keep as-is.</p>
+<hr />
+<h3 id="testsintegrationtest_parallel_executionpy-new"><code>tests/integration/test_parallel_execution.py</code> (new)</h3>
+<p><code>test_two_agents_in_same_round</code> — start=["a", "b"]. Assert both patches in event log. Assert one WorkflowStarted, two PatchApplied, one WorkflowCompleted.</p>
+<p><code>test_parallel_agents_read_same_snapshot</code> — agents a and b both read <code>facts.counter</code> from context. Set initial counter=42. Assert both patches record value 42 — same snapshot.</p>
+<p><code>test_sequential_rounds_chain</code> — planner→researcher→writer chain. Assert three distinct rounds in event log.</p>
+<p><code>test_fan_out</code> — coordinator→[analyst_a, analyst_b]. Assert analyst_a and analyst_b run in same round.</p>
+<p><code>test_fan_out_then_fan_in</code> — coordinator→[analyst_a, analyst_b]→aggregator. Assert analyst_a and analyst_b before aggregator.</p>
+<p><code>test_unknown_agent_raises</code> — <code>pytest.raises(ValueError)</code>.</p>
+<hr />
+<h3 id="docsconceptsconflictmd"><code>docs/concepts/conflict.md</code></h3>
+<p>Write the Conflict Detection concept guide. Sections:</p>
+<p>What a conflict is — two agents in the same parallel round both targeting the same state path. Contrast with LangGraph: "In LangGraph, if two agents update the same key, the last writer wins silently. In agentstatelib, the conflict is detected before either patch is applied, resolved explicitly, and logged as a ConflictDetected event."</p>
+<p>The resolution pipeline — batch submitted to <code>resolve_batch()</code>, winners returned, <code>ConflictDetected</code> event emitted for each collision, winners applied to state.</p>
+<p>Resolution strategies — explain <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code> with when to use each. Show how to set <code>priority</code> on a <code>StatePatch</code>.</p>
+<p>Writing a custom resolver — show the <code>ConflictResolver</code> Protocol and a five-line custom implementation.</p>
+<p>Reading the conflict log — show how to filter <code>ConflictDetected</code> events from the event log.</p>
+<hr />
+<h3 id="docsconceptsparallelismmd"><code>docs/concepts/parallelism.md</code></h3>
+<p>Write the Parallel Execution concept guide. Sections:</p>
+<p>The round model — every round all runnable agents execute concurrently against the same state snapshot. No agent in a round sees another's updates until the next round.</p>
+<p>Why this matters — eliminates read-write races within a round. Contrast with sequential execution where agent B always sees agent A's changes.</p>
+<p>Fan-out topology — how coordinator→[analyst_a, analyst_b] works. Both analysts run in round 2 simultaneously.</p>
+<p>Fan-in — how [analyst_a, analyst_b]→aggregator works. Aggregator runs in round 3 after both analysts complete.</p>
+<p>Parallel start — <code>run(state, start=["a", "b"])</code> for when multiple agents should start simultaneously.</p>
+<p>The semaphore — <code>max_concurrent</code> parameter in <code>AgentGraph.__init__</code>. Controls total concurrency. Default 10.</p>
+<hr />
+<h3 id="docsapi-referenceconflictsmd"><code>docs/api-reference/conflicts.md</code></h3>
+<p>Autodoc pages for <code>ConflictDetector</code>, <code>ConflictRecord</code>, <code>BatchResolutionResult</code>, <code>ConflictResolver</code>, <code>LastWriteWins</code>, <code>PriorityBased</code>, <code>RejectIncoming</code>, <code>InvariantChecker</code>, <code>InvariantViolation</code>, <code>check_all</code>, <code>TasksReferenceExistingGoals</code>, <code>CompletedGoalsHaveNoBlockingTasks</code>.</p>
+<hr />
+<h3 id="update-mkdocsyml-nav">Update <code>mkdocs.yml</code> nav</h3>
+<p>Add to nav:</p>
+<pre><code class="language-yaml">nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+    - Shared State: concepts/shared-state.md
+    - Patches: concepts/patches.md
+    - Conflict Detection: concepts/conflict.md
+    - Parallel Execution: concepts/parallelism.md
+  - API Reference:
+    - State: api-reference/state.md
+    - Patch: api-reference/patch.md
+    - Graph: api-reference/graph.md
+    - Conflicts: api-reference/conflicts.md
+</code></pre>
+<hr />
+<h3 id="test-commands-for-week-3">Test commands for Week 3</h3>
+<pre><code class="language-powershell"># Run all tests — should have 0 failures
+pytest tests/ -v
+
+mypy agentstatelib/ --strict
+
+# Verify the parallel model works end to end
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.core.events import ConflictDetected
+from agentstatelib.memory.store import InMemoryStore
+
+async def main():
+    store = InMemoryStore()
+    graph = AgentGraph(store=store)
+
+    @graph.node('analyst_a')
+    async def analyst_a(ctx):
+        return StatePatch(agent_id='analyst_a', target='facts.verdict', value='positive', reason='a says positive')
+
+    @graph.node('analyst_b')
+    async def analyst_b(ctx):
+        return StatePatch(agent_id='analyst_b', target='facts.verdict', value='negative', reason='b says negative')
+
+    state = SharedState(goal='conflict test')
+    final = await graph.run(state, start=['analyst_a', 'analyst_b'])
+
+    events = await store.get_workflow(state.workflow_id)
+    conflicts = [e for e in events if isinstance(e, ConflictDetected)]
+    print(f'Conflicts: {len(conflicts)}')
+    print(f'Winner: {conflicts[0].winner_agent_id}')
+    print(f'Final verdict: {final.facts['verdict']}')
+    assert len(conflicts) == 1
+    print('conflict test passed')
+
+asyncio.run(main())
+&quot;
+
+# Build docs
+mkdocs build --strict
+
+# Publish v0.2.0
+python -m build
+twine upload dist/*
+git tag v0.2.0
+git push origin v0.2.0
+mike deploy --push --update-aliases 0.2 latest
+</code></pre>
+<hr />
+<h2 id="phase-3-week-4-fastapi-http-layer-v02">Phase 3 · Week 4 · FastAPI HTTP Layer · v0.2</h2>
+<p>(Unchanged from v3 instructions except add docs.)</p>
+<h3 id="additional-doc-files-for-week-4">Additional doc files for Week 4</h3>
+<p><strong><code>docs/guides/http-api.md</code></strong> — guide for using the HTTP API. Show the curl commands for creating a workflow, submitting a patch, getting state, and streaming events. Include a Python client example using <code>httpx</code>. Explain when you want the HTTP API vs direct library import.</p>
+<p><strong><code>docs/api-reference/api.md</code></strong> — link to the FastAPI auto-generated OpenAPI docs at <code>/docs</code> and <code>/redoc</code>. Note that the OpenAPI schema is auto-generated from your Pydantic models — no manual documentation needed.</p>
+<p>Add to mkdocs.yml nav under Guides: <code>HTTP API: guides/http-api.md</code>.</p>
+<p>After publishing, deploy docs: <code>mike deploy --push --update-aliases 0.2 latest</code>.</p>
+<hr />
+<h2 id="phase-3-week-5-persistence-checkpoint-replay">Phase 3 · Week 5 · Persistence · Checkpoint · Replay</h2>
+<h3 id="additional-doc-files-for-week-5">Additional doc files for Week 5</h3>
+<p><strong><code>docs/concepts/event-log.md</code></strong> — explain event sourcing to users. Why an append-only log? What you get for free: audit trail, replay, recovery. How the event log relates to SharedState (state is a projection of events). How to read the event log.</p>
+<p><strong><code>docs/guides/checkpoint-recovery.md</code></strong> — step-by-step guide for saving and restoring checkpoints. Show the save/load/resume pattern. Explain when to use checkpoints (long-running workflows, workflows that call expensive APIs, workflows running on hardware that may fail).</p>
+<p><strong><code>docs/guides/replay-debugger.md</code></strong> — step-by-step guide for using <code>ReplayDebugger</code>. Show the step-through loop. Explain the use case: "My workflow produced a wrong answer. I want to see what state each agent saw when it made its decision." Compare explicitly to LangGraph: "LangGraph has no equivalent. Once a LangGraph run completes or fails, the intermediate states are gone."</p>
+<p>After publishing, deploy: <code>mike deploy --push --update-aliases 0.3 latest</code>.</p>
+<hr />
+<h2 id="phase-3-week-6-local-model-reliability-colab-integration">Phase 3 · Week 6 · Local Model Reliability · Colab Integration</h2>
+<p>This is the week you run experiments on Colab Pro and generate the benchmark data that becomes your technical differentiator.</p>
+<h3 id="part-a-colab-setup">Part A — Colab setup</h3>
+<p>Open <code>notebooks/colab_setup.ipynb</code> in Colab Pro. Run all six cells in order. Copy the ngrok URL from Cell 4. Open your Windows <code>.env</code> file and update <code>COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app</code>.</p>
+<p>Verify connection from Windows:</p>
+<pre><code class="language-powershell">python -c &quot;
+import requests, os
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('COLAB_OLLAMA_URL', 'http://localhost:11434')
+print('Connecting to:', url)
+r = requests.get(f'{url}/api/tags', timeout=10)
+models = [m['name'] for m in r.json().get('models', [])]
+print('Available models:', models)
+&quot;
+</code></pre>
+<p>If this prints your model names, Colab is correctly connected.</p>
+<h3 id="part-b-library-files">Part B — Library files</h3>
+<ol>
+<li><code>agentstatelib/contrib/base_agent.py</code></li>
+<li><code>examples/models/ollama_agent.py</code></li>
+<li><code>examples/models/openai_agent.py</code></li>
+<li><code>examples/models/groq_agent.py</code></li>
+<li><code>examples/models/colab_ollama_agent.py</code></li>
+<li><code>examples/benchmark/run_benchmark.py</code></li>
+<li><code>docs/guides/local-models.md</code> (new)</li>
+<li><code>docs/guides/colab-setup.md</code> (new)</li>
+</ol>
+<hr />
+<h3 id="agentstatelibcontribbase_agentpy"><code>agentstatelib/contrib/base_agent.py</code></h3>
+<p>Write <code>MaxRetriesExceeded</code> exception carrying <code>agent_id</code>, <code>attempts</code>, <code>last_error</code>, <code>last_output</code>.</p>
+<p>Write <code>LLMAgent</code> base class with complete docstring explaining: "Optional base class for LLM-backed agent functions. Provides the retry-with-correction loop used by OllamaAgent, OpenAIAgent, and similar adapters. Not required — any async function returning StatePatch works as an AgentFn."</p>
+<p><code>__init__</code>: <code>agent_id</code>, <code>system_prompt</code>, <code>model</code>, <code>max_retries=3</code>.</p>
+<p><code>__call__</code>: the retry loop. Strip markdown fences. Parse JSON. Validate as StatePatch. On failure: build correction prompt with error message. After max retries: raise <code>MaxRetriesExceeded</code>.</p>
+<p><code>_build_prompt(context, error=None)</code>: combine system prompt, JSON context, output instruction. If error: append correction instruction.</p>
+<p><code>_call_model(prompt)</code>: abstract, raises <code>NotImplementedError</code>.</p>
+<hr />
+<h3 id="examplesmodelscolab_ollama_agentpy"><code>examples/models/colab_ollama_agent.py</code></h3>
+<p>This is the file users copy when they want to run local models from Colab. It must include detailed comments explaining the Colab setup.</p>
+<p>Import httpx, json, os. Import StatePatch from agentstatelib. Import LLMAgent from contrib.</p>
+<p>Write <code>check_colab_connection(base_url: str) -&gt; bool</code> — GET <code>/api/tags</code>, return True/False with clear error messages.</p>
+<p>Write <code>ColabOllamaAgent</code> extending <code>LLMAgent</code>. <code>__init__</code> reads <code>COLAB_OLLAMA_URL</code> from environment (fallback to localhost). Stores <code>use_grammar: bool = True</code>.</p>
+<p><code>_call_model</code>: POST to <code>{base_url}/api/generate</code>. If <code>use_grammar</code>: include <code>"format": StatePatch.model_json_schema()</code>. Timeout 120 seconds (local models are slow). Return <code>response.json()["response"]</code>.</p>
+<p>In <code>main()</code>: print setup instructions for Colab, check connection, run a sample call, print result.</p>
+<p>Include this comment block at the top of the file explaining the full Colab setup flow so any user who reads it knows exactly what to do:</p>
+<pre><code class="language-python"># COLAB SETUP — how to use this file
+#
+# 1. Open notebooks/colab_setup.ipynb in Google Colab Pro
+# 2. Run all six cells in order
+# 3. Copy the ngrok URL printed by Cell 4
+# 4. Add to your .env file: COLAB_OLLAMA_URL=https://xxxx.ngrok-free.app
+# 5. Run this file: python examples/models/colab_ollama_agent.py
+#
+# The ngrok URL changes every Colab session. Update .env each time.
+# Keep Cell 6 (keep-alive) running while using Colab.
+</code></pre>
+<hr />
+<h3 id="examplesbenchmarkrun_benchmarkpy"><code>examples/benchmark/run_benchmark.py</code></h3>
+<p>Write <code>BenchmarkResult</code> dataclass: <code>model</code>, <code>use_grammar</code>, <code>attempt</code>, <code>success</code>, <code>retries_used</code>, <code>latency_seconds</code>, <code>error</code>.</p>
+<p>Write <code>async def run_single_attempt(model, base_url, context, use_grammar, max_retries=3)</code>. Times the full call including retries. Returns <code>BenchmarkResult</code>.</p>
+<p>Write <code>async def benchmark_model(model, base_url, n_runs=20)</code>. Runs n_runs with grammar on, n_runs with grammar off. Returns stats dict.</p>
+<p>Standard benchmark context:</p>
+<pre><code class="language-python">BENCHMARK_CONTEXT = {
+    &quot;goal&quot;: &quot;Analyze architectural differences between monolithic and microservices systems&quot;,
+    &quot;tasks&quot;: {&quot;task_1&quot;: {&quot;description&quot;: &quot;identify three core differences&quot;, &quot;status&quot;: &quot;pending&quot;}},
+    &quot;facts&quot;: {&quot;domain&quot;: &quot;software architecture&quot;, &quot;depth&quot;: &quot;technical&quot;}
+}
+</code></pre>
+<p><code>main()</code>: read <code>COLAB_OLLAMA_URL</code> from env. Get model list from <code>BENCHMARK_MODELS</code> env var (default <code>"llama3:8b,mistral:7b"</code>). For each model: run benchmark, print formatted table, save to <code>examples/benchmark/results/{timestamp}.json</code>.</p>
+<hr />
+<h3 id="docsguideslocal-modelsmd"><code>docs/guides/local-models.md</code></h3>
+<p>Write the local models guide. This is one of your most important pages — it explains your technical differentiator.</p>
+<p>Sections:</p>
+<p>The problem — local models (Llama3, Mistral) fail to produce valid structured JSON reliably. In a multi-agent system, one malformed output breaks downstream agents. Show a table: without grammar constraints Llama3-8B succeeds ~62% of the time. With grammar constraints ~95%.</p>
+<p>How grammar-constrained output works — explain that Ollama's <code>format</code> parameter accepts a JSON schema and constrains sampling to only produce tokens that match that schema. Show how agentstatelib passes <code>StatePatch.model_json_schema()</code> as the format.</p>
+<p>The retry-with-correction loop — even with grammar constraints, models sometimes produce wrong values. The retry loop re-prompts with the error message and bad output, giving the model a chance to self-correct.</p>
+<p>Using Colab Pro — explain why: your Windows laptop does not have enough VRAM for 70B models. Colab Pro gives you A100 GPUs. Link to the Colab setup guide.</p>
+<p>Supported backends — table: Ollama (recommended for Colab), llama.cpp server, vLLM (for high-throughput production), any OpenAI-compatible endpoint.</p>
+<hr />
+<h3 id="docsguidescolab-setupmd"><code>docs/guides/colab-setup.md</code></h3>
+<p>Step-by-step guide for setting up Colab Pro for local model inference.</p>
+<p>Prerequisites section: Colab Pro account, ngrok free account (for the tunnel), Python dotenv.</p>
+<p>Step 1: Open the notebook. Explain where <code>notebooks/colab_setup.ipynb</code> is. Tell users to go to File → Open notebook → GitHub → paste the repo URL.</p>
+<p>Step 2: Run cells 1–5. Explain what each cell does in one sentence.</p>
+<p>Step 3: Copy the URL. Show exactly what the Cell 4 output looks like and where to find the URL in it.</p>
+<p>Step 4: Update .env. Show the exact line to add.</p>
+<p>Step 5: Verify connection. Give the exact Windows PowerShell command to test.</p>
+<p>Step 6: Run keep-alive. Tell users to keep Cell 6 running while they work.</p>
+<p>Troubleshooting section: ngrok URL changed (restart Cell 4), Ollama not responding (restart Cell 2), out of VRAM (use smaller model or Q4 quantization), Colab disconnected (re-run all cells, update .env).</p>
+<hr />
+<h3 id="running-the-benchmark">Running the benchmark</h3>
+<pre><code class="language-powershell"># Make sure Colab is running and COLAB_OLLAMA_URL is set
+# Run benchmark
+python examples/benchmark/run_benchmark.py
+
+# Results saved to examples/benchmark/results/
+# Copy numbers into docs/benchmark.md
+</code></pre>
+<p>After running, fill in <code>docs/benchmark.md</code> with real numbers. Add to mkdocs nav.</p>
+<p>Deploy docs: <code>mike deploy --push --update-aliases 0.3 latest</code>.</p>
+<hr />
+<h2 id="phase-4-week-7-observability-opentelemetry-jaeger-workflowsummary">Phase 4 · Week 7 · Observability — OpenTelemetry · Jaeger · WorkflowSummary</h2>
+<h3 id="files-to-work-in_3">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/observability/tracing.py</code></li>
+<li><code>agentstatelib/observability/analysis.py</code></li>
+<li><code>agentstatelib/router/graph.py</code> (add OTel spans)</li>
+<li><code>agentstatelib/observability/__init__.py</code></li>
+<li><code>tests/unit/test_tracing.py</code></li>
+<li><code>docs/concepts/observability.md</code> (new)</li>
+<li><code>docs/guides/opentelemetry.md</code> (new)</li>
+</ol>
+<pre><code class="language-powershell">uv add --optional otel opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc
+docker run -d --name jaeger -p 16686:16686 -p 4317:4317 jaegertracing/all-in-one:latest
+</code></pre>
+<hr />
+<h3 id="agentstatelibobservabilitytracingpy"><code>agentstatelib/observability/tracing.py</code></h3>
+<p>Full docstring on module: "OpenTelemetry instrumentation for agentstatelib. Optional — install with pip install agentstatelib[otel]. When OTel is not configured, a no-op tracer is used automatically. Instrumented code in graph.py runs identically with or without OTel."</p>
+<p><code>setup_tracing()</code> docstring: explain Parameters, that it must be called once before <code>graph.run()</code>, and what happens to traces (they go to the configured exporter — Jaeger locally, Datadog/Honeycomb in production).</p>
+<p><code>_NoOpTracer</code> and <code>_NoOpSpan</code>: docstring explaining these are used automatically when OTel is not installed or not configured.</p>
+<hr />
+<h3 id="agentstatelibobservabilityanalysispy"><code>agentstatelib/observability/analysis.py</code></h3>
+<p><code>WorkflowSummary</code> docstring: "Statistics for a completed workflow run, derived from the event log. Use analyze_workflow() to compute. Includes per-agent patch counts, conflict rate, total duration, and anomaly flags."</p>
+<p><code>analyze_workflow()</code> docstring: explain what events it processes, what stats it computes, what anomaly rules it applies.</p>
+<p><code>AnomalyFlag</code> docstring: explain severity levels and what they mean for the workflow.</p>
+<hr />
+<h3 id="docsconceptsobservabilitymd"><code>docs/concepts/observability.md</code></h3>
+<p>Write the observability concept guide. This is your product story — write it well.</p>
+<p>Opening: "Most multi-agent frameworks are black boxes. You know what went in and what came out, but not what happened in between. agentstatelib is the opposite: every agent call, state change, conflict, and routing decision is recorded."</p>
+<p>The three pillars — traces (Jaeger), event log (structured history), analysis (WorkflowSummary + anomaly detection).</p>
+<p>What Datadog does for infrastructure — brief explanation of APM, distributed tracing, how Datadog traces a request across microservices. Then: "agentstatelib does the equivalent for AI agent workflows. Instead of HTTP requests across services, we trace agent calls across rounds. Instead of database query latency, we track patch application time and conflict rate."</p>
+<p>Why no existing library does this — LangGraph has LangSmith but it is tightly coupled to LangChain. CrewAI and AutoGen have no observability layer. agentstatelib is framework-agnostic observability.</p>
+<hr />
+<h3 id="docsguidesopentelemetrymd"><code>docs/guides/opentelemetry.md</code></h3>
+<p>Step-by-step guide:</p>
+<p>Step 1: Install. <code>pip install agentstatelib[otel]</code>. Start Jaeger (give the exact docker command).</p>
+<p>Step 2: Configure. Show <code>setup_tracing()</code> call. Explain endpoint parameter.</p>
+<p>Step 3: Run a workflow. Existing graph.run() calls automatically emit spans — no code changes.</p>
+<p>Step 4: Open Jaeger. Screenshot description (you add actual screenshot later). Explain: service dropdown, trace list, trace waterfall, span attributes.</p>
+<p>Step 5: What to look for — which agent is slow, where conflicts cluster, which rounds have the most parallelism.</p>
+<p>Connecting to Datadog/Honeycomb — one-paragraph each with the endpoint URL format.</p>
+<p>WorkflowSummary section — show <code>analyze_workflow()</code> usage, explain each field.</p>
+<hr />
+<h3 id="test-commands-for-week-7">Test commands for Week 7</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+# Run instrumented workflow, check Jaeger
+python -c &quot;
+import asyncio
+from agentstatelib.observability.tracing import setup_tracing
+from agentstatelib import SharedState, AgentGraph, StatePatch
+
+setup_tracing(service_name='agentstatelib-dev')
+
+async def main():
+    graph = AgentGraph()
+
+    @graph.node('planner')
+    async def planner(ctx):
+        return StatePatch(agent_id='planner', target='facts.plan', value='done', reason='planned')
+
+    @graph.node('researcher')
+    async def researcher(ctx):
+        return StatePatch(agent_id='researcher', target='artifacts.sources', value=['s1'], reason='found')
+
+    graph.edge('planner', 'researcher', lambda s: 'plan' in s.get('facts', {}))
+    state = SharedState(goal='OTel test')
+    await graph.run(state, start='planner')
+    print('Check Jaeger at http://localhost:16686 — service: agentstatelib-dev')
+
+asyncio.run(main())
+&quot;
+
+start http://localhost:16686
+
+mkdocs build --strict
+
+# Publish v0.4.0
+python -m build
+twine upload dist/*
+git tag v0.4.0
+git push origin v0.4.0
+mike deploy --push --update-aliases 0.4 latest
+</code></pre>
+<hr />
+<h2 id="phase-4-week-8-rich-dashboard-v04">Phase 4 · Week 8 · Rich Dashboard · v0.4</h2>
+<h3 id="files-to-work-in_4">Files to work in</h3>
+<ol>
+<li><code>agentstatelib/observability/dashboard.py</code></li>
+<li><code>agentstatelib/observability/__init__.py</code> (update)</li>
+<li><code>tests/unit/test_dashboard.py</code></li>
+<li><code>docs/guides/dashboard.md</code> (new)</li>
+</ol>
+<pre><code class="language-powershell">uv add --optional dashboard rich
+</code></pre>
+<hr />
+<h3 id="agentstatelibobservabilitydashboardpy"><code>agentstatelib/observability/dashboard.py</code></h3>
+<p>Module docstring: "Live terminal dashboard for agentstatelib workflows. Optional — install with pip install agentstatelib[dashboard]. Uses rich.Live to display real-time workflow progress. Pass an asyncio.Queue as event_queue to AgentGraph.run() and the same queue to WorkflowDashboard to watch a workflow execute live."</p>
+<p><code>WorkflowDashboard</code> class docstring: include a complete usage example with asyncio.gather. Explain the sentinel pattern (put None to stop).</p>
+<hr />
+<h3 id="docsguidesdashboardmd"><code>docs/guides/dashboard.md</code></h3>
+<p>Step-by-step guide. Explain what users see (current agent, recent events, conflict count, elapsed time). Show the asyncio.gather pattern. Note: "Use a real terminal (Windows Terminal, iTerm2, macOS Terminal) — the rich library renders best outside IDE integrated terminals." Tell users to screenshot and add to their README.</p>
+<hr />
+<h3 id="test-and-demo-commands-for-week-8">Test and demo commands for Week 8</h3>
+<pre><code class="language-powershell">pytest tests/ -v
+
+# Run dashboard demo in Windows Terminal (not VS Code terminal)
+# Start → Windows Terminal → paste this:
+python -c &quot;
+import asyncio
+from agentstatelib import SharedState, AgentGraph, StatePatch
+from agentstatelib.memory.store import InMemoryStore
+from agentstatelib.observability.dashboard import WorkflowDashboard
+
+async def main():
+    queue = asyncio.Queue()
+    store = InMemoryStore()
+    graph = AgentGraph(store=store)
+
+    @graph.node('planner')
+    async def planner(ctx):
+        import time; await asyncio.sleep(0.8)
+        return StatePatch(agent_id='planner', target='facts.plan', value='done', reason='planned')
+
+    @graph.node('analyst_a')
+    async def analyst_a(ctx):
+        await asyncio.sleep(1.2)
+        return StatePatch(agent_id='analyst_a', target='artifacts.a', value='result a', reason='analysis a')
+
+    @graph.node('analyst_b')
+    async def analyst_b(ctx):
+        await asyncio.sleep(1.0)
+        return StatePatch(agent_id='analyst_b', target='artifacts.b', value='result b', reason='analysis b')
+
+    @graph.node('writer')
+    async def writer(ctx):
+        await asyncio.sleep(0.9)
+        return StatePatch(agent_id='writer', target='artifacts.draft', value='Final draft', reason='wrote')
+
+    graph.edge('planner', 'analyst_a')
+    graph.edge('planner', 'analyst_b')
+    graph.edge('analyst_a', 'writer')
+    graph.edge('analyst_b', 'writer')
+
+    dashboard = WorkflowDashboard(queue)
+    state = SharedState(goal='Dashboard demo: multi-agent research')
+
+    results = await asyncio.gather(
+        graph.run(state, start='planner', event_queue=queue),
+        dashboard.run(),
+    )
+    print('Done:', list(results[0].artifacts.keys()))
+
+asyncio.run(main())
+&quot;
+
+# Take a screenshot and save to docs/assets/dashboard-screenshot.png
+# Then add to README.md and docs/index.md
+
+mkdocs build --strict
+
+# Publish v0.4.0
+python -m build
+twine upload dist/*
+git tag v0.4.0
+git push origin v0.4.0
+mike deploy --push --update-aliases 0.4 latest
+</code></pre>
+<hr />
+<h2 id="phase-5-weeks-910-production-hardening-v05">Phase 5 · Weeks 9–10 · Production Hardening · v0.5</h2>
+<h3 id="week-9-tests-property-tests-docker">Week 9 — Tests · Property tests · Docker</h3>
+<p>(Test files same as v3 instructions.)</p>
+<h3 id="additional-doc-files-for-week-9">Additional doc files for Week 9</h3>
+<p><strong><code>docs/guides/testing.md</code></strong> — guide for testing agentstatelib-based workflows. Explain: use <code>InMemoryStore</code> in tests (no database setup), use stub agent functions (deterministic, fast), use property-based tests for invariants (hypothesis). Show example conftest.py fixture patterns. Explain the difference between testing library code (your responsibility) and testing user workflows (their responsibility, your guide helps them).</p>
+<hr />
+<h3 id="week-10-api-hardening-redis-v05">Week 10 — API Hardening · Redis · v0.5</h3>
+<p>(Files same as v3 instructions.)</p>
+<h3 id="additional-doc-files-for-week-10">Additional doc files for Week 10</h3>
+<p><strong><code>docs/guides/production.md</code></strong> — production deployment guide. Sections: environment variables (API keys, Redis URL, store path), Docker deployment (docker-compose command), health monitoring (what /health returns and how to hook it to your monitoring), rate limiting (how to configure), cost control (caching LLM outputs with Redis).</p>
+<p>After both weeks complete:</p>
+<pre><code class="language-powershell">python -m build
+twine upload dist/*
+git tag v0.5.0
+git push origin v0.5.0
+mike deploy --push --update-aliases 0.5 latest
+</code></pre>
+<hr />
+<h2 id="phase-6-week-11-api-audit-type-stubs-adrs">Phase 6 · Week 11 · API Audit · Type Stubs · ADRs</h2>
+<p>(Same as v3 instructions for code files.)</p>
+<h3 id="additional-doc-files-for-week-11">Additional doc files for Week 11</h3>
+<p><strong><code>docs/decisions/</code></strong> — copy each ADR into the docs folder so they appear on the doc site. Add to mkdocs nav under a "Architecture" section.</p>
+<p><strong><code>docs/guides/migration/</code></strong> — create <code>v0.1-to-v0.2.md</code>. Explain: <code>submit()</code> now returns a tuple (breaking change), <code>resolve_batch()</code> is the primary API, parallel start with list is supported. Keep each migration guide concise: what changed, why, and the exact code diff to update.</p>
+<hr />
+<h2 id="phase-6-week-12-package-cicd-integrations-v10-alpha">Phase 6 · Week 12 · Package · CI/CD · Integrations · v1.0-alpha</h2>
+<h3 id="cicd-for-docs-githubworkflowsdocsyml">CI/CD for docs — <code>.github/workflows/docs.yml</code></h3>
+<p>Write this GitHub Actions workflow file. Trigger on push to <code>main</code> and on new tags. Steps: checkout with fetch-depth 0 (mike needs full history), set up Python, install with <code>pip install agentstatelib[docs]</code>, run <code>mike deploy --push --update-aliases {version} latest</code> where version comes from the git tag. On push to main without a tag: run <code>mkdocs build --strict</code> only (verify docs build, do not deploy).</p>
+<p>This means every time you push a version tag, docs deploy automatically alongside the PyPI publish.</p>
+<h3 id="githubworkflowspublishyml"><code>.github/workflows/publish.yml</code></h3>
+<p>Same as v3. Add one step before the PyPI upload: <code>mkdocs build --strict</code>. If docs fail to build, the publish is aborted. This prevents releasing a version with broken docs.</p>
+<h3 id="docsguidesintegrationsmd"><code>docs/guides/integrations.md</code></h3>
+<p>Write the integrations guide. Show three examples with code:</p>
+<p>LangChain adapter — how to wrap a LangChain chain as an AgentFn. One function, 10 lines, no agentstatelib imports in user code.</p>
+<p>LiteLLM agent — how to use LiteLLM inside an AgentFn to get 100+ model backends. Show the function signature and the litellm call.</p>
+<p>Rule-based agent — show that zero LLM involvement works. Priority classifier, router, status checker as plain Python.</p>
+<p>End with: "agentstatelib works with everything because it only sees StatePatch objects. It never calls a model, never imports your framework, never touches your API keys."</p>
+<h3 id="update-readmemd">Update README.md</h3>
+<p>The README is now the product landing page. Sections:</p>
+<ol>
+<li>One-sentence description with the comparison table (same as docs/index.md)</li>
+<li>Install with pip commands for different extras</li>
+<li>15-line quickstart example using the decorator pattern</li>
+<li>Screenshot of the dashboard running</li>
+<li>Link to full documentation</li>
+<li>Benchmark results table (two numbers: success rate with and without grammar constraints)</li>
+<li>How to contribute</li>
+</ol>
+<h3 id="publish-v100-alpha">Publish v1.0.0-alpha</h3>
+<pre><code class="language-powershell"># Update version in pyproject.toml to 1.0.0-alpha
+git add .
+git commit -m &quot;release: v1.0.0-alpha&quot;
+git tag v1.0.0-alpha
+git push origin main
+git push origin v1.0.0-alpha
+
+# CI handles PyPI publish and docs deploy automatically
+
+# Verify docs deployed
+start https://yourusername.github.io/agentstatelib
+</code></pre>
+<hr />
+<h2 id="phase-7-weeks-1314-write-and-ship">Phase 7 · Weeks 13–14 · Write and Ship</h2>
+<h3 id="week-13-design-document-notebooks-docs-review">Week 13 — Design document · Notebooks · Docs review</h3>
+<p><strong><code>docs/design.md</code></strong> — the full design document (same as v3). Add to mkdocs nav.</p>
+<p><strong><code>docs/concepts/local-models.md</code></strong> — expand the local models concept doc with your actual benchmark numbers. Make it specific: "We tested Llama3-8B running on Colab Pro (A100) with 20 runs each condition..."</p>
+<p><strong><code>examples/workflows/research_pipeline.py</code></strong> — annotated working example. Every line of library code commented. This file is linked from the docs as a downloadable example.</p>
+<p><strong><code>examples/workflows/support_ticket.py</code></strong> — second annotated example showing different state shape.</p>
+<p>Do a full docs review this week. Read every page as if you are a developer who just discovered the library. Fix anything confusing, incomplete, or wrong.</p>
+<pre><code class="language-powershell">mkdocs serve
+# Opens a live preview at http://localhost:8000
+# Edit docs files and see changes in real time
+</code></pre>
+<hr />
+<h3 id="week-14-blog-posts-show-hn-v100">Week 14 — Blog posts · Show HN · v1.0.0</h3>
+<p><strong>Blog post 1</strong> — "What happens between LLM calls — why I built agentstatelib." Lead with benchmark numbers. The headline claim with real numbers from your benchmark. Explain round-based parallelism. Show the 15-line example. Link to the library.</p>
+<p><strong>Blog post 2</strong> — "How I would scale agentstatelib to 100,000 workflows per day." Architecture thinking only.</p>
+<p><strong>Publish v1.0.0</strong> — final release. Update <code>__version__</code>. Update docs to mark v1.0 as stable.</p>
+<pre><code class="language-powershell"># Final version bump
+# Edit pyproject.toml: version = &quot;1.0.0&quot;
+# Edit agentstatelib/__init__.py: __version__ = &quot;1.0.0&quot;
+
+python -m build
+git add .
+git commit -m &quot;release: v1.0.0&quot;
+git tag v1.0.0
+git push origin main
+git push origin v1.0.0
+
+# CI publishes to PyPI and deploys docs automatically
+
+# Post blog posts
+# Post Show HN
+# Share in LangChain Discord
+# Open good first issues
+</code></pre>
+<hr />
+<h2 id="quick-reference-commands-every-session">Quick Reference — Commands Every Session</h2>
+<pre><code class="language-powershell"># Activate environment
+.venv\Scripts\activate
+
+# After every file change
+ruff check agentstatelib/
+mypy agentstatelib/ --strict
+pytest tests/ -v
+
+# Verify docs build after doc changes
+mkdocs build --strict
+
+# Preview docs locally
+mkdocs serve
+
+# Before every commit
+ruff check agentstatelib/
+mypy agentstatelib/ --strict
+pytest tests/ -v --tb=short
+mkdocs build --strict
+git add .
+git commit -m &quot;type: description&quot;
+
+# When Colab session starts
+# 1. Open notebooks/colab_setup.ipynb in Colab Pro
+# 2. Run cells 1-6
+# 3. Copy ngrok URL from Cell 4
+# 4. Update COLAB_OLLAMA_URL in .env
+# 5. Run: python -c &quot;from examples.models.colab_ollama_agent import check_colab_connection; import os; print(check_colab_connection(os.environ['COLAB_OLLAMA_URL']))&quot;
+
+# Version release workflow
+# 1. Update version in pyproject.toml and __init__.py
+# 2. Update CHANGELOG.md
+# 3. python -m build &amp;&amp; twine upload dist/*
+# 4. git tag vX.Y.Z &amp;&amp; git push origin vX.Y.Z
+# 5. mike deploy --push --update-aliases X.Y latest
+# 6. Verify: pip install agentstateliblib==X.Y.Z in clean venv
+
+# Commit prefixes
+# feat:     new user-facing feature
+# fix:      bug fix
+# refactor: no behavior change
+# test:     adding or fixing tests
+# docs:     documentation only
+# chore:    tooling, deps, config
+# perf:     performance improvement
+</code></pre>
+<hr />
+<h2 id="version-feature-docs-mapping">Version → Feature → Docs Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Feature</th>
+<th>Docs added</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0.1.0</td>
+<td>SharedState, StatePatch, AgentGraph, SQLiteStore</td>
+<td>quickstart, concepts/shared-state, concepts/patches, api-reference/state, api-reference/patch, api-reference/graph</td>
+</tr>
+<tr>
+<td>v0.2.0</td>
+<td>Conflict detection, parallel execution, invariants</td>
+<td>concepts/conflict, concepts/parallelism, api-reference/conflicts</td>
+</tr>
+<tr>
+<td>v0.2.1</td>
+<td>FastAPI HTTP layer</td>
+<td>guides/http-api, api-reference/api</td>
+</tr>
+<tr>
+<td>v0.3.0</td>
+<td>Checkpoint, replay debugger, PostgreSQL</td>
+<td>concepts/event-log, guides/checkpoint-recovery, guides/replay-debugger</td>
+</tr>
+<tr>
+<td>v0.3.1</td>
+<td>Local model reliability + Colab</td>
+<td>guides/local-models, guides/colab-setup, benchmark results</td>
+</tr>
+<tr>
+<td>v0.4.0</td>
+<td>OpenTelemetry, WorkflowSummary, dashboard</td>
+<td>concepts/observability, guides/opentelemetry, guides/dashboard</td>
+</tr>
+<tr>
+<td>v0.5.0</td>
+<td>Redis cache, rate limiting, Docker, property tests</td>
+<td>guides/production, guides/testing</td>
+</tr>
+<tr>
+<td>v1.0.0-alpha</td>
+<td>API stabilization, type stubs, ADRs, CI/CD</td>
+<td>decisions/, guides/migration/v0.x-to-v1.md, guides/integrations</td>
+</tr>
+<tr>
+<td>v1.0.0</td>
+<td>Final stable release</td>
+<td>Full docs review, design.md</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
