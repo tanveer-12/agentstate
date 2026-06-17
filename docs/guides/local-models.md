@@ -58,7 +58,7 @@ You should see a JSON response listing your installed models. If you see a conne
 
 ### Use OllamaAgent
 
-The example is in [`examples/models/ollama_agent.py`](../../examples/models/ollama_agent.py). The default `base_url` is `http://localhost:11434`, which is exactly where Ollama listens. **If you are running Ollama locally, you do not need to set any environment variable.** The agent just works:
+The example is in [`examples/models/ollama_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/ollama_agent.py). The default `base_url` is `http://localhost:11434`, which is exactly where Ollama listens. **If you are running Ollama locally, you do not need to set any environment variable.** The agent just works:
 
 ```python
 from examples.models.ollama_agent import OllamaAgent
@@ -147,7 +147,7 @@ agent = OllamaAgent(
 
 ## Option 3 — LM Studio, vLLM, Llamafile, LocalAI (OpenAI-compatible)
 
-These tools run local models but expose an **OpenAI-compatible API**. That means you use the `OpenAIAgent` from [`examples/models/openai_agent.py`](../../examples/models/openai_agent.py) — not the Ollama one — and just point `base_url` at the local port.
+These tools run local models but expose an **OpenAI-compatible API**. That means you use the `OpenAIAgent` from [`examples/models/openai_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/openai_agent.py) — not the Ollama one — and just point `base_url` at the local port.
 
 | Tool | Default local URL | Notes |
 |---|---|---|
@@ -218,7 +218,7 @@ If you do not want to run anything locally, these cloud providers work out of th
 
 ### OpenAI
 
-See [`examples/models/openai_agent.py`](../../examples/models/openai_agent.py).
+See [`examples/models/openai_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/openai_agent.py).
 
 ```env
 OPENAI_API_KEY=sk-...
@@ -237,7 +237,7 @@ agent = OpenAIAgent(
 
 ### Anthropic
 
-See [`examples/models/anthropic_agent.py`](../../examples/models/anthropic_agent.py). Anthropic uses a different API shape (Messages API) so it has its own subclass. The usage is the same:
+See [`examples/models/anthropic_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/anthropic_agent.py). Anthropic uses a different API shape (Messages API) so it has its own subclass. The usage is the same:
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-...
@@ -256,7 +256,7 @@ agent = AnthropicAgent(
 
 ### Groq (free tier, very fast)
 
-Groq runs open models like Llama3 and Mistral in the cloud with extremely low latency. It has a free tier and uses the OpenAI-compatible API shape. See [`examples/models/groq_agent.py`](../../examples/models/groq_agent.py).
+Groq runs open models like Llama3 and Mistral in the cloud with extremely low latency. It has a free tier and uses the OpenAI-compatible API shape. See [`examples/models/groq_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/groq_agent.py).
 
 ```env
 GROQ_API_KEY=gsk_...
@@ -293,7 +293,7 @@ agent = OpenAIAgent(
 
 ## Option 5 — No model at all (rule-based)
 
-Any async function that accepts a `dict` and returns a `StatePatch` is a valid agent. You do not need a model. See [`examples/models/rule_based_agent.py`](../../examples/models/rule_based_agent.py) for a complete example with a keyword classifier, a router, and a completion checker — all deterministic, instant, and free.
+Any async function that accepts a `dict` and returns a `StatePatch` is a valid agent. You do not need a model. See [`examples/models/rule_based_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/rule_based_agent.py) for a complete example with a keyword classifier, a router, and a completion checker — all deterministic, instant, and free.
 
 ```python
 from agentstatelib import StatePatch
@@ -393,11 +393,11 @@ High-value reasoning goes to the strongest model; repetitive or cheap steps stay
 
 | Your setup | Example file |
 |---|---|
-| Ollama local | [`examples/models/ollama_agent.py`](../../examples/models/ollama_agent.py) |
-| Ollama via ngrok / Docker / remote | [`examples/models/ollama_agent.py`](../../examples/models/ollama_agent.py) — change `base_url` |
-| LM Studio / vLLM / Llamafile / LocalAI | [`examples/models/openai_agent.py`](../../examples/models/openai_agent.py) — change `base_url` |
-| OpenAI | [`examples/models/openai_agent.py`](../../examples/models/openai_agent.py) |
-| Anthropic | [`examples/models/anthropic_agent.py`](../../examples/models/anthropic_agent.py) |
-| Groq | [`examples/models/groq_agent.py`](../../examples/models/groq_agent.py) |
-| Together AI / Fireworks / Azure | [`examples/models/openai_agent.py`](../../examples/models/openai_agent.py) — change `base_url` + `api_key` |
-| No model (deterministic) | [`examples/models/rule_based_agent.py`](../../examples/models/rule_based_agent.py) |
+| Ollama local | [`examples/models/ollama_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/ollama_agent.py) |
+| Ollama via ngrok / Docker / remote | [`examples/models/ollama_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/ollama_agent.py) — change `base_url` |
+| LM Studio / vLLM / Llamafile / LocalAI | [`examples/models/openai_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/openai_agent.py) — change `base_url` |
+| OpenAI | [`examples/models/openai_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/openai_agent.py) |
+| Anthropic | [`examples/models/anthropic_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/anthropic_agent.py) |
+| Groq | [`examples/models/groq_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/groq_agent.py) |
+| Together AI / Fireworks / Azure | [`examples/models/openai_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/openai_agent.py) — change `base_url` + `api_key` |
+| No model (deterministic) | [`examples/models/rule_based_agent.py`](https://github.com/tanveer-12/agentstate/blob/main/examples/models/rule_based_agent.py) |
