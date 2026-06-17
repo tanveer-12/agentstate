@@ -9,7 +9,23 @@ AgentStateLib is a Python library for building reliable multi-agent workflows. I
 
 **Full documentation:** see the [docs/](docs/) folder — start with [docs/quickstart.md](docs/quickstart.md).
 
-**PYPI official: [agentstate-lib](https://pypi.org/project/agentstate-lib/)
+**PYPI official**: [agentstate-lib](https://pypi.org/project/agentstate-lib/)
+
+## agentstatelib in ACTION
+
+SQLiq is a demo application built to showcase [agentstatelib](https://github.com/tanveer-12/agentstate). The goal is to show, end-to-end, what agentstatelib enables: real-time agent tracing, shared state across agents, human approval gates, conflict resolution, and a live dashboard - all in a production-shaped project.
+
+SQLiq Repo : [SQLiq](https://github.com/tanveer-12/SQLiq)
+
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=9FNspFpIBdY">
+    <img src="https://i.ytimg.com/vi/9FNspFpIBdY/maxresdefault.jpg" alt="Watch SQLiq Demo" width="750">
+    <br>
+    <span style="font-size: 20px;">▶️ Watch on YouTube</span>
+  </a>
+</div>
+
+
 ## Installation
 
 ```bash
