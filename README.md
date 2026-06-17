@@ -1,13 +1,13 @@
 [![Version](https://img.shields.io/badge/version-v0.5.1-2563eb?style=flat-square)](https://pypi.org/project/agentstate-lib/)
 [![Python](https://img.shields.io/badge/python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-tanveer--12.github.io%2Fagentstate-blue?style=flat-square)](https://tanveer-12.github.io/agentstate/)
+[![Docs](https://img.shields.io/badge/docs-github.com%2Ftanveer--12%2Fagentstate-blue?style=flat-square)](https://github.com/tanveer-12/agentstate)
 
 # AgentStateLib
 
 AgentStateLib is a Python library for building reliable multi-agent workflows. It gives multiple agents a shared, typed state and a simple graph router, so you can coordinate them without passing raw strings around.
 
-**Full documentation:** [tanveer-12.github.io/agentstate](https://tanveer-12.github.io/agentstate/) — includes the [Quickstart guide](https://tanveer-12.github.io/agentstate/quickstart/), concept docs, API reference, and integration guides.
+**Full documentation:** see the [docs/](docs/) folder — start with [docs/quickstart.md](docs/quickstart.md).
 
 ## Installation
 
@@ -70,14 +70,10 @@ if __name__ == "__main__":
 
 ## Documentation
 
-| Section | Link |
-|---|---|
-| Quickstart | [tanveer-12.github.io/agentstate/quickstart/](https://tanveer-12.github.io/agentstate/quickstart/) |
-| Concepts | [tanveer-12.github.io/agentstate/concepts/shared-state/](https://tanveer-12.github.io/agentstate/concepts/shared-state/) |
-| API Reference | [tanveer-12.github.io/agentstate/api-reference/state/](https://tanveer-12.github.io/agentstate/api-reference/state/) |
-| Guides | [tanveer-12.github.io/agentstate/guides/http-api/](https://tanveer-12.github.io/agentstate/guides/http-api/) |
-| Local Models | [tanveer-12.github.io/agentstate/guides/local-models/](https://tanveer-12.github.io/agentstate/guides/local-models/) |
-| LLM Integration | [tanveer-12.github.io/agentstate/guides/llm-integration/](https://tanveer-12.github.io/agentstate/guides/llm-integration/) |
+- [Quickstart](docs/quickstart.md) — install, first workflow, core concepts, and all links
+- **Concepts:** [Shared State](docs/concepts/shared-state.md) · [Patches](docs/concepts/patches.md) · [Conflict Detection](docs/concepts/conflict.md) · [Parallel Execution](docs/concepts/parallelism.md) · [Event Log](docs/concepts/event-log.md) · [Trace Model](docs/concepts/trace-model.md) · [Observability](docs/concepts/observability.md) · [Local Models](docs/concepts/local-models.md)
+- **API Reference:** [State](docs/api-reference/state.md) · [Patch](docs/api-reference/patch.md) · [Graph](docs/api-reference/graph.md) · [Conflicts](docs/api-reference/conflicts.md) · [Store](docs/api-reference/store.md)
+- **Guides:** [HTTP API](docs/guides/http-api.md) · [Human in the Loop](docs/guides/human-in-the-loop.md) · [Checkpoint & Recovery](docs/guides/checkpoint-recovery.md) · [Replay Debugger](docs/guides/replay-debugger.md) · [LLM Integration](docs/guides/llm-integration.md) · [Local Models](docs/guides/local-models.md) · [OpenTelemetry](docs/guides/opentelemetry.md) · [Observability](docs/guides/observability.md)
 
 ## Status
 

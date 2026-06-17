@@ -167,7 +167,7 @@ class MyOllamaAgent(LLMAgent):
             return r.json()["response"]
 ```
 
-Ready-to-run example files for every provider are in the [`examples/models/`](https://github.com/tanveer-12/agentstate/tree/main/examples/models) directory.
+Ready-to-run example files for every provider are in the `examples/models/` directory.
 
 ---
 
