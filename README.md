@@ -9,6 +9,7 @@ AgentStateLib is a Python library for building reliable multi-agent workflows. I
 
 **Full documentation:** see the [docs/](docs/) folder — start with [docs/quickstart.md](docs/quickstart.md).
 
+**PYPI official: [agentstate-lib](https://pypi.org/project/agentstate-lib/)
 ## Installation
 
 ```bash
